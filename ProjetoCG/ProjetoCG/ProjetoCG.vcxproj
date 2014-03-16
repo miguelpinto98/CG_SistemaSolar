@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="mainGerador.cpp" />
+    <ClCompile Include="mainMotor3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mainGerador.h" />

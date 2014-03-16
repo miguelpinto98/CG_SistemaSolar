@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<cena>
-    <modelo ficheiro="esfera.3d" />
-    <modelo ficheiro="plano.3d" />
-    <modelo ficheiro="cone.3d" />
-    <modelo ficheiro="paralelipedo.3d" />
-</cena>

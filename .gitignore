@@ -11,10 +11,11 @@
 *.lai
 *.la
 *.a
-ProjetoCG/ProjetoCG.opensdf
+Gerador/Gerador.opensdf
 Motor3D/Motor3D.opensdf
 
-ProjetoCG/Debug/*
-ProjetoCG/Release/*
-ProjetoCG/ProjetoCG/Debug/*
+Gerador/Debug/*
+Gerador/Gerador/Debug/*
 
+Motor3D/Debug/*
+Motor3D/Motor3D/Debug/*

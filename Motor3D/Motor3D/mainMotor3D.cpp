@@ -103,102 +103,6 @@ void renderScene(void) {
 	} else {
 		cout << "Not OK!";
 	}
-	/*
-	double x, y=-(larg/2), z=y;
-	double vr=compr/cmdv, hr=larg/cmdh;
-	double ax, ay=y+hr, az=larg/2;
-	int i,j;
-
-	//BACK AND FRONT
-	for(i=0; i<cmdh; i++) {
-		x=-(compr/2);
-		ax=x+vr;
-		for(j=0; j<cmdv; j++) {
-			glVertex3f(x,y,z);
-			glVertex3f(ax,y,z);
-			glVertex3f(ax,ay,z);
-
-			glVertex3f(x,y,z);
-			glVertex3f(ax,ay,z);
-			glVertex3f(x,ay,z);
-
-			glVertex3f(x,y,az);
-			glVertex3f(ax,y,az);
-			glVertex3f(ax,ay,az);
-
-			glVertex3f(x,y,az);
-			glVertex3f(ax,ay,az);
-			glVertex3f(x,ay,az);
-
-			x=ax;
-			ax+=vr;
-		}
-		y=ay;
-		ay+=hr;
-	}
-	
-	//TOP AND DOWN
-	y=larg/2, ay=-y;
-	z=-(larg/2), az=z+hr;
-
-	for(i=0; i<cmdh; i++) {
-		x=-(compr/2);
-		ax=x+vr;
-		for(j=0; j<cmdv; j++) {
-			glVertex3f(x,y,z);
-			glVertex3f(ax,y,z);
-			glVertex3f(ax,y,az);
-
-			glVertex3f(x,y,z);
-			glVertex3f(ax,y,az);
-			glVertex3f(x,y,az);
-
-			glVertex3f(x,ay,z);
-			glVertex3f(ax,ay,z);
-			glVertex3f(ax,ay,az);
-
-			glVertex3f(x,ay,z);
-			glVertex3f(ax,ay,az);
-			glVertex3f(x,ay,az);
-
-			x=ax;
-			ax+=vr;
-		}
-		z=az;
-		az+=hr;
-	}
-	
-	//LEFT AND RIGHT
-	x=compr/2; ax=-x;
-	y=-(larg/2), ay=y+hr;
-
-	for(i=0; i<cmdh; i++) {
-		z=-(larg/2);
-		az=z+hr;
-		for(j=0; j<cmdv; j++) {
-			glVertex3f(x,y,z);
-			glVertex3f(x,y,az);
-			glVertex3f(x,ay,az);
-
-			glVertex3f(x,y,z);
-			glVertex3f(x,ay,az);
-			glVertex3f(x,ay,z);
-			
-			glVertex3f(ax,y,z);
-			glVertex3f(ax,y,az);
-			glVertex3f(ax,ay,az);
-
-			glVertex3f(ax,y,z);
-			glVertex3f(ax,ay,az);
-			glVertex3f(ax,ay,z);
-
-			z=az;
-			az+=hr;
-		}
-		y=ay;
-		ay+=hr;
-	} */
-
 	glEnd();
 
 	// End of frame
@@ -259,15 +163,12 @@ void menu(int op) {
 
 
 int main(int argc, char **argv) {
-
-
 // inicialização
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 	glutInitWindowPosition(100,100);
 	glutInitWindowSize(800,800);
-	glutCreateWindow("CG@DI-UM");
-		
+	glutCreateWindow("CG@DI-UM");		
 
 // registo de funções 
 	glutDisplayFunc(renderScene);
@@ -287,7 +188,6 @@ int main(int argc, char **argv) {
 	glutAddMenuEntry("GL_POINT",3);
 	glutAddMenuEntry("GL_FRONT",4);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-
 
 // alguns settings para OpenGL
 	glEnable(GL_DEPTH_TEST);

@@ -4,6 +4,11 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <fstream>
+ #include <iostream>
+ #include <string>
+
+using namespace std;
 
 #define CONST 0.1f;
 
@@ -62,9 +67,43 @@ void renderScene(void) {
 // pôr instruções de desenho aqui
 	double larg=2, compr=6;
 	int cmdh=2,cmdv=2;
-
+	string str;
 	glBegin(GL_TRIANGLES);
 
+	string line, token;
+	string delimiter = ",";
+	int pos;
+	double a,b,c;
+	ifstream file("paralelipipedo.3d");
+	if(file.is_open()) {
+		while(getline(file,line)) {
+			//i=0;
+			//while(i<=2) {
+				pos = line.find(delimiter);
+				token = line.substr(0,pos);
+				a = atof(token.c_str());
+				line.erase(0, pos + delimiter.length());
+
+				pos = line.find(delimiter);
+				token = line.substr(0,pos);
+				b = atof(token.c_str());
+				line.erase(0, pos + delimiter.length());
+
+				pos = line.find(delimiter);
+				token = line.substr(0,pos);
+				c = atof(token.c_str());
+				line.erase(0, pos + delimiter.length());
+
+				glVertex3f(a,b,c);
+				//cout<< a << " - " << b << " - " << c << '\n';
+				//i++;
+			//}
+		}
+		file.close();
+	} else {
+		cout << "Not OK!";
+	}
+	/*
 	double x, y=-(larg/2), z=y;
 	double vr=compr/cmdv, hr=larg/cmdh;
 	double ax, ay=y+hr, az=larg/2;
@@ -158,7 +197,7 @@ void renderScene(void) {
 		}
 		y=ay;
 		ay+=hr;
-	}
+	} */
 
 	glEnd();
 
@@ -177,14 +216,18 @@ void renderScene(void) {
 			case 'W': zz+=CONST; break;
 			case 's':
 			case 'S': zz-=CONST; break;
+			case 'e':
+			case 'E': angulo-=5.0f; break;
+			case 'q':
+			case 'Q': angulo+=5.0f; break;
 		}
 		glutPostRedisplay();
 	}
 
 	void arrowKeyboards(int tecla, int x, int y) {
 		switch (tecla) {
-		case GLUT_KEY_LEFT: angulo+=5.0f; break;
-		case GLUT_KEY_RIGHT: angulo-=5.0f; break;
+		case GLUT_KEY_LEFT: break;
+		case GLUT_KEY_RIGHT: break;
 		case GLUT_KEY_UP: angulo+=0.1f; break;
 		case GLUT_KEY_DOWN: altura-=0.1f; break;
 		}
@@ -205,17 +248,16 @@ void renderScene(void) {
 
 
 // escrever função de processamento do menu
-	void menu(int op) {
-
-		switch (op) {
+void menu(int op) {
+	switch (op) {
 		case 1: glPolygonMode(GL_FRONT, GL_FILL); break;
 		case 2: glPolygonMode(GL_FRONT, GL_LINE); break;
 		case 3: glPolygonMode(GL_FRONT, GL_POINT); break;
-		}
-		glutPostRedisplay();
 	}
+	glutPostRedisplay();
+}
 
-/*
+
 int main(int argc, char **argv) {
 
 
@@ -255,4 +297,4 @@ int main(int argc, char **argv) {
 	glutMainLoop();
 
 	return 1;
-}*/
+}

@@ -45,27 +45,28 @@ void paralelipipedo(double compr, double larg, int cmdh, int cmdv) {
 	double vr=compr/cmdv, hr=larg/cmdh;
 	double ax, ay=y+hr, az=larg/2;
 	int i,j;
+	ofstream file("paralelipipedo.3d");
 
 	//BACK AND FRONT
 	for(i=0; i<cmdh; i++) {
 		x=-(compr/2);
 		ax=x+vr;
 		for(j=0; j<cmdv; j++) {
-			printf("%f %f %f\n",x,y,z);
-			printf("%f %f %f\n",ax,y,z);
-			printf("%f %f %f\n",ax,ay,z);
+			printf("%f %f %f\n",x,y,z); file << x << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",ax,y,z); file << ax << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",ax,ay,z); file << ax << "," << ay << ","<< z << endl;
 
-			printf("%f %f %f\n",x,y,z);
-			printf("%f %f %f\n",ax,ay,z);
-			printf("%f %f %f\n",x,ay,z);
+			printf("%f %f %f\n",x,y,z); file << x << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",ax,ay,z); file << ax << "," << ay << ","<< z << endl;
+			printf("%f %f %f\n",x,ay,z); file << x << "," << ay << ","<< z << endl;
 
-			printf("%f %f %f\n",x,y,az);
-			printf("%f %f %f\n",ax,y,az);
-			printf("%f %f %f\n",ax,ay,az);
+			printf("%f %f %f\n",x,y,az); file << x << "," << y << ","<< az << endl;
+			printf("%f %f %f\n",ax,y,az); file << ax << "," << y << ","<< az << endl;
+			printf("%f %f %f\n",ax,ay,az); file << ax << "," << ay << ","<< az << endl;
 
-			printf("%f %f %f\n",x,y,az);
-			printf("%f %f %f\n",ax,ay,az);
-			printf("%f %f %f\n",x,ay,az);
+			printf("%f %f %f\n",x,y,az); file << x << "," << y << ","<< az << endl;
+			printf("%f %f %f\n",ax,ay,az); file << ax << "," << ay << ","<< az << endl;
+			printf("%f %f %f\n",x,ay,az); file << x << "," << ay << ","<< az << endl;
 
 			x=ax;
 			ax+=vr;
@@ -82,21 +83,21 @@ void paralelipipedo(double compr, double larg, int cmdh, int cmdv) {
 		x=-(compr/2);
 		ax=x+vr;
 		for(j=0; j<cmdv; j++) {
-			printf("%f %f %f\n",x,y,z);
-			printf("%f %f %f\n",ax,y,z);
-			printf("%f %f %f\n",ax,y,az);
+			printf("%f %f %f\n",x,y,z); file << x << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",ax,y,z); file << ax << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",ax,y,az); file << ax << "," << y << ","<< az << endl;
 
-			printf("%f %f %f\n",x,y,z);
-			printf("%f %f %f\n",ax,y,az);
-			printf("%f %f %f\n",x,y,az);
+			printf("%f %f %f\n",x,y,z); file << x << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",ax,y,az); file << ax << "," << y << ","<< az << endl;
+			printf("%f %f %f\n",x,y,az); file << x << "," << y << ","<< az << endl;
 
-			printf("%f %f %f\n",x,ay,z);
-			printf("%f %f %f\n",ax,ay,z);
-			printf("%f %f %f\n",ax,ay,az);
+			printf("%f %f %f\n",x,ay,z); file << x << "," << ay << ","<< z << endl;
+			printf("%f %f %f\n",ax,ay,z); file << ax << "," << ay << ","<< z << endl;
+			printf("%f %f %f\n",ax,ay,az); file << ax << "," << ay << ","<< az << endl;
 
-			printf("%f %f %f\n",x,ay,z);
-			printf("%f %f %f\n",ax,ay,az);
-			printf("%f %f %f\n",x,ay,az);
+			printf("%f %f %f\n",x,ay,z); file << x << "," << ay << ","<< z << endl;
+			printf("%f %f %f\n",ax,ay,az); file << ax << "," << ay << ","<< az << endl;
+			printf("%f %f %f\n",x,ay,az); file << x << "," << ay << ","<< az << endl;
 
 			x=ax;
 			ax+=vr;
@@ -113,21 +114,21 @@ void paralelipipedo(double compr, double larg, int cmdh, int cmdv) {
 		z=-(larg/2);
 		az=z+hr;
 		for(j=0; j<cmdv; j++) {
-			printf("%f %f %f\n",x,y,z);
-			printf("%f %f %f\n",x,y,az);
-			printf("%f %f %f\n",x,ay,az);
+			printf("%f %f %f\n",x,y,z); file << x << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",x,y,az); file << x << "," << y << ","<< az << endl;
+			printf("%f %f %f\n",x,ay,az); file << x << "," << ay << ","<< az << endl;
 
-			printf("%f %f %f\n",x,y,z);
-			printf("%f %f %f\n",x,ay,az);
-			printf("%f %f %f\n",x,ay,z);
+			printf("%f %f %f\n",x,y,z); file << x << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",x,ay,az); file << x << "," << ay << ","<< az << endl;
+			printf("%f %f %f\n",x,ay,z); file << x << "," << ay << ","<< z << endl;
 			
-			printf("%f %f %f\n",ax,y,z);
-			printf("%f %f %f\n",ax,y,az);
-			printf("%f %f %f\n",ax,ay,az);
+			printf("%f %f %f\n",ax,y,z); file << ax << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",ax,y,az); file << ax << "," << y << ","<< az << endl;
+			printf("%f %f %f\n",ax,ay,az); file << ax << "," << ay << ","<< az << endl;
 
-			printf("%f %f %f\n",ax,y,z);
-			printf("%f %f %f\n",ax,ay,az);
-			printf("%f %f %f\n",ax,ay,z);
+			printf("%f %f %f\n",ax,y,z); file << ax << "," << y << ","<< z << endl;
+			printf("%f %f %f\n",ax,ay,az); file << ax << "," << ay << ","<< az << endl;
+			printf("%f %f %f\n",ax,ay,z); file << ax << "," << ay << ","<< z << endl;
 
 			z=az;
 			az+=hr;
@@ -135,8 +136,9 @@ void paralelipipedo(double compr, double larg, int cmdh, int cmdv) {
 		y=ay;
 		ay+=hr;
 	}
+	file.close();
 }
-
+/*
 int main(int argc, char **argv) {
 	/*
 	cout << "argc = " << argc << endl; 
@@ -145,10 +147,45 @@ int main(int argc, char **argv) {
 
 	if(argc==7)
 		cout << "Sou um Plano ou Paralelipedo" << endl;
-	*/
+	
 	
 	//plano(1,4,2,4);
-	paralelipipedo(4,2,2,2);
+	paralelipipedo(1,0.5,10,10);
+	
+	/*
+	string line, token;
+	string delimiter = ",";
+	int pos;
+	double a,b,c;
+	ifstream file("paralelipipedo.3d");
+	if(file.is_open()) {
+		while(getline(file,line)) {
+			//i=0;
+			//while(i<=2) {
+				pos = line.find(delimiter);
+				token = line.substr(0,pos);
+				a = atof(token.c_str());
+				line.erase(0, pos + delimiter.length());
+
+				pos = line.find(delimiter);
+				token = line.substr(0,pos);
+				b = atof(token.c_str());
+				line.erase(0, pos + delimiter.length());
+
+				pos = line.find(delimiter);
+				token = line.substr(0,pos);
+				c = atof(token.c_str());
+				line.erase(0, pos + delimiter.length());
+
+
+				cout<< a << " - " << b << " - " << c << '\n';
+				//i++;
+			//}
+		}
+		file.close();
+	} else {
+		cout << "Not OK!";
+	}
 
 	return 0;
-}
+}*/

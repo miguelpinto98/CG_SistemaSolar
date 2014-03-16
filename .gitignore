@@ -12,3 +12,7 @@
 *.la
 *.a
 ProjetoCG/ProjetoCG.opensdf
+ProjetoCG/Debug/*
+ProjetoCG/Release/*
+ProjetoCG/ProjetoCG/Debug/*
+

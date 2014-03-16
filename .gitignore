@@ -12,6 +12,8 @@
 *.la
 *.a
 ProjetoCG/ProjetoCG.opensdf
+Motor3D/Motor3D.opensdf
+
 ProjetoCG/Debug/*
 ProjetoCG/Release/*
 ProjetoCG/ProjetoCG/Debug/*

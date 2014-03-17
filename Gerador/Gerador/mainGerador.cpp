@@ -131,20 +131,62 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv) {
 	file.close();
 }
 
+void esfera(double raio, int camadasV, int camadasH){
+	double camada = M_PI / camadasV; //pi=180
+	double rotacoes = 2 * M_PI / camadasH;
+	int count = 1;
+	ofstream file("esfera.3d");
+
+	glBegin(GL_TRIANGLES);
+
+	for (int i = 0; i<camadasV; i++){
+		double angYX = camada*i; // 0 a 180º na vertical
+
+		for (int j = 0; j<camadasH; j++){
+			double angZX = rotacoes*j; // 0 a 360º na horizontal
+			count++;
+
+			double x1 = raio * sin(angYX) * sin(angZX);
+			double x2 = raio * sin(angYX + camada) * sin(angZX);
+			double x3 = raio * sin(angYX + camada) * sin(angZX + rotacoes);
+			double x4 = raio * sin(angYX) * sin(angZX + rotacoes);
+
+			double y1 = raio * cos(angYX);
+			double y2 = raio * cos(angYX + camada);
+
+			double z1 = raio * sin(angYX) * cos(angZX);
+			double z2 = raio * sin(angYX + camada) * cos(angZX);
+			double z3 = raio * sin(angYX + camada) * cos(angZX + rotacoes);
+			double z4 = raio * sin(angYX) * cos(angZX + rotacoes);
+
+
+			printf("\n\n-- ITERACAO %d de %d --\n", count - 1, camadasV*camadasH);
+			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
+			printf("%f, %f, %f\n", x2, y2, z2); file << x2 << "," << y2 << "," << z2 << endl;
+			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
+
+			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
+			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
+			printf("%f, %f, %f\n", x4, y1, z4); file << x4 << "," << y1 << "," << z4 << endl;
+
+
+		}
+	}
+	glEnd();
+	file.close();
+}
+
 int main(int argc, char **argv) {	
 	if(argc>1) {
-		if(!strcmp(argv[1],"plano")) {
-			cout << "PLANO\n";
-			plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]));
-		} else {
-			if(!strcmp(argv[1],"paralelipipedo")) {
-				cout << "PARALELIPIPEDO\n";
-				paralelipipedo(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), atoi(argv[6]));
-			} else {
-				if(!strcmp(argv[1],"cone"))
-					;
-				else
-					;
+		if(!strcmp(argv[1],"plano")){ cout << "PLANO\n"; plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]));}		
+		else {
+			if(!strcmp(argv[1],"paralelipipedo")){cout << "PARALELIPIPEDO\n";paralelipipedo(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), atoi(argv[6]));} 
+			else {
+				if(!strcmp(argv[1],"cone"))					;
+				else {
+					if (!strcmp(argv[1], "esfera")) {cout << "ESFERA\n";	esfera(atof(argv[2]), atof(argv[3]), atof(argv[4]));}
+				}
+					
 			}
 		}
 	}

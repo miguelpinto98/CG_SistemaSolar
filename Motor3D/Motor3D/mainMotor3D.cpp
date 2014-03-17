@@ -10,18 +10,21 @@
 
 using namespace std;
 
-#define CONST 0.1f;
-
-float xx = 0.0f, zz = 0.0f, angulo = 0.0f, altura = 1.5;
+float CONST = 0.1;
 
 // angle of rotation for the camera direction
-float angle=0.0;
+float angle = 0.0f;
+
 // actual vector representing the camera's direction
 float lx=0.0f,lz=-1.0f;
-// XZ position of the camera
-float x=0.0f,z=5.0f;
 
+// XZ position of the camera
+float x=0.0f, z=5.0f;
+
+// the key states. These variables will be zero
+//when no key is being presses
 float deltaAngle = 0.0f;
+float deltaMove = 0;
 int xOrigin = -1;
 
 void changeSize(int w, int h) {
@@ -49,7 +52,25 @@ void changeSize(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void computePos(float deltaMove) {
+
+	x += deltaMove * lx * 0.1f;
+	z += deltaMove * lz * 0.1f;
+}
+
+void computeDir(float deltaAngle) {
+
+	angle += deltaAngle;
+	lx = sin(angle);
+	lz = -cos(angle);
+}
+
 void renderScene(void) {
+
+	if (deltaMove)
+		computePos(deltaMove);
+	if (deltaAngle)
+		computeDir(deltaAngle);
 
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -59,22 +80,19 @@ void renderScene(void) {
 	gluLookAt(x,0.0,z, 
 		      lx+x,0.0,lz+z,
 			  0.0f,1.0f,0.0f);
-	
 
-	glTranslatef(xx,0,zz);
-    glRotatef(angulo, 0.0f, 1.0f, 0.0f);
+	//glTranslatef(x,0,z);
+    //glRotatef(angulo, 0.0f, 1.0f, 0.0f);
 
 // pôr instruções de desenho aqui
-	double larg=2, compr=6;
-	int cmdh=2,cmdv=2;
-	string str;
 	glBegin(GL_TRIANGLES);
-
+	
 	string line, token;
 	string delimiter = ",";
 	int pos;
 	double a,b,c;
 	ifstream file("paralelipipedo.3d");
+	//ifstream file("plano.3d");
 	if(file.is_open()) {
 		while(getline(file,line)) {
 			//i=0;
@@ -113,42 +131,40 @@ void renderScene(void) {
 	void normalkeyboard(unsigned char tecla, int x, int y) {
 		switch (tecla) {
 			case 'a':
-			case 'A': xx-=CONST; break;
+			case 'A': x-=CONST; break;
 			case 'd': 
-			case 'D': xx+=CONST; break;
+			case 'D': x+=CONST; break;
 			case 'w':
-			case 'W': zz+=CONST; break;
+			case 'W': z+=CONST; break;
 			case 's':
-			case 'S': zz-=CONST; break;
+			case 'S': z-=CONST; break;
 			case 'e':
-			case 'E': angulo-=5.0f; break;
+			case 'E': angle-=5.0f; break;
 			case 'q':
-			case 'Q': angulo+=5.0f; break;
+			case 'Q': angle+=5.0f; break;
 		}
 		glutPostRedisplay();
 	}
 
-	void arrowKeyboards(int tecla, int x, int y) {
-		switch (tecla) {
-		case GLUT_KEY_LEFT: break;
-		case GLUT_KEY_RIGHT: break;
-		case GLUT_KEY_UP: angulo+=0.1f; break;
-		case GLUT_KEY_DOWN: altura-=0.1f; break;
-		}
-		glutPostRedisplay();
-	}
+void pressKey(int key, int xx, int yy) {
 
-	void mouseMove(int x, int y) {
-		if (xOrigin >= 0) {
-
-		// update deltaAngle
-		deltaAngle = (x - xOrigin) * 0.001f;
-
-		// update camera's direction
-		lx = sin(angle + deltaAngle);
-		lz = -cos(angle + deltaAngle);
+	switch (key) {
+		case GLUT_KEY_LEFT : deltaAngle = -0.01f; break;
+		case GLUT_KEY_RIGHT : deltaAngle = 0.01f; break;
+		case GLUT_KEY_UP : deltaMove = 0.5f; break;
+		case GLUT_KEY_DOWN : deltaMove = -0.5f; break;
 	}
+}
+
+void releaseKey(int key, int x, int y) {
+
+	switch (key) {
+		case GLUT_KEY_LEFT :
+		case GLUT_KEY_RIGHT : deltaAngle = 0.0f;break;
+		case GLUT_KEY_UP :
+		case GLUT_KEY_DOWN : deltaMove = 0;break;
 	}
+}
 
 
 // escrever função de processamento do menu
@@ -159,6 +175,36 @@ void menu(int op) {
 		case 3: glPolygonMode(GL_FRONT, GL_POINT); break;
 	}
 	glutPostRedisplay();
+}
+
+void mouseButton(int button, int state, int x, int y) {
+
+	// only start motion if the left button is pressed
+	if (button == GLUT_LEFT_BUTTON) {
+
+		// when the button is released
+		if (state == GLUT_UP) {
+			angle += deltaAngle;
+			xOrigin = -1;
+		}
+		else  {// state = GLUT_DOWN
+			xOrigin = x;
+		}
+	}
+}
+
+void mouseMove(int x, int y) {
+
+	// this will only be true when the left button is down
+	if (xOrigin >= 0) {
+
+		// update deltaAngle
+		deltaAngle = (x - xOrigin) * 0.001f;
+
+		// update camera's direction
+		lx = sin(angle + deltaAngle);
+		lz = -cos(angle + deltaAngle);
+	}
 }
 
 
@@ -177,8 +223,12 @@ int main(int argc, char **argv) {
 
 // pôr aqui registo da funções do teclado e rato
 	glutKeyboardFunc(normalkeyboard);
-	glutSpecialFunc(arrowKeyboards);
+	glutSpecialFunc(pressKey);
 
+	// here are the new entries
+	glutIgnoreKeyRepeat(1);
+	glutSpecialUpFunc(releaseKey);
+	glutMouseFunc(mouseButton);
 	glutMotionFunc(mouseMove);
 
 // pôr aqui a criação do menu

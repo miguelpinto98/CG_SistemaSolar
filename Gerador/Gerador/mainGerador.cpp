@@ -137,8 +137,6 @@ void esfera(double raio, int camadasV, int camadasH){
 	int count = 1;
 	ofstream file("esfera.3d");
 
-	glBegin(GL_TRIANGLES);
-
 	for (int i = 0; i<camadasV; i++){
 		double angYX = camada*i; // 0 a 180º na vertical
 
@@ -168,11 +166,8 @@ void esfera(double raio, int camadasV, int camadasH){
 			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
 			printf("%f, %f, %f\n", x4, y1, z4); file << x4 << "," << y1 << "," << z4 << endl;
-
-
 		}
 	}
-	glEnd();
 	file.close();
 }
 

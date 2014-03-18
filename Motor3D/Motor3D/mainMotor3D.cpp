@@ -82,7 +82,7 @@ void renderScene(void) {
 			  0.0f,1.0f,0.0f);
 
 	//glTranslatef(x,0,z);
-    //glRotatef(angulo, 0.0f, 1.0f, 0.0f);
+    //glRotatef(angle, 0.0f, 1.0f, 0.0f);
 
 // pôr instruções de desenho aqui
 	glBegin(GL_TRIANGLES);
@@ -91,8 +91,9 @@ void renderScene(void) {
 	string delimiter = ",";
 	int pos;
 	double a,b,c;
-	ifstream file("paralelipipedo.3d");
+	//ifstream file("paralelipipedo.3d");
 	//ifstream file("plano.3d");
+	ifstream file("esfera.3d");
 	if(file.is_open()) {
 		while(getline(file,line)) {
 			//i=0;

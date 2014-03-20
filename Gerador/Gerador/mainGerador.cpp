@@ -135,7 +135,10 @@ void esfera(double raio, int camadasV, int camadasH){
 	double camada = M_PI / camadasV; //pi=180
 	double rotacoes = 2 * M_PI / camadasH;
 	int count = 1;
-	ofstream file("esfera.3d");
+	//ofstream file("esfera.3d");
+
+	Ponto po;
+	p.clear();
 
 	for (int i = 0; i<camadasV; i++){
 		double angYX = camada*i; // 0 a 180º na vertical
@@ -158,17 +161,23 @@ void esfera(double raio, int camadasV, int camadasH){
 			double z4 = raio * sin(angYX) * cos(angZX + rotacoes);
 
 
-			printf("\n\n-- ITERACAO %d de %d --\n", count - 1, camadasV*camadasH);
+			/*printf("\n\n-- ITERACAO %d de %d --\n", count - 1, camadasV*camadasH);
 			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x2, y2, z2); file << x2 << "," << y2 << "," << z2 << endl;
-			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
+			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;*/
+			po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
+			po.x = x2; po.y = y2; po.z = z2; p.push_back(po);
+			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);
 
-			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
+			/*printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
-			printf("%f, %f, %f\n", x4, y1, z4); file << x4 << "," << y1 << "," << z4 << endl;
+			printf("%f, %f, %f\n", x4, y1, z4); file << x4 << "," << y1 << "," << z4 << endl;*/
+			po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
+			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);
+			po.x = x4; po.y = y1; po.z = z4; p.push_back(po);
 		}
 	}
-	file.close();
+	//file.close();
 }
 
 void cone(double raio, double altura, double camadasV, double camadasH){
@@ -190,9 +199,9 @@ void cone(double raio, double altura, double camadasV, double camadasH){
 			double y2 = alt;
 			double z2 = raio * cos(alpha+deltaV);
 
-			double x2 = raio * sin(alpha);
-			double y2 = alt;
-			double z2 = raio * cos(alpha);
+			double x3 = raio * sin(alpha);
+			double y3 = alt;
+			double z3 = raio * cos(alpha);
 
 			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x2, y2, z2); file << x2 << "," << y2 << "," << z2 << endl;
@@ -252,13 +261,28 @@ int main(int argc, char **argv) {
 		else {
 			if(!strcmp(argv[1],"paralelipipedo")){cout << "PARALELIPIPEDO\n";paralelipipedo(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), atoi(argv[6]));} 
 			else {
-				if(!strcmp(argv[1],"cone")){cout << "CONE\n";	cone(atof(argv[2]), atof(argv[3]), atof(argv[4]), atof(argv[5]));}
+				if(!strcmp(argv[1],"cone")){cout << "CONE\n";	cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]));}
 				else {
-					if (!strcmp(argv[1], "esfera")) {cout << "ESFERA\n";	esfera(atof(argv[2]), atof(argv[3]), atof(argv[4]));}
+					if (!strcmp(argv[1], "esfera")) {
+						cout << "ESFERA\n";	
+						esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]));
+						ofstream file(argv[5], ios::out | ios::binary);
+						file.write((char*)&p, sizeof(p));
+						file.close();
+					}
 				}
 					
 			}
 		}
+	}
+
+	ifstream in("esfera.3d", ios::in | ios:: binary);
+	if(in) {
+	in.read((char*)&p, sizeof(p));
+	in.close();
+
+	for(int i=0; i<10; i++)
+		cout << p.at(i).x << " - " << p.at(i).y << endl;
 	}
 	return 0;
 }

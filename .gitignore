@@ -13,11 +13,9 @@
 *.a
 Gerador/Gerador.opensdf
 Motor3D/Motor3D.opensdf
-
 Gerador/Debug/*
 Gerador/Gerador/Debug/*
 Gerador/Gerador.sdf
-
 Motor3D/Debug/*
 Motor3D/Motor3D/Debug/*
 Motor3D/Motor3D.sdf

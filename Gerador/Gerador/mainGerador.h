@@ -10,13 +10,3 @@
 #include <math.h>
 
 using namespace std;
-
-#include <vector>
-
-struct Ponto {
-	double x;
-	double y;
-	double z;
-};
-
-vector<Ponto> p;

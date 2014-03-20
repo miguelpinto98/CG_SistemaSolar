@@ -1,12 +1,12 @@
 #include "mainGerador.h"
 
-void plano(float compr, float larg, int cmdh, int cmdv) {
+void plano(float compr, float larg, int cmdh, int cmdv, string str) {
 	double x, y=-(larg/2), z=y;
 	double vr=compr/cmdv, hr=larg/cmdh;
 	double ax, ay=y+hr, az=larg/2;
 	int i,j;
 
-	ofstream file("plano.3d");
+	ofstream file(str);
 	y=larg/2, ay=-y;
 	z=-(larg/2), az=z+hr;
 
@@ -32,12 +32,12 @@ void plano(float compr, float larg, int cmdh, int cmdv) {
 }
 
 
-void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv) {
+void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, string str) {
 	double x, y=-(larg/2), z=y;
 	double vr=compr/cmdv, hr=larg/cmdh;
 	double ax, ay=y+hr, az=larg/2;
 	int i,j;
-	ofstream file("paralelipipedo.3d");
+	ofstream file(str);
 
 	//BACK AND FRONT
 	for(i=0; i<cmdh; i++) {
@@ -131,14 +131,11 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv) {
 	file.close();
 }
 
-void esfera(double raio, int camadasV, int camadasH){
+void esfera(double raio, int camadasV, int camadasH, string str){
 	double camada = M_PI / camadasV; //pi=180
 	double rotacoes = 2 * M_PI / camadasH;
 	int count = 1;
-	//ofstream file("esfera.3d");
-
-	Ponto po;
-	p.clear();
+	ofstream file(str);
 
 	for (int i = 0; i<camadasV; i++){
 		double angYX = camada*i; // 0 a 180º na vertical
@@ -154,39 +151,39 @@ void esfera(double raio, int camadasV, int camadasH){
 
 			double y1 = raio * cos(angYX);
 			double y2 = raio * cos(angYX + camada);
-
+		
 			double z1 = raio * sin(angYX) * cos(angZX);
 			double z2 = raio * sin(angYX + camada) * cos(angZX);
 			double z3 = raio * sin(angYX + camada) * cos(angZX + rotacoes);
 			double z4 = raio * sin(angYX) * cos(angZX + rotacoes);
 
 
-			/*printf("\n\n-- ITERACAO %d de %d --\n", count - 1, camadasV*camadasH);
+			//printf("\n\n-- ITERACAO %d de %d --\n", count - 1, camadasV*camadasH);
 			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x2, y2, z2); file << x2 << "," << y2 << "," << z2 << endl;
-			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;*/
-			po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
-			po.x = x2; po.y = y2; po.z = z2; p.push_back(po);
-			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);
-
-			/*printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
-			printf("%f, %f, %f\n", x4, y1, z4); file << x4 << "," << y1 << "," << z4 << endl;*/
-			po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
+			/*po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
+			po.x = x2; po.y = y2; po.z = z2; p.push_back(po);
+			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);*/
+
+			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
+			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
+			printf("%f, %f, %f\n", x4, y1, z4); file << x4 << "," << y1 << "," << z4 << endl;
+			/*po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
 			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);
-			po.x = x4; po.y = y1; po.z = z4; p.push_back(po);
+			po.x = x4; po.y = y1; po.z = z4; p.push_back(po);*/
 		}
 	}
-	//file.close();
+	file.close();
 }
 
-void cone(double raio, double altura, double camadasV, double camadasH){
+void cone(double raio, double altura, double camadasV, double camadasH, string str){
 
 	double deltaV = (2*M_PI)/camadasV;
 	double deltaH = altura/camadasH;
 	double alt = -altura/2;
 
-	ofstream file("cone.3d");
+	ofstream file(str);
 
 	// a base (desenhado em y = alt = -altura/2)
 		for(double alpha = 0; alpha < 2*M_PI; alpha += deltaV){
@@ -257,32 +254,26 @@ void cone(double raio, double altura, double camadasV, double camadasH){
 
 int main(int argc, char **argv) {	
 	if(argc>1) {
-		if(!strcmp(argv[1],"plano")){ cout << "PLANO\n"; plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]));}		
-		else {
-			if(!strcmp(argv[1],"paralelipipedo")){cout << "PARALELIPIPEDO\n";paralelipipedo(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), atoi(argv[6]));} 
-			else {
-				if(!strcmp(argv[1],"cone")){cout << "CONE\n";	cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]));}
-				else {
+		if(!strcmp(argv[1],"plano")) {
+			cout << "PLANO\n" << endl;
+			plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), argv[6]);
+		} else {
+			if(!strcmp(argv[1],"paralelipipedo")) {
+				cout << "PARALELIPIPEDO\n" << endl;
+				paralelipipedo(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), atoi(argv[6]), argv[7]);
+			} else {
+				if(!strcmp(argv[1],"cone")) {
+					cout << "CONE\n" << endl;
+					cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), argv[6]);
+				} else {
 					if (!strcmp(argv[1], "esfera")) {
-						cout << "ESFERA\n";	
-						esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]));
-						ofstream file(argv[5], ios::out | ios::binary);
-						file.write((char*)&p, sizeof(p));
-						file.close();
+						cout << "ESFERA\n" << endl;
+						esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), argv[5]);
 					}
-				}
-					
+				}	
 			}
 		}
 	}
 
-	ifstream in("esfera.3d", ios::in | ios:: binary);
-	if(in) {
-	in.read((char*)&p, sizeof(p));
-	in.close();
-
-	for(int i=0; i<10; i++)
-		cout << p.at(i).x << " - " << p.at(i).y << endl;
-	}
 	return 0;
 }

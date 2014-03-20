@@ -5,30 +5,28 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <fstream>
- #include <iostream>
- #include <string>
+#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-float CONST = 0.1;
+struct sPonto {
+	double x;
+	double y;
+	double z;
+};
 
-// angle of rotation for the camera direction
-float angle = 0.0f;
+vector<sPonto> pontos;
 
-// actual vector representing the camera's direction
-float lx=0.0f,lz=-1.0f;
+#define CONST 0.1f;
+float xx=0, yy=0, zz=0, angle = 0.0f;
+float camX = 0, camY, camZ = 5;
+int startX, startY, tracking = 0;
 
-// XZ position of the camera
-float x=0.0f, z=5.0f;
-
-// the key states. These variables will be zero
-//when no key is being presses
-float deltaAngle = 0.0f;
-float deltaMove = 0;
-int xOrigin = -1;
+int alpha = 0, beta = 0, r = 5;
 
 void changeSize(int w, int h) {
-
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window with zero width).
 	if(h == 0)
@@ -52,118 +50,50 @@ void changeSize(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void computePos(float deltaMove) {
-
-	x += deltaMove * lx * 0.1f;
-	z += deltaMove * lz * 0.1f;
-}
-
-void computeDir(float deltaAngle) {
-
-	angle += deltaAngle;
-	lx = sin(angle);
-	lz = -cos(angle);
-}
-
 void renderScene(void) {
-
-	if (deltaMove)
-		computePos(deltaMove);
-	if (deltaAngle)
-		computeDir(deltaAngle);
-
-	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// set the camera
 	glLoadIdentity();
-	gluLookAt(x,0.0,z, 
-		      lx+x,0.0,lz+z,
+	gluLookAt(camX,camY,camZ, 
+		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
 
-	//glTranslatef(x,0,z);
-    //glRotatef(angle, 0.0f, 1.0f, 0.0f);
+	glTranslatef(xx,yy,zz);
+    glRotatef(angle, 0.0f, 1.0f, 0.0f);
 
-// pôr instruções de desenho aqui
 	glBegin(GL_TRIANGLES);
-	
-	string line, token;
-	string delimiter = ",";
-	int pos;
-	double a,b,c;
-	//ifstream file("paralelipipedo.3d");
-	//ifstream file("plano.3d");
-	ifstream file("esfera.3d");
-	if(file.is_open()) {
-		while(getline(file,line)) {
-			//i=0;
-			//while(i<=2) {
-				pos = line.find(delimiter);
-				token = line.substr(0,pos);
-				a = atof(token.c_str());
-				line.erase(0, pos + delimiter.length());
-
-				pos = line.find(delimiter);
-				token = line.substr(0,pos);
-				b = atof(token.c_str());
-				line.erase(0, pos + delimiter.length());
-
-				pos = line.find(delimiter);
-				token = line.substr(0,pos);
-				c = atof(token.c_str());
-				line.erase(0, pos + delimiter.length());
-
-				glVertex3f(a,b,c);
-				//cout<< a << " - " << b << " - " << c << '\n';
-				//i++;
-			//}
-		}
-		file.close();
-	} else {
-		cout << "Not OK!";
-	}
+		for(int i=0; i<pontos.size(); i++)
+			glVertex3f(pontos[i].x,pontos[i].y,pontos[i].z);
 	glEnd();
 
-	// End of frame
 	glutSwapBuffers();
 }
 
 // escrever função de processamento do teclado
-	void normalkeyboard(unsigned char tecla, int x, int y) {
-		switch (tecla) {
-			case 'a':
-			case 'A': x-=CONST; break;
-			case 'd': 
-			case 'D': x+=CONST; break;
-			case 'w':
-			case 'W': z+=CONST; break;
-			case 's':
-			case 'S': z-=CONST; break;
-			case 'e':
-			case 'E': angle-=5.0f; break;
-			case 'q':
-			case 'Q': angle+=5.0f; break;
-		}
-		glutPostRedisplay();
+void normalkeyboard(unsigned char tecla, int x, int y) {
+	switch (tecla) {
+		case 'a':
+		case 'A': xx-=CONST; break;
+		case 'd': 
+		case 'D': xx+=CONST; break;
+		case 'w':
+		case 'W': yy+=CONST; break;
+		case 's':
+		case 'S': yy-=CONST; break;
+		case 'e':
+		case 'E': zz-=CONST; break;
+		case 'q':
+		case 'Q': zz+=CONST; break;
 	}
-
-void pressKey(int key, int xx, int yy) {
-
-	switch (key) {
-		case GLUT_KEY_LEFT : deltaAngle = -0.01f; break;
-		case GLUT_KEY_RIGHT : deltaAngle = 0.01f; break;
-		case GLUT_KEY_UP : deltaMove = 0.5f; break;
-		case GLUT_KEY_DOWN : deltaMove = -0.5f; break;
-	}
+	glutPostRedisplay();
 }
 
-void releaseKey(int key, int x, int y) {
-
+void specialKeys(int key, int x, int y) {
 	switch (key) {
-		case GLUT_KEY_LEFT :
-		case GLUT_KEY_RIGHT : deltaAngle = 0.0f;break;
-		case GLUT_KEY_UP :
-		case GLUT_KEY_DOWN : deltaMove = 0;break;
+		case GLUT_KEY_LEFT: angle-=5.0f; break;
+		case GLUT_KEY_RIGHT: angle+=5.0f; break;
+		case GLUT_KEY_UP: yy+=CONST; break;
+		case GLUT_KEY_DOWN: break;
 	}
 }
 
@@ -178,34 +108,110 @@ void menu(int op) {
 	glutPostRedisplay();
 }
 
-void mouseButton(int button, int state, int x, int y) {
+void lerFicheiro(string fl) {
+	string line, token, delimiter = ",";
+	int pos;
+	double a,b,c;
+	ifstream file(fl);
+	sPonto pp;
 
-	// only start motion if the left button is pressed
-	if (button == GLUT_LEFT_BUTTON) {
+	if(file.is_open()) {
+		while(getline(file,line)) {
+			pos = line.find(delimiter);
+			token = line.substr(0,pos);
+			a = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+			pp.x=a;
 
-		// when the button is released
-		if (state == GLUT_UP) {
-			angle += deltaAngle;
-			xOrigin = -1;
+			pos = line.find(delimiter);
+			token = line.substr(0,pos);
+			b = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+			pp.y=b;
+
+			pos = line.find(delimiter);
+			token = line.substr(0,pos);
+			c = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+			pp.z=c;
+			
+			pontos.push_back(pp);
+			//cout<< a << " - " << b << " - " << c << '\n';
 		}
-		else  {// state = GLUT_DOWN
-			xOrigin = x;
-		}
+		file.close();
+	} else {
+		cout << "Nao foi possivel ler o arquivo" << endl;
 	}
+} 
+
+void processMouseButtons(int button, int state, int xx, int yy)
+{
+   if (state == GLUT_DOWN)  {
+      startX = xx;
+      startY = yy;
+      if (button == GLUT_LEFT_BUTTON)
+         tracking = 1;
+      else if (button == GLUT_RIGHT_BUTTON)
+         tracking = 2;
+      else
+         tracking = 0;
+   }
+   else if (state == GLUT_UP) {
+      if (tracking == 1) {
+         alpha += (xx - startX);
+         beta += (yy - startY);
+      }
+      else if (tracking == 2) {
+         
+         r -= yy - startY;
+         if (r < 3)
+            r = 3.0;
+      }
+      tracking = 0;
+   }
+
+   
 }
 
-void mouseMove(int x, int y) {
 
-	// this will only be true when the left button is down
-	if (xOrigin >= 0) {
+void processMouseMotion(int xx, int yy)
+{
 
-		// update deltaAngle
-		deltaAngle = (x - xOrigin) * 0.001f;
+   int deltaX, deltaY;
+   int alphaAux, betaAux;
+   int rAux;
 
-		// update camera's direction
-		lx = sin(angle + deltaAngle);
-		lz = -cos(angle + deltaAngle);
-	}
+   if (!tracking)
+      return;
+
+   deltaX = xx - startX;
+   deltaY = yy - startY;
+
+   if (tracking == 1) {
+
+
+      alphaAux = alpha + deltaX;
+      betaAux = beta + deltaY;
+
+      if (betaAux > 85.0)
+         betaAux = 85.0;
+      else if (betaAux < -85.0)
+         betaAux = -85.0;
+
+      rAux = r;
+   }
+   else if (tracking == 2) {
+
+      alphaAux = alpha;
+      betaAux = beta;
+      rAux = r - deltaY;
+      if (rAux < 3)
+         rAux = 3;
+   }
+   camX = rAux * sin(alphaAux * 3.14 / 180.0) * cos(betaAux * 3.14 / 180.0);
+   camZ = rAux * cos(alphaAux * 3.14 / 180.0) * cos(betaAux * 3.14 / 180.0);
+   camY = rAux *                          sin(betaAux * 3.14 / 180.0);
+
 }
 
 
@@ -217,6 +223,12 @@ int main(int argc, char **argv) {
 	glutInitWindowSize(800,800);
 	glutCreateWindow("CG@DI-UM");		
 
+// Ler Ficheiro Para Estrutura
+	lerFicheiro("cone.3d");
+	lerFicheiro("esfera.3d");
+	lerFicheiro("plano.3d");
+	lerFicheiro("paralelipipedo.3d");
+
 // registo de funções 
 	glutDisplayFunc(renderScene);
 	glutIdleFunc(renderScene);
@@ -224,13 +236,11 @@ int main(int argc, char **argv) {
 
 // pôr aqui registo da funções do teclado e rato
 	glutKeyboardFunc(normalkeyboard);
-	glutSpecialFunc(pressKey);
+	glutSpecialFunc(specialKeys);
 
-	// here are the new entries
-	glutIgnoreKeyRepeat(1);
-	glutSpecialUpFunc(releaseKey);
-	glutMouseFunc(mouseButton);
-	glutMotionFunc(mouseMove);
+	/*Código 28*/
+	glutMouseFunc(processMouseButtons);
+	glutMotionFunc(processMouseMotion);
 
 // pôr aqui a criação do menu
 	glutCreateMenu(menu);

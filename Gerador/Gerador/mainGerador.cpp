@@ -285,21 +285,23 @@ void cone(double raio, double altura, double camadasV, double camadasH, string s
 
 int main(int argc, char **argv) {	
 	if(argc>1) {
-		if(!strcmp(argv[1],"plano")) {
+		if(!strcmp(argv[1],"plano") && argc==7) {
 			cout << "PLANO\n" << endl;
 			plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), argv[6]);
 		} else {
-			if(!strcmp(argv[1],"paralelipipedo")) {
+			if(!strcmp(argv[1],"paralelipipedo") && argc==9) {
 				cout << "PARALELIPIPEDO\n" << endl;
 				paralelipipedo(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]), argv[8]);
 			} else {
-				if(!strcmp(argv[1],"cone")) {
+				if(!strcmp(argv[1],"cone") && argc==7) {
 					cout << "CONE\n" << endl;
 					cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), argv[6]);
 				} else {
-					if (!strcmp(argv[1], "esfera")) {
+					if (!strcmp(argv[1], "esfera") && argc==6) {
 						cout << "ESFERA\n" << endl;
 						esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), argv[5]);
+					} else {
+						cout << "PRIMITIVA NAO DESENHADA - DADOS INSERIDOS INVALIDOS!" << endl;
 					}
 				}	
 			}

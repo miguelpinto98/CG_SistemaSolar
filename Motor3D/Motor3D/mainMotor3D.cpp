@@ -1,15 +1,16 @@
-#include <stdlib.h>
-
-#include <GL/glut.h>
-
 #define _USE_MATH_DEFINES
+
+#include <stdlib.h>
+#include <GL/glut.h>
 #include <math.h>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
+#include "tinyxml2\tinyxml2.h"
 
 using namespace std;
+using namespace tinyxml2;
 
 struct sPonto {
 	double x;
@@ -214,48 +215,51 @@ void processMouseMotion(int xx, int yy)
 
 }
 
+void readXML(string fxml) {
+	XMLDocument doc;
+	doc.LoadFile(fxml.c_str());
+    
+    XMLElement* raiz = doc.FirstChildElement("cena");
+    
+    for (XMLElement* elem = raiz->FirstChildElement(); elem; elem = elem->NextSiblingElement()) {
+		string str = elem->Attribute("ficheiro");
+		cout << str << endl;
+		lerFicheiro(str);
+	}
+}
 
 int main(int argc, char **argv) {
-// inicialização
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
-	glutInitWindowPosition(100,100);
-	glutInitWindowSize(800,800);
-	glutCreateWindow("CG@DI-UM");		
+	if(argc>1) { 
+		glutInit(&argc, argv);
+		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
+		glutInitWindowPosition(100,100);
+		glutInitWindowSize(800,800);
+		glutCreateWindow("CG@DI-UM");		
 
-// Ler Ficheiro Para Estrutura
-	lerFicheiro("cone.3d");
-	lerFicheiro("esfera.3d");
-	lerFicheiro("plano.3d");
-	lerFicheiro("paralelipipedo.3d");
+		readXML(argv[1]);
 
-// registo de funções 
-	glutDisplayFunc(renderScene);
-	glutIdleFunc(renderScene);
-	glutReshapeFunc(changeSize);
+		glutDisplayFunc(renderScene);
+		glutIdleFunc(renderScene);
+		glutReshapeFunc(changeSize);
 
-// pôr aqui registo da funções do teclado e rato
-	glutKeyboardFunc(normalkeyboard);
-	glutSpecialFunc(specialKeys);
+		glutKeyboardFunc(normalkeyboard);
+		glutSpecialFunc(specialKeys);
 
-	/*Código 28*/
-	glutMouseFunc(processMouseButtons);
-	glutMotionFunc(processMouseMotion);
+		/*Código 28*/
+		glutMouseFunc(processMouseButtons);
+		glutMotionFunc(processMouseMotion);
 
-// pôr aqui a criação do menu
-	glutCreateMenu(menu);
-	glutAddMenuEntry("GL_FILL",1);
-	glutAddMenuEntry("GL_LINE",2);
-	glutAddMenuEntry("GL_POINT",3);
-	glutAddMenuEntry("GL_FRONT",4);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
+		glutCreateMenu(menu);
+		glutAddMenuEntry("GL_FILL",1);
+		glutAddMenuEntry("GL_LINE",2);
+		glutAddMenuEntry("GL_POINT",3);
+		glutAddMenuEntry("GL_FRONT",4);
+		glutAttachMenu(GLUT_RIGHT_BUTTON);
 
-// alguns settings para OpenGL
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
 	
-// entrar no ciclo do GLUT 
-	glutMainLoop();
-
+		glutMainLoop();
+	}
 	return 1;
 }

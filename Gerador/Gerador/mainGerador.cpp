@@ -100,7 +100,7 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;
 
 			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;
-			printf("%f %f %f\n", ax, y, az); file << ax << "," << ay << "," << az << endl;
+			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;
 			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;
 
 		
@@ -113,7 +113,7 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
 
 			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;
+			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << az << endl;
 			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;
 
 		

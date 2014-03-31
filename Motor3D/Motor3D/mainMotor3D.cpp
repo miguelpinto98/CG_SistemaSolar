@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES
 
 #include <stdlib.h>
-#include <GL/glut.h>
+#include <GLUT/glut.h>
 #include <math.h>
 #include <fstream>
 #include <iostream>
@@ -28,8 +28,7 @@ int startX, startY, tracking = 0;
 int alpha = 0, beta = 0, r = 5;
 
 void changeSize(int w, int h) {
-	// Prevent a divide by zero, when window is too short
-	// (you cant make a window with zero width).
+	// Prevent a divide by zero, when window is too short (you cant make a window with zero width).
 	if(h == 0)
 		h = 1;
 
@@ -218,16 +217,46 @@ void processMouseMotion(int xx, int yy)
 void readXML(string fxml) {
 	XMLDocument doc;
 	doc.LoadFile(fxml.c_str());
-    
-    XMLElement* raiz = doc.FirstChildElement("cena");
-    
-    for (XMLElement* elem = raiz->FirstChildElement(); elem; elem = elem->NextSiblingElement()) {
-		string str = elem->Attribute("ficheiro");
-		cout << str << endl;
-		lerFicheiro(str);
-	}
+    XMLElement* cena = doc.FirstChildElement("cena");
+	XMLElement* grupo = cena->FirstChildElement("grupo");
+	XMLElement* grupo2 = grupo->FirstChildElement("grupo");
+	  
+		for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
+		
+			if(strcmp(transformacao->Value(), "translacao")==0) {printf("%s - %s, %s, %s\n", transformacao->Value(), transformacao->Attribute("X"), transformacao->Attribute("Y"), transformacao->Attribute("Z"));}
+ 
+			if(strcmp(transformacao->Value(), "rotacao")==0) {printf("%s - %s, %s, %s, %s \n", transformacao->Value(), transformacao->Attribute("angulo"), transformacao->Attribute("eixoX"), transformacao->Attribute("eixoY"), transformacao->Attribute("eixoZ"));}
+		 
+			if(strcmp(transformacao->Value(), "escala")==0) { printf("%s\n", transformacao->Value());}
+		}
+
+
+
+		for (XMLElement* modelo = grupo->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement()) {
+			printf("%s\n", modelo->Attribute("ficheiro"));
+		}
+
+
+
+		for (XMLElement* transformacao2 = grupo2->FirstChildElement(); (strcmp(transformacao2->Value(), "modelos")!=0); transformacao2 = transformacao2->NextSiblingElement()) {
+		
+			if(strcmp(transformacao2->Value(), "translacao")==0) {printf("%s - %s, %s, %s\n", transformacao2->Value(), transformacao2->Attribute("X"), transformacao2->Attribute("Y"), transformacao2->Attribute("Z"));}
+ 
+			if(strcmp(transformacao2->Value(), "rotacao")==0) {printf("%s - %s, %s, %s, %s \n", transformacao2->Value(), transformacao2->Attribute("angulo"), transformacao2->Attribute("eixoX"), transformacao2->Attribute("eixoY"), transformacao2->Attribute("eixoZ"));}
+		 
+			if(strcmp(transformacao2->Value(), "escala")==0) { printf("%s\n", transformacao2->Value());}
+		}
+	
+		
+		for (XMLElement* modelo2 = grupo2->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo2; modelo2 = modelo2->NextSiblingElement()) {
+			printf("%s\n", modelo2->Attribute("ficheiro"));
+		}
+
 }
 
+
+//cout << str << endl;
+//lerFicheiro(str);
 int main(int argc, char **argv) {
 	if(argc>1) { 
 		glutInit(&argc, argv);
@@ -236,7 +265,9 @@ int main(int argc, char **argv) {
 		glutInitWindowSize(800,800);
 		glutCreateWindow("CG@DI-UM");		
 
-		readXML(argv[1]);
+		//readXML(argv[1]);
+		string xmlmotor="teste63.xml";
+		readXML(xmlmotor);
 
 		glutDisplayFunc(renderScene);
 		glutIdleFunc(renderScene);

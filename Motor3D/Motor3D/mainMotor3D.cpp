@@ -218,39 +218,64 @@ void readXML(string fxml) {
 	XMLDocument doc;
 	doc.LoadFile(fxml.c_str());
     XMLElement* cena = doc.FirstChildElement("cena");
-	XMLElement* grupo = cena->FirstChildElement("grupo");
-	XMLElement* grupo2 = grupo->FirstChildElement("grupo");
+	XMLElement* grupoPai = cena->FirstChildElement("grupo");
+	XMLElement* grupoFilho = grupoPai->FirstChildElement("grupo");
+
+	
 	  
-		for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
 		
-			if(strcmp(transformacao->Value(), "translacao")==0) {printf("%s - %s, %s, %s\n", transformacao->Value(), transformacao->Attribute("X"), transformacao->Attribute("Y"), transformacao->Attribute("Z"));}
- 
-			if(strcmp(transformacao->Value(), "rotacao")==0) {printf("%s - %s, %s, %s, %s \n", transformacao->Value(), transformacao->Attribute("angulo"), transformacao->Attribute("eixoX"), transformacao->Attribute("eixoY"), transformacao->Attribute("eixoZ"));}
-		 
-			if(strcmp(transformacao->Value(), "escala")==0) { printf("%s\n", transformacao->Value());}
+		//transformações "gerais": Grupo pai
+		for (XMLElement* transformacao = grupoPai->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
+		
+			if(strcmp(transformacao->Value(), "translacao")==0){
+				printf("%s - %s, %s, %s\n", transformacao->Value(), transformacao->Attribute("X"), transformacao->Attribute("Y"), transformacao->Attribute("Z"));
+			}
+
+			if(strcmp(transformacao->Value(), "rotacao")==0) {
+				printf("%s - %s, %s, %s, %s \n", transformacao->Value(), transformacao->Attribute("angulo"), transformacao->Attribute("eixoX"), transformacao->Attribute("eixoY"), transformacao->Attribute("eixoZ"));
+			}
+			
+			
+			if(strcmp(transformacao->Value(), "escala")==0){
+				printf("%s\n", transformacao->Value());
+			}
 		}
 
 
 
-		for (XMLElement* modelo = grupo->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement()) {
+		//modelos que recebem as transformações "gerais": abrangidos pelo grupo pai
+		for (XMLElement* modelo = grupoPai->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement()){
 			printf("%s\n", modelo->Attribute("ficheiro"));
 		}
 
 
+		//percorre todos os filhos
+		for(; grupoFilho; grupoFilho=grupoFilho->NextSiblingElement("grupo")){
 
-		for (XMLElement* transformacao2 = grupo2->FirstChildElement(); (strcmp(transformacao2->Value(), "modelos")!=0); transformacao2 = transformacao2->NextSiblingElement()) {
+		//transformações do filho: grupo filho
+		for (XMLElement* transformacaoFilho = grupoFilho->FirstChildElement(); (strcmp(transformacaoFilho->Value(), "modelos")!=0); transformacaoFilho = transformacaoFilho->NextSiblingElement()) {
 		
-			if(strcmp(transformacao2->Value(), "translacao")==0) {printf("%s - %s, %s, %s\n", transformacao2->Value(), transformacao2->Attribute("X"), transformacao2->Attribute("Y"), transformacao2->Attribute("Z"));}
+			if(strcmp(transformacaoFilho->Value(), "translacao")==0) {
+				printf("%s - %s, %s, %s\n", transformacaoFilho->Value(), transformacaoFilho->Attribute("X"), transformacaoFilho->Attribute("Y"), transformacaoFilho->Attribute("Z"));
+			}
  
-			if(strcmp(transformacao2->Value(), "rotacao")==0) {printf("%s - %s, %s, %s, %s \n", transformacao2->Value(), transformacao2->Attribute("angulo"), transformacao2->Attribute("eixoX"), transformacao2->Attribute("eixoY"), transformacao2->Attribute("eixoZ"));}
+
+			if(strcmp(transformacaoFilho->Value(), "rotacao")==0) {
+				printf("%s - %s, %s, %s, %s \n", transformacaoFilho->Value(), transformacaoFilho->Attribute("angulo"), transformacaoFilho->Attribute("eixoX"), transformacaoFilho->Attribute("eixoY"), transformacaoFilho->Attribute("eixoZ"));
+			}
 		 
-			if(strcmp(transformacao2->Value(), "escala")==0) { printf("%s\n", transformacao2->Value());}
+
+			if(strcmp(transformacaoFilho->Value(), "escala")==0) {
+				printf("%s\n", transformacaoFilho->Value());
+			}
 		}
 	
-		
-		for (XMLElement* modelo2 = grupo2->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo2; modelo2 = modelo2->NextSiblingElement()) {
-			printf("%s\n", modelo2->Attribute("ficheiro"));
+		//modelos que recebem as transformações do filho
+		for (XMLElement* modeloFilho = grupoFilho->FirstChildElement("modelos")->FirstChildElement("modelo"); modeloFilho; modeloFilho = modeloFilho->NextSiblingElement()) {
+			printf("%s\n", modeloFilho->Attribute("ficheiro"));
 		}
+		 
+	}
 
 }
 

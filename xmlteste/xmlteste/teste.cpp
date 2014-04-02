@@ -11,9 +11,9 @@ using namespace std;
 using namespace tinyxml2;
 
 void teste(XMLElement* grupo){
-		
+
+			//transformações para um grupo
 			for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
-		
 				if(strcmp(transformacao->Value(), "translacao")==0) {
 					printf("%s - %s, %s, %s\n", transformacao->Value(), transformacao->Attribute("X"), transformacao->Attribute("Y"), transformacao->Attribute("Z"));}
  
@@ -24,12 +24,17 @@ void teste(XMLElement* grupo){
 					printf("%s\n", transformacao->Value());}
 			}
 	
-			//modelos que recebem as transformações
+
+			//para o mesmo grupo, quais os modelos(ficheiros) que recebem as transformações
 			for (XMLElement* modelo = grupo->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement("modelo")) {
 				printf("%s\n", modelo->Attribute("ficheiro"));}
 			
-	
+
+
+			//faz o mesmo de cima para grupos filhos
 			if (grupo->FirstChildElement("grupo")) {teste(grupo->FirstChildElement("grupo"));}
+
+			//faz o mesmo de cima para grupos irmãos
 		    if (grupo->NextSiblingElement("grupo")) {teste(grupo->NextSiblingElement("grupo"));}
 			
 
@@ -43,8 +48,7 @@ void readXML(string fxml) {
 }
 
 int main(int argc, char **argv) {
-	string xmlmotor="teste63.xml";
-
+	string xmlmotor="teste63.xml"; //BARRIGAS, apenas mudas aqui o nome do ficheiro e botas para correr :D
 	readXML(xmlmotor);
 	return 1;
 }

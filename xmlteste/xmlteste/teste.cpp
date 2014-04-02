@@ -58,14 +58,14 @@ void teste(XMLElement* grupo){
 				if(strcmp(transformacao->Value(), "escala")==0) {
 					float escX, escY, escZ;
 
-					if(transformacao->Attribute("angulo") == NULL) escX=0;
-					else escX= stof(transformacao->Attribute("angulo"));
+					if(transformacao->Attribute("X") == NULL) escX=0;
+					else escX= stof(transformacao->Attribute("X"));
 
-					if(transformacao->Attribute("eixoX") == NULL) escY=0;
-					else escY= stof(transformacao->Attribute("eixoX"));
+					if(transformacao->Attribute("Y") == NULL) escY=0;
+					else escY= stof(transformacao->Attribute("Y"));
 
-					if(transformacao->Attribute("eixoY") == NULL) escZ=0;
-					else escZ= stof(transformacao->Attribute("eixoY"));
+					if(transformacao->Attribute("Z") == NULL) escZ=0;
+					else escZ= stof(transformacao->Attribute("Z"));
 
 					printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
 				}

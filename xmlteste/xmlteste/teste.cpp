@@ -11,10 +11,11 @@ using namespace std;
 using namespace tinyxml2;
 
 void teste(XMLElement* grupo){
-
+	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
+			
 			//transformações para um grupo
 			for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
-				
+
 				//translacao
 				if(strcmp(transformacao->Value(), "translacao")==0) {
 					float transX, transY, transZ;
@@ -30,7 +31,6 @@ void teste(XMLElement* grupo){
 
 					printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);	
 				}
-
 
 
 				//rotacao
@@ -95,7 +95,13 @@ void readXML(string fxml) {
 }
 
 int main(int argc, char **argv) {
-	string xmlmotor="outro.xml"; //BARRIGAS, apenas mudas aqui o nome do ficheiro e botas para correr :D
+	string xmlmotor="exemplo1.xml";
+	//string xmlmotor="exemplo2.xml";
+	//string xmlmotor="exemplo3.xml";
+	//string xmlmotor="exemplo4.xml";
+	//string xmlmotor="exemplo5.xml";
+	//string xmlmotor="exemplo6.xml";
+	//string xmlmotor="exemploInv1.xml";
 	readXML(xmlmotor);
 	return 1;
 }

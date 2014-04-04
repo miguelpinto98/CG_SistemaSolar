@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cena>
+	<grupo>
+		<translacao X="5" Y="0" Z="2" />
+		<grupo>
+			<translacao Y="1">
+			<modelos>
+				<modelo ficheiro="cone.3d" />
+			</modelos>
+		</grupo>
+		<translacao X="5" Y="0" Z="2" />
+		<grupo>
+			<translacao X="1" />
+			<modelos>
+				<modelo ficheiro="cone.3d" />
+			</modelos>
+		</grupo>
+	</grupo>
+</cena>

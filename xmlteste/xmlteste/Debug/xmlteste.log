@@ -1,4 +1,4 @@
-﻿Build started 02-04-2014 08:57:16.
+﻿Build started 04-04-2014 23:07:11.
 Project "C:\Users\User\documents\visual studio 2012\Projects\xmlteste\xmlteste\xmlteste.vcxproj" on node 2 (Build target(s)).
 ClCompile:
   C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt teste.cpp
@@ -11,4 +11,4 @@ Done Building Project "C:\Users\User\documents\visual studio 2012\Projects\xmlte
 
 Build succeeded.
 
-Time Elapsed 00:00:01.76
+Time Elapsed 00:00:01.71

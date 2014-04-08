@@ -214,6 +214,7 @@ void processMouseMotion(int xx, int yy)
 
 }
 
+
 void teste(XMLElement* grupo){
 	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
 			
@@ -291,6 +292,7 @@ void teste(XMLElement* grupo){
 
 }
 
+
 void readXML(string fxml) {
 	XMLDocument doc;
 	doc.LoadFile(fxml.c_str());
@@ -299,7 +301,7 @@ void readXML(string fxml) {
 }
 
 //cout << str << endl;
-//lerFicheiro(str);
+//lerFicheiro(str);  
 int main(int argc, char **argv) {
 	string xmlmotor="exemplo1.xml";
 	//string xmlmotor="exemplo2.xml";
@@ -317,7 +319,6 @@ int main(int argc, char **argv) {
 		glutInitWindowSize(800,800);
 		glutCreateWindow("CG@DI-UM");		
 
-	
 
 		glutDisplayFunc(renderScene);
 		glutIdleFunc(renderScene);

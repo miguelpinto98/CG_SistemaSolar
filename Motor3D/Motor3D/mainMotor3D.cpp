@@ -1,13 +1,15 @@
 #define _USE_MATH_DEFINES
 
 #include <stdlib.h>
-#include <GLUT/glut.h>
+#include <GL/glut.h>
 #include <math.h>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 #include "tinyxml2\tinyxml2.h"
+#include "Ponto.h"
+#include "Primitiva.h"
 
 using namespace std;
 using namespace tinyxml2;
@@ -108,41 +110,7 @@ void menu(int op) {
 	glutPostRedisplay();
 }
 
-void lerFicheiro(string fl) {
-	string line, token, delimiter = ",";
-	int pos;
-	double a,b,c;
-	ifstream file(fl);
-	sPonto pp;
 
-	if(file.is_open()) {
-		while(getline(file,line)) {
-			pos = line.find(delimiter);
-			token = line.substr(0,pos);
-			a = atof(token.c_str());
-			line.erase(0, pos + delimiter.length());
-			pp.x=a;
-
-			pos = line.find(delimiter);
-			token = line.substr(0,pos);
-			b = atof(token.c_str());
-			line.erase(0, pos + delimiter.length());
-			pp.y=b;
-
-			pos = line.find(delimiter);
-			token = line.substr(0,pos);
-			c = atof(token.c_str());
-			line.erase(0, pos + delimiter.length());
-			pp.z=c;
-			
-			pontos.push_back(pp);
-			//cout<< a << " - " << b << " - " << c << '\n';
-		}
-		file.close();
-	} else {
-		cout << "Nao foi possivel ler o arquivo" << endl;
-	}
-} 
 
 void processMouseButtons(int button, int state, int xx, int yy)
 {
@@ -214,6 +182,44 @@ void processMouseMotion(int xx, int yy)
 
 }
 
+void lerFicheiro(string fl, Primitiva& pr) {
+	string line, token, delimiter = ",";
+	int pos;
+	double a,b,c;
+	ifstream file(fl);
+	sPonto pp;
+
+	if(file.is_open()) {
+		while(getline(file,line)) {
+			pos = line.find(delimiter);
+			token = line.substr(0,pos);
+			a = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+			pp.x=a;
+
+			pos = line.find(delimiter);
+			token = line.substr(0,pos);
+			b = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+			pp.y=b;
+
+			pos = line.find(delimiter);
+			token = line.substr(0,pos);
+			c = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+			pp.z=c;
+			
+			Ponto po(a,b,c);
+			pr.adicionaPonto(po);
+			
+			//pontos.push_back(pp);
+			//cout<< a << " - " << b << " - " << c << '\n';
+		}
+		file.close();
+	} else {
+		cout << "Nao foi possivel ler o arquivo" << endl;
+	}
+} 
 
 void teste(XMLElement* grupo){
 	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
@@ -279,7 +285,15 @@ void teste(XMLElement* grupo){
 
 			//para o mesmo grupo, quais os modelos(ficheiros) que recebem as transformações
 			for (XMLElement* modelo = grupo->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement("modelo")) {
-				printf("%s\n", modelo->Attribute("ficheiro"));}
+				Primitiva p(modelo->Attribute("ficheiro"));
+				cout << p.getNomePrimitiva() << endl;
+				lerFicheiro(p.getNomePrimitiva(),p);
+				cout << "FIM! LER PONTOS: " << endl;
+
+				for(int i=0; i<p.getPontos().size(); i++)
+					cout << p.getPontos()[i].getX() << " - " << p.getPontos()[i].getY() << " - " << p.getPontos()[i].getZ() << '\n'; 
+				
+			}
 			
 
 

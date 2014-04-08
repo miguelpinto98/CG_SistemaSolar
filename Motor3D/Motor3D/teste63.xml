@@ -5,13 +5,5 @@
 		<modelos>
 			<modelo ficheiro="esfera.3d" />
 		</modelos>
-		<grupo>
-			<translacao Y="2" />
-			<translacao Y="6" />
-			<modelos>
-				<modelo ficheiro="cone.3d" />
-				<modelo ficheiro="paralelo.3d" />
-			</modelos>
-		</grupo>
 	</grupo>
 </cena>

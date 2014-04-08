@@ -6,7 +6,6 @@
 		<escala X="1" Y="2" Z="3" />
 		<modelos>
 			<modelo ficheiro="esfera.3d" />
-			<modelo ficheiro="cone.3d" />
 		</modelos>
 	</grupo>
 </cena>

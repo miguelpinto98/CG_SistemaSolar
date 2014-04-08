@@ -81,9 +81,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="mainMotor3D.cpp" />
+    <ClCompile Include="Ponto.cpp" />
+    <ClCompile Include="Primitiva.cpp" />
     <ClCompile Include="tinyxml2\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ponto.h" />
+    <ClInclude Include="Primitiva.h" />
     <ClInclude Include="tinyxml2\tinyxml2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

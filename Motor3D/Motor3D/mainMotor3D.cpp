@@ -214,75 +214,102 @@ void processMouseMotion(int xx, int yy)
 
 }
 
-void readXML(string fxml) {
-	XMLDocument doc;
-	doc.LoadFile(fxml.c_str());
-    XMLElement* cena = doc.FirstChildElement("cena");
-	XMLElement* grupoPai = cena->FirstChildElement("grupo");
-	XMLElement* grupoFilho = grupoPai->FirstChildElement("grupo");
-
-	
-	  
-		
-		//transformações "gerais": Grupo pai
-		for (XMLElement* transformacao = grupoPai->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
-		
-			if(strcmp(transformacao->Value(), "translacao")==0){
-				printf("%s - %s, %s, %s\n", transformacao->Value(), transformacao->Attribute("X"), transformacao->Attribute("Y"), transformacao->Attribute("Z"));
-			}
-
-			if(strcmp(transformacao->Value(), "rotacao")==0) {
-				printf("%s - %s, %s, %s, %s \n", transformacao->Value(), transformacao->Attribute("angulo"), transformacao->Attribute("eixoX"), transformacao->Attribute("eixoY"), transformacao->Attribute("eixoZ"));
-			}
+void teste(XMLElement* grupo){
+	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
 			
-			
-			if(strcmp(transformacao->Value(), "escala")==0){
-				printf("%s\n", transformacao->Value());
-			}
-		}
+			//transformações para um grupo
+			for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
+
+				//translacao
+				if(strcmp(transformacao->Value(), "translacao")==0) {
+					float transX, transY, transZ;
+
+					if(transformacao->Attribute("X") == NULL) transX=0;
+					else transX= stof(transformacao->Attribute("X"));
+
+					if(transformacao->Attribute("Y") == NULL) transY=0;
+					else transY= stof(transformacao->Attribute("Y"));
+
+					if(transformacao->Attribute("Z") == NULL) transZ=0;
+					else transZ= stof(transformacao->Attribute("Z"));
+
+					printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);	
+				}
 
 
+				//rotacao
+				if(strcmp(transformacao->Value(), "rotacao")==0) {
+					float rotAng, rotEixoX, rotEixoY, rotEixoZ;
 
-		//modelos que recebem as transformações "gerais": abrangidos pelo grupo pai
-		for (XMLElement* modelo = grupoPai->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement()){
-			printf("%s\n", modelo->Attribute("ficheiro"));
-		}
+					if(transformacao->Attribute("angulo") == NULL) rotAng=0;
+					else rotAng= stof(transformacao->Attribute("angulo"));
 
+					if(transformacao->Attribute("eixoX") == NULL) rotEixoX=0;
+					else rotEixoX= stof(transformacao->Attribute("eixoX"));
 
-		//percorre todos os filhos
-		for(; grupoFilho; grupoFilho=grupoFilho->NextSiblingElement("grupo")){
+					if(transformacao->Attribute("eixoY") == NULL) rotEixoY=0;
+					else rotEixoY= stof(transformacao->Attribute("eixoY"));
 
-		//transformações do filho: grupo filho
-		for (XMLElement* transformacaoFilho = grupoFilho->FirstChildElement(); (strcmp(transformacaoFilho->Value(), "modelos")!=0); transformacaoFilho = transformacaoFilho->NextSiblingElement()) {
-		
-			if(strcmp(transformacaoFilho->Value(), "translacao")==0) {
-				printf("%s - %s, %s, %s\n", transformacaoFilho->Value(), transformacaoFilho->Attribute("X"), transformacaoFilho->Attribute("Y"), transformacaoFilho->Attribute("Z"));
-			}
- 
+					if(transformacao->Attribute("eixoZ") == NULL) rotEixoZ=0;
+					else rotEixoZ= stof(transformacao->Attribute("eixoZ"));
 
-			if(strcmp(transformacaoFilho->Value(), "rotacao")==0) {
-				printf("%s - %s, %s, %s, %s \n", transformacaoFilho->Value(), transformacaoFilho->Attribute("angulo"), transformacaoFilho->Attribute("eixoX"), transformacaoFilho->Attribute("eixoY"), transformacaoFilho->Attribute("eixoZ"));
-			}
+					printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
+				}
 		 
 
-			if(strcmp(transformacaoFilho->Value(), "escala")==0) {
-				printf("%s\n", transformacaoFilho->Value());
+
+				//escala
+				if(strcmp(transformacao->Value(), "escala")==0) {
+					float escX, escY, escZ;
+
+					if(transformacao->Attribute("X") == NULL) escX=0;
+					else escX= stof(transformacao->Attribute("X"));
+
+					if(transformacao->Attribute("Y") == NULL) escY=0;
+					else escY= stof(transformacao->Attribute("Y"));
+
+					if(transformacao->Attribute("Z") == NULL) escZ=0;
+					else escZ= stof(transformacao->Attribute("Z"));
+
+					printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
+				}
 			}
-		}
 	
-		//modelos que recebem as transformações do filho
-		for (XMLElement* modeloFilho = grupoFilho->FirstChildElement("modelos")->FirstChildElement("modelo"); modeloFilho; modeloFilho = modeloFilho->NextSiblingElement()) {
-			printf("%s\n", modeloFilho->Attribute("ficheiro"));
-		}
-		 
-	}
+
+			//para o mesmo grupo, quais os modelos(ficheiros) que recebem as transformações
+			for (XMLElement* modelo = grupo->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement("modelo")) {
+				printf("%s\n", modelo->Attribute("ficheiro"));}
+			
+
+
+			//faz o mesmo de cima para grupos filhos
+			if (grupo->FirstChildElement("grupo")) {teste(grupo->FirstChildElement("grupo"));}
+
+			//faz o mesmo de cima para grupos irmãos
+		    if (grupo->NextSiblingElement("grupo")) {teste(grupo->NextSiblingElement("grupo"));}
+			
 
 }
 
+void readXML(string fxml) {
+	XMLDocument doc;
+	doc.LoadFile(fxml.c_str());
+	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
+	teste(cena);
+}
 
 //cout << str << endl;
 //lerFicheiro(str);
 int main(int argc, char **argv) {
+	string xmlmotor="exemplo1.xml";
+	//string xmlmotor="exemplo2.xml";
+	//string xmlmotor="exemplo3.xml";
+	//string xmlmotor="exemplo4.xml";
+	//string xmlmotor="exemplo5.xml";
+	//string xmlmotor="exemplo6.xml";
+	//string xmlmotor="exemploInv1.xml";
+	readXML(xmlmotor);
+
 	if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
@@ -290,9 +317,7 @@ int main(int argc, char **argv) {
 		glutInitWindowSize(800,800);
 		glutCreateWindow("CG@DI-UM");		
 
-		//readXML(argv[1]);
-		string xmlmotor="teste63.xml";
-		readXML(xmlmotor);
+	
 
 		glutDisplayFunc(renderScene);
 		glutIdleFunc(renderScene);

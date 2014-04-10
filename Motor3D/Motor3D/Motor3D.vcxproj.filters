@@ -33,10 +33,10 @@
     <ClCompile Include="Ponto.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Estado.cpp">
+    <ClCompile Include="Tipo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tipo.cpp">
+    <ClCompile Include="Transformacao.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,10 +50,10 @@
     <ClInclude Include="Ponto.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Estado.h">
+    <ClInclude Include="Tipo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tipo.h">
+    <ClInclude Include="Transformacao.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

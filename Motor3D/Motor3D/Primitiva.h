@@ -2,13 +2,13 @@
 #include <vector>
 #include <iostream>
 #include "Ponto.h"
-#include "Estado.h"
+#include "Transformacao.h"
 
 using namespace std;
 
 class Primitiva {
 	string nome;
-	Estado estado;
+	Transformacao transf;
 public:
 	Primitiva(string);
 	vector<Ponto> pontos;

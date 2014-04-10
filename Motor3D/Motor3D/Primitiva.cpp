@@ -1,9 +1,9 @@
 #include "Primitiva.h"
 
-Primitiva::Primitiva(string name){
-	nome = name;
-	pontos.begin();
-}
+Primitiva::Primitiva(string nome) {
+	nome = nome;
+	transf = Transformacao::Transformacao();
+	}
 
 void Primitiva::adicionaPonto(Ponto p) {
 	pontos.push_back(p);

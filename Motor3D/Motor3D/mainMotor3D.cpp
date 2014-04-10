@@ -15,6 +15,25 @@
 using namespace std;
 using namespace tinyxml2;
 
+struct sTipo {
+	double x;
+	double y;
+	double z;
+	double ang;
+};
+
+struct sTransformacao {
+	Tipo translacao;
+	Tipo rotacao;
+	Tipo escala;
+};
+
+
+struct sPrimitiva {
+	string nome;
+	Transformacao trans;
+};
+
 struct sPonto {
 	double x;
 	double y;

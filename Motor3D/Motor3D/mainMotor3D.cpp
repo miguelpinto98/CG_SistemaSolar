@@ -10,6 +10,7 @@
 #include "tinyxml2\tinyxml2.h"
 #include "Ponto.h"
 #include "Primitiva.h"
+#include "Estado.h"
 
 using namespace std;
 using namespace tinyxml2;
@@ -232,98 +233,114 @@ void lerFicheiro(string fl, Primitiva& pr) {
 	}
 } 
 
-void teste(XMLElement* grupo){
-	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
+
+void teste(XMLElement* grupo, Estado e) {
+	//Estado est;
+	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) 
+		grupo=grupo->FirstChildElement();
+
 			
-		//transformações para um grupo
-		for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
-			//translacao
-			if(strcmp(transformacao->Value(), "translacao")==0) {
-				float transX, transY, transZ;
+	//transformações para um grupo
+	for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
+		//translacao
+		if(strcmp(transformacao->Value(), "translacao")==0) {
+			Tipo t;
 
-				if(transformacao->Attribute("X") == NULL)
-					transX=0;
-				else 
-					transX= stof(transformacao->Attribute("X"));
+			float transX, transY, transZ;
 
-				if(transformacao->Attribute("Y") == NULL)
-					transY=0;
-				else
-					transY= stof(transformacao->Attribute("Y"));
+			if(transformacao->Attribute("X") == NULL)
+				transX=0;
+			else 
+				transX= stof(transformacao->Attribute("X"));
 
-				if(transformacao->Attribute("Z") == NULL)
-					transZ=0;
-				else
-					transZ= stof(transformacao->Attribute("Z"));
+			if(transformacao->Attribute("Y") == NULL)
+				transY=0;
+			else
+				transY= stof(transformacao->Attribute("Y"));
 
-				printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);	
-			}
+			if(transformacao->Attribute("Z") == NULL)
+				transZ=0;
+			else
+				transZ= stof(transformacao->Attribute("Z"));
 
-			//rotacao
-			if(strcmp(transformacao->Value(), "rotacao")==0) {
-				float rotAng, rotEixoX, rotEixoY, rotEixoZ;
+			printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
+			
+			t.x = transX;
+			t.y = transY;
+			t.z = transZ;
+			t.ang = 0;
 
-				if(transformacao->Attribute("angulo") == NULL) 
-					rotAng=0;
-				else 
-					rotAng= stof(transformacao->Attribute("angulo"));
+			//est.trans = t;
 
-				if(transformacao->Attribute("eixoX") == NULL)
-					rotEixoX=0;
-				else 
-					rotEixoX= stof(transformacao->Attribute("eixoX"));
 
-				if(transformacao->Attribute("eixoY") == NULL)
-					rotEixoY=0;
-				else 
-					rotEixoY= stof(transformacao->Attribute("eixoY"));
+		}
 
-				if(transformacao->Attribute("eixoZ") == NULL)
-					rotEixoZ=0;
-				else 
-					rotEixoZ= stof(transformacao->Attribute("eixoZ"));
+		//rotacao
+		if(strcmp(transformacao->Value(), "rotacao")==0) {
+			float rotAng, rotEixoX, rotEixoY, rotEixoZ;
 
-				printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
-			}
+			if(transformacao->Attribute("angulo") == NULL) 
+				rotAng=0;
+			else 
+				rotAng= stof(transformacao->Attribute("angulo"));
+
+			if(transformacao->Attribute("eixoX") == NULL)
+				rotEixoX=0;
+			else 
+				rotEixoX= stof(transformacao->Attribute("eixoX"));
+
+			if(transformacao->Attribute("eixoY") == NULL)
+				rotEixoY=0;
+			else 
+				rotEixoY= stof(transformacao->Attribute("eixoY"));
+
+			if(transformacao->Attribute("eixoZ") == NULL)
+				rotEixoZ=0;
+			else 
+				rotEixoZ= stof(transformacao->Attribute("eixoZ"));
+
+			printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
+		}
 		 
-			//escala
-			if(strcmp(transformacao->Value(), "escala")==0) {
-				float escX, escY, escZ;
+		//escala
+		if(strcmp(transformacao->Value(), "escala")==0) {
+			float escX, escY, escZ;
 
-				if(transformacao->Attribute("X") == NULL)
-					escX=0;
-				else 
-					escX= stof(transformacao->Attribute("X"));
+			if(transformacao->Attribute("X") == NULL)
+				escX=0;
+			else 
+				escX= stof(transformacao->Attribute("X"));
 
-				if(transformacao->Attribute("Y") == NULL)
-					escY=0;
-				else 
-					escY= stof(transformacao->Attribute("Y"));
+			if(transformacao->Attribute("Y") == NULL)
+				escY=0;
+			else 
+				escY= stof(transformacao->Attribute("Y"));
 
-				if(transformacao->Attribute("Z") == NULL)
-					escZ=0;
-				else 
-					escZ= stof(transformacao->Attribute("Z"));
+			if(transformacao->Attribute("Z") == NULL)
+				escZ=0;
+			else 
+				escZ= stof(transformacao->Attribute("Z"));
 
-				printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
-			}
+			printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
 		}
+	}
 
-		//para o mesmo grupo, quais os modelos(ficheiros) que recebem as transformações
-		for (XMLElement* modelo = grupo->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement("modelo")) {
-			Primitiva p(modelo->Attribute("ficheiro"));
-			cout << p.getNomePrimitiva() << endl;
-			lerFicheiro(p.getNomePrimitiva(),p);
-			primitivas.push_back(p);		
-		}
+	//para o mesmo grupo, quais os modelos(ficheiros) que recebem as transformações
+	for (XMLElement* modelo = grupo->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement("modelo")) {
+		Primitiva p(modelo->Attribute("ficheiro"));
+		cout << p.getNomePrimitiva() << endl;
+		lerFicheiro(p.getNomePrimitiva(),p);
+		primitivas.push_back(p);		
+	}
+
 			
-		//faz o mesmo de cima para grupos filhos
-		if(grupo->FirstChildElement("grupo"))
-			teste(grupo->FirstChildElement("grupo"));
+	//faz o mesmo de cima para grupos filhos
+	if(grupo->FirstChildElement("grupo"))
+		teste(grupo->FirstChildElement("grupo"),e);
 
-		//faz o mesmo de cima para grupos irmãos
-		if(grupo->NextSiblingElement("grupo"))
-			teste(grupo->NextSiblingElement("grupo"));
+	//faz o mesmo de cima para grupos irmãos
+	if(grupo->NextSiblingElement("grupo"))
+		teste(grupo->NextSiblingElement("grupo"),e);
 }
 
 
@@ -331,22 +348,25 @@ void readXML(string fxml) {
 	XMLDocument doc;
 	doc.LoadFile(fxml.c_str());
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
-	teste(cena);
+
+	Estado xx = {};
+
+	teste(cena,xx);
 }
 
 //cout << str << endl;
 //lerFicheiro(str);  
 int main(int argc, char **argv) {
-	string xmlmotor="exemplo1.xml";
+	//string xmlmotor="exemplo1.xml";
 	//string xmlmotor="exemplo2.xml";
 	//string xmlmotor="exemplo3.xml";
-	//string xmlmotor="exemplo4.xml";
+	string xmlmotor="exemplo4.xml";
 	//string xmlmotor="exemplo5.xml";
 	//string xmlmotor="exemplo6.xml";
 	//string xmlmotor="exemploInv1.xml";
 	readXML(xmlmotor);
 
-	//if(argc>1) { 
+	if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 		glutInitWindowPosition(100,100);
@@ -376,6 +396,6 @@ int main(int argc, char **argv) {
 		glEnable(GL_CULL_FACE);
 	
 		glutMainLoop();
-	//}
+	}
 	return 1;
 }

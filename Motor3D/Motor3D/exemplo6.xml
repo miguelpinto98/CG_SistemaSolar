@@ -10,16 +10,14 @@
 			<modelos>
 				<modelo ficheiro="cone.3d" />
 			</modelos>
-			<grupo>
-			<translacao Y="3" />
-			<modelos>
-				<modelo ficheiro="cone.3d" />
-			</modelos>
-			</grupo>
+				<translacao Y="3" />
+				<modelos>
+					<modelo ficheiro="cone.3d" />
+				</modelos>
 		</grupo>
 		<grupo>
 			<translacao Y="4" />
-			<modelos>
+			<modselos>
 				<modelo ficheiro="paralelo.3d" />
 			</modelos>
 		</grupo>

@@ -80,15 +80,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Estado.cpp" />
     <ClCompile Include="mainMotor3D.cpp" />
     <ClCompile Include="Ponto.cpp" />
     <ClCompile Include="Primitiva.cpp" />
     <ClCompile Include="tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="Tipo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Estado.h" />
     <ClInclude Include="Ponto.h" />
     <ClInclude Include="Primitiva.h" />
     <ClInclude Include="tinyxml2\tinyxml2.h" />
+    <ClInclude Include="Tipo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

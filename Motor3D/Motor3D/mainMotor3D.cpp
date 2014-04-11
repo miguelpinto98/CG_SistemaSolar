@@ -255,10 +255,9 @@ int lerFicheiro(string fl, Primitiva& pr) {
 	}
 } 
 
-vector<Transformacao> hist;
 
 
-void teste(XMLElement* grupo, Transformacao transf, int filho) {
+void teste(XMLElement* grupo, Transformacao transf) {
 	Transformacao tr;
 	Tipo tp;
 
@@ -349,7 +348,7 @@ void teste(XMLElement* grupo, Transformacao transf, int filho) {
 			//printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
 
 			Tipo x = transf.getEscala();
-			tp = Tipo::Tipo(escX+x.getTX(),escY+x.getTY(),escZ+x.getTZ());
+			tp = Tipo::Tipo(escX*x.getTX(),escY*x.getTY(),escZ*x.getTZ());
 			tr.setEscala(tp);
 		} else {
 			tr.setEscala(transf.getEscala());
@@ -376,20 +375,20 @@ void teste(XMLElement* grupo, Transformacao transf, int filho) {
 	//faz o mesmo de cima para grupos filhos
 	if(grupo->FirstChildElement("grupo")) {
 
-		hist.push_back(tr);
-		teste(grupo->FirstChildElement("grupo"),tr,0);
+		//hist.push_back(tr);
+		teste(grupo->FirstChildElement("grupo"),tr);
 	}
 
 	//faz o mesmo de cima para grupos irmãos
 	if(grupo->NextSiblingElement("grupo")) {
-		int n = hist.size();		
-		Transformacao tt = Transformacao::Transformacao();
+		//int n = hist.size();		
+		//Transformacao tt = Transformacao::Transformacao();
 
-		if(n>0)
-			tt = hist[n-1];
+		//if(n>0)
+			//tt = hist[n-1];
 
-		hist.pop_back();
-		teste(grupo->NextSiblingElement("grupo"),tt,0);
+		//hist.pop_back();
+		teste(grupo->NextSiblingElement("grupo"),transf);
 	}
 }
 
@@ -399,8 +398,8 @@ void readXML(string fxml) {
 	doc.LoadFile(fxml.c_str());
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
 	Transformacao t = Transformacao::Transformacao();
-
-	teste(cena,t,0);
+	t.setEscala(Tipo::Tipo(1,1,1));
+	teste(cena,t);
 }
 
 //cout << str << endl;
@@ -413,10 +412,10 @@ int main(int argc, char **argv) {
 	//string xmlmotor="exemplo5.xml";
 	//string xmlmotor="exemplo6.xml";
 	//string xmlmotor="exemploInv1.xml";
-	string xmlmotor="sistemasolar.xml";
+	string xmlmotor="sistemasolar1.xml";
 	readXML(xmlmotor);
 
-	if(argc>1) { 
+	//if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 		glutInitWindowPosition(100,100);
@@ -446,6 +445,6 @@ int main(int argc, char **argv) {
 		glEnable(GL_CULL_FACE);
 	
 		glutMainLoop();
-	}
+	//}
 	return 1;
 }

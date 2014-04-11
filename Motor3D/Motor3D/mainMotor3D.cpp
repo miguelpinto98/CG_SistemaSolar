@@ -409,10 +409,11 @@ int main(int argc, char **argv) {
 	//string xmlmotor="exemplo1.xml";
 	//string xmlmotor="exemplo2.xml";
 	//string xmlmotor="exemplo3.xml";
-	string xmlmotor="exemplo4.xml";
+	//string xmlmotor="exemplo4.xml";
 	//string xmlmotor="exemplo5.xml";
 	//string xmlmotor="exemplo6.xml";
 	//string xmlmotor="exemploInv1.xml";
+	string xmlmotor="sistemasolar.xml";
 	readXML(xmlmotor);
 
 	if(argc>1) { 
@@ -430,7 +431,7 @@ int main(int argc, char **argv) {
 		glutKeyboardFunc(normalkeyboard);
 		glutSpecialFunc(specialKeys);
 
-		/*Código 28*/
+
 		glutMouseFunc(processMouseButtons);
 		glutMotionFunc(processMouseMotion);
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cena>
+	<grupo>
+		<!--sol-->
+		<modelos>
+			<modelo ficheiro="esfera.3d" />
+		</modelos>
+		<!--mercurio--> 
+		<grupo> 
+			<translacao X="0.0579" />
+			<modelos>
+				<modelo ficheiro="esfera.3d" />
+			</modelos>
+		</grupo>
+		<!--venus--> 
+		<grupo> 
+			<translacao X="0.108" />
+			<modelos>
+				<modelo ficheiro="esfera.3d" />
+			</modelos>
+		</grupo>
+		<!--terra--> 
+		<grupo> 
+			<translacao X="0.1496" />
+			<modelos>
+				<modelo ficheiro="esfera.3d" />
+			</modelos>
+			<!--lua--> 
+			<grupo> 
+				<translacao Y="0.01" />
+					<modelos>
+						<modelo ficheiro="esfera.3d" />
+					</modelos>
+			</grupo>
+		</grupo>
+		<!--marte--> 
+		<grupo> 
+			<translacao X="1.228" />
+			<modelos>
+				<modelo ficheiro="esfera.3d" />
+			</modelos>
+		</grupo>
+		<!--jupiter--> 
+		<grupo> 
+			<translacao X="0.778" />
+			<modelos>
+				<modelo ficheiro="esfera.3d" />
+			</modelos>
+		</grupo>
+		<!--saturno--> 
+		<grupo> 
+			<translacao X="1.43" />
+			<modelos>
+				<modelo ficheiro="esfera.3d" />
+			</modelos>
+		</grupo>
+		<!--urano--> 
+		<grupo> 
+			<translacao X="2.87" />
+			<modelos>
+				<modelo ficheiro="esfera.3d" />
+			</modelos>
+		</grupo>
+		<!--neptuno--> 
+		<grupo> 
+			<translacao X="4.5" />
+			<modelos>
+				<modelo ficheiro="esfera.3d" />
+			</modelos>
+		</grupo>
+	</grupo>
+</cena>

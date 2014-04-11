@@ -14,6 +14,8 @@ public:
 	vector<Ponto> pontos;
 	string getNomePrimitiva() { return nome; }
 	vector<Ponto> getPontos() { return pontos; }
+	Transformacao getTransformacao() { return transf; }
+	void setTransformacao(Transformacao t) { transf = t; }
 	void adicionaPonto(Ponto p);
 	virtual ~Primitiva(void);
 };

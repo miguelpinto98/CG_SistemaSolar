@@ -15,25 +15,6 @@
 using namespace std;
 using namespace tinyxml2;
 
-struct sTipo {
-	double x;
-	double y;
-	double z;
-	double ang;
-};
-
-struct sTransformacao {
-	Tipo translacao;
-	Tipo rotacao;
-	Tipo escala;
-};
-
-
-struct sPrimitiva {
-	string nome;
-	Transformacao trans;
-};
-
 struct sPonto {
 	double x;
 	double y;
@@ -85,19 +66,39 @@ void renderScene(void) {
 	glTranslatef(xx,yy,zz);
     glRotatef(angle, 0.0f, 1.0f, 0.0f);
 
-	glBegin(GL_TRIANGLES);
+	
 	int ipr = primitivas.size(), jpon;
 	vector<Ponto> ress;
 
 	for(int i=0; i<ipr; i++) {
 		jpon = primitivas[i].getPontos().size();
 		ress = primitivas[i].getPontos();
+		Transformacao t = primitivas[i].getTransformacao();
+		Tipo tp;
+
+		if(!t.trasnformacaoVazia()) {
+			tp = t.getTranslacao();
+			if(!tp.tipoVazio()) {
+				//cout << tp.getTX() << " - " <<tp.getTY() << " - " << tp.getTZ() << endl;
+				glTranslatef(tp.getTX(),tp.getTY(),tp.getTZ()); 
+			}
+
+			tp=t.getRotacao(); 
+			if(!tp.tipoVazio())
+				glRotatef(tp.getTAng(), tp.getTX(),tp.getTY(),tp.getTZ());
+			
+			tp=t.getEscala();
+			if(!tp.tipoVazio())
+				glScalef(tp.getTX(),tp.getTY(),tp.getTZ()); 
+		}
 		
+		glBegin(GL_TRIANGLES);
 		for(int j=0; j< jpon; j++) {
 			glVertex3f(ress.at(j).getX(), ress.at(j).getY(), ress.at(j).getZ());
 		}
+		glEnd();
 	}
-	glEnd();
+
 
 	glutSwapBuffers();
 }
@@ -213,7 +214,7 @@ void processMouseMotion(int xx, int yy)
 
 }
 
-void lerFicheiro(string fl, Primitiva& pr) {
+int lerFicheiro(string fl, Primitiva& pr) {
 	string line, token, delimiter = ",";
 	int pos;
 	double a,b,c;
@@ -247,24 +248,25 @@ void lerFicheiro(string fl, Primitiva& pr) {
 			//cout<< a << " - " << b << " - " << c << '\n';
 		}
 		file.close();
+		return 0;
 	} else {
 		cout << "Nao foi possivel ler o arquivo" << endl;
+		return -1;
 	}
 } 
 
 
-void teste(XMLElement* grupo, Estado e) {
-	//Estado est;
+void teste(XMLElement* grupo, Transformacao transf) {
+	Transformacao tr;
+	Tipo tp;
+
 	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) 
 		grupo=grupo->FirstChildElement();
-
-			
+	
 	//transformações para um grupo
 	for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
 		//translacao
 		if(strcmp(transformacao->Value(), "translacao")==0) {
-			Tipo t;
-
 			float transX, transY, transZ;
 
 			if(transformacao->Attribute("X") == NULL)
@@ -282,18 +284,13 @@ void teste(XMLElement* grupo, Estado e) {
 			else
 				transZ= stof(transformacao->Attribute("Z"));
 
-			printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
-			
-			t.x = transX;
-			t.y = transY;
-			t.z = transZ;
-			t.ang = 0;
-
-			//est.trans = t;
-
-
+			//printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
+	
+			Tipo x = transf.getTranslacao();
+			tp = Tipo::Tipo(transX+x.getTX(),transY+x.getTY(),transZ+x.getTZ());
+			tr.setTranslacao(tp);
 		}
-
+		
 		//rotacao
 		if(strcmp(transformacao->Value(), "rotacao")==0) {
 			float rotAng, rotEixoX, rotEixoY, rotEixoZ;
@@ -318,8 +315,13 @@ void teste(XMLElement* grupo, Estado e) {
 			else 
 				rotEixoZ= stof(transformacao->Attribute("eixoZ"));
 
-			printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
+			//printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
+
+			Tipo x = transf.getRotacao();
+			tp = Tipo::Tipo(rotAng+x.getTAng(),rotEixoX+x.getTX(),rotEixoY+x.getTY(),rotEixoZ+x.getTZ());
+			tr.setRotacao(tp);
 		}
+			
 		 
 		//escala
 		if(strcmp(transformacao->Value(), "escala")==0) {
@@ -340,26 +342,38 @@ void teste(XMLElement* grupo, Estado e) {
 			else 
 				escZ= stof(transformacao->Attribute("Z"));
 
-			printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
+			//printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
+
+			Tipo x = transf.getEscala();
+			tp = Tipo::Tipo(escX+x.getTX(),escY+x.getTY(),escZ+x.getTZ());
+			tr.setEscala(tp);
 		}
 	}
 
 	//para o mesmo grupo, quais os modelos(ficheiros) que recebem as transformações
 	for (XMLElement* modelo = grupo->FirstChildElement("modelos")->FirstChildElement("modelo"); modelo; modelo = modelo->NextSiblingElement("modelo")) {
+		int flag;
 		Primitiva p(modelo->Attribute("ficheiro"));
 		cout << p.getNomePrimitiva() << endl;
-		lerFicheiro(p.getNomePrimitiva(),p);
-		primitivas.push_back(p);		
-	}
+		flag = lerFicheiro(p.getNomePrimitiva(),p);
 
-			
+		if(flag>=0) { 
+			p.setTransformacao(tr);
+			primitivas.push_back(p);
+
+			cout << tr.getTranslacao().getTX() << " - " << tr.getTranslacao().getTY() << " - " << tr.getTranslacao().getTZ() << endl;
+			cout << tr.getRotacao().getTAng() << " - " << tr.getRotacao().getTX() << " - " << tr.getRotacao().getTY() << " - " << tr.getRotacao().getTZ() << endl;
+			cout << tr.getEscala().getTX() << " - " << tr.getEscala().getTY() << " - " << tr.getEscala().getTZ() << endl;
+		}
+	}
+	
 	//faz o mesmo de cima para grupos filhos
 	if(grupo->FirstChildElement("grupo"))
-		teste(grupo->FirstChildElement("grupo"),e);
+		teste(grupo->FirstChildElement("grupo"),tr);
 
 	//faz o mesmo de cima para grupos irmãos
 	if(grupo->NextSiblingElement("grupo"))
-		teste(grupo->NextSiblingElement("grupo"),e);
+		teste(grupo->NextSiblingElement("grupo"),Transformacao::Transformacao());
 }
 
 
@@ -367,10 +381,9 @@ void readXML(string fxml) {
 	XMLDocument doc;
 	doc.LoadFile(fxml.c_str());
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
+	Transformacao t = Transformacao::Transformacao();
 
-	Estado xx = {};
-
-	teste(cena,xx);
+	teste(cena,t);
 }
 
 //cout << str << endl;
@@ -385,7 +398,7 @@ int main(int argc, char **argv) {
 	//string xmlmotor="exemploInv1.xml";
 	readXML(xmlmotor);
 
-	if(argc>1) { 
+	//if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 		glutInitWindowPosition(100,100);
@@ -397,12 +410,12 @@ int main(int argc, char **argv) {
 		glutIdleFunc(renderScene);
 		glutReshapeFunc(changeSize);
 
-		glutKeyboardFunc(normalkeyboard);
-		glutSpecialFunc(specialKeys);
+		//glutKeyboardFunc(normalkeyboard);
+		//glutSpecialFunc(specialKeys);
 
 		/*Código 28*/
-		glutMouseFunc(processMouseButtons);
-		glutMotionFunc(processMouseMotion);
+		//glutMouseFunc(processMouseButtons);
+		//glutMotionFunc(processMouseMotion);
 
 		glutCreateMenu(menu);
 		glutAddMenuEntry("GL_FILL",1);
@@ -415,6 +428,6 @@ int main(int argc, char **argv) {
 		glEnable(GL_CULL_FACE);
 	
 		glutMainLoop();
-	}
+	//}
 	return 1;
 }

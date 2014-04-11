@@ -1,14 +1,18 @@
 #pragma once
 
 class Tipo {
-	double x;
-	double y;
-	double z;
-	double ang;
+	float x;
+	float y;
+	float z;
+	float ang;
 public:
 	Tipo();
-	Tipo(double, double, double);
-	Tipo(double, double, double, double);
+	Tipo(float, float, float);
+	Tipo(float, float, float, float);
+	float getTX() { return x; }
+	float getTY() { return y; }
+	float getTZ() { return z; }
+	float getTAng() { return ang; }
 	bool tipoVazio();
 	~Tipo(void);
 };

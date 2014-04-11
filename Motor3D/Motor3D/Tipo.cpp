@@ -8,14 +8,14 @@ Tipo::Tipo() {
 	ang = 0;
 }
 
-Tipo::Tipo(double xx, double yy, double zz) {
+Tipo::Tipo(float xx, float yy, float zz) {
 	x = xx;
 	y = yy;
 	z = zz;
 	ang = 0;
 }
 
-Tipo::Tipo(double xx, double yy, double zz, double a) {
+Tipo::Tipo(float a, float xx, float yy, float zz) {
 	x = xx;
 	y = yy;
 	z = zz;

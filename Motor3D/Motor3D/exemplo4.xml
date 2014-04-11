@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cena>
 	<grupo>
-		<translacao X="5" Y="0" Z="2" />
+		<translacao X="1" Y="0" Z="0" />
 		<rotacao angulo="45" eixoX="0" eixoY="1" eixoZ="0" />
 		<modelos>
 			<modelo ficheiro="esfera.3d" />
@@ -14,14 +14,14 @@
 			<grupo>
 				<translacao X="1" />
 				<modelos>
-					<modelo ficheiro="cone.3d" />
+					<modelo ficheiro="conesd.3d" />
 				</modelos>
 			</grupo>
 		</grupo>
 		<grupo>
 			<translacao X="1" />
 			<modelos>
-				<modelo ficheiro="cone.3d" />
+				<modelo ficheiro="conde.3d" />
 			</modelos>
 		</grupo>
 	</grupo>

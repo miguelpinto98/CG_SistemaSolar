@@ -14,14 +14,14 @@
 			<grupo>
 				<translacao X="1" />
 				<modelos>
-					<modelo ficheiro="conesd.3d" />
+					<modelo ficheiro="cone.3d" />
 				</modelos>
 			</grupo>
 		</grupo>
 		<grupo>
 			<translacao X="1" />
 			<modelos>
-				<modelo ficheiro="conde.3d" />
+				<modelo ficheiro="cone.3d" />
 			</modelos>
 		</grupo>
 	</grupo>

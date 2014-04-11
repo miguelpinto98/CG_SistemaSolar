@@ -255,8 +255,10 @@ int lerFicheiro(string fl, Primitiva& pr) {
 	}
 } 
 
+vector<Transformacao> hist;
 
-void teste(XMLElement* grupo, Transformacao transf) {
+
+void teste(XMLElement* grupo, Transformacao transf, int filho) {
 	Transformacao tr;
 	Tipo tp;
 
@@ -284,7 +286,7 @@ void teste(XMLElement* grupo, Transformacao transf) {
 			else
 				transZ= stof(transformacao->Attribute("Z"));
 
-			//printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
+			printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
 	
 			Tipo x = transf.getTranslacao();
 			tp = Tipo::Tipo(transX+x.getTX(),transY+x.getTY(),transZ+x.getTZ());
@@ -320,6 +322,8 @@ void teste(XMLElement* grupo, Transformacao transf) {
 			Tipo x = transf.getRotacao();
 			tp = Tipo::Tipo(rotAng+x.getTAng(),rotEixoX+x.getTX(),rotEixoY+x.getTY(),rotEixoZ+x.getTZ());
 			tr.setRotacao(tp);
+		} else {
+			tr.setRotacao(transf.getRotacao());
 		}
 			
 		 
@@ -347,6 +351,8 @@ void teste(XMLElement* grupo, Transformacao transf) {
 			Tipo x = transf.getEscala();
 			tp = Tipo::Tipo(escX+x.getTX(),escY+x.getTY(),escZ+x.getTZ());
 			tr.setEscala(tp);
+		} else {
+			tr.setEscala(transf.getEscala());
 		}
 	}
 
@@ -368,12 +374,23 @@ void teste(XMLElement* grupo, Transformacao transf) {
 	}
 	
 	//faz o mesmo de cima para grupos filhos
-	if(grupo->FirstChildElement("grupo"))
-		teste(grupo->FirstChildElement("grupo"),tr);
+	if(grupo->FirstChildElement("grupo")) {
+
+		hist.push_back(tr);
+		teste(grupo->FirstChildElement("grupo"),tr,0);
+	}
 
 	//faz o mesmo de cima para grupos irmãos
-	if(grupo->NextSiblingElement("grupo"))
-		teste(grupo->NextSiblingElement("grupo"),Transformacao::Transformacao());
+	if(grupo->NextSiblingElement("grupo")) {
+		int n = hist.size();		
+		Transformacao tt = Transformacao::Transformacao();
+
+		if(n>0)
+			tt = hist[n-1];
+
+		hist.pop_back();
+		teste(grupo->NextSiblingElement("grupo"),tt,0);
+	}
 }
 
 
@@ -383,7 +400,7 @@ void readXML(string fxml) {
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
 	Transformacao t = Transformacao::Transformacao();
 
-	teste(cena,t);
+	teste(cena,t,0);
 }
 
 //cout << str << endl;
@@ -398,7 +415,7 @@ int main(int argc, char **argv) {
 	//string xmlmotor="exemploInv1.xml";
 	readXML(xmlmotor);
 
-	//if(argc>1) { 
+	if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 		glutInitWindowPosition(100,100);
@@ -410,12 +427,12 @@ int main(int argc, char **argv) {
 		glutIdleFunc(renderScene);
 		glutReshapeFunc(changeSize);
 
-		//glutKeyboardFunc(normalkeyboard);
-		//glutSpecialFunc(specialKeys);
+		glutKeyboardFunc(normalkeyboard);
+		glutSpecialFunc(specialKeys);
 
 		/*Código 28*/
-		//glutMouseFunc(processMouseButtons);
-		//glutMotionFunc(processMouseMotion);
+		glutMouseFunc(processMouseButtons);
+		glutMotionFunc(processMouseMotion);
 
 		glutCreateMenu(menu);
 		glutAddMenuEntry("GL_FILL",1);
@@ -428,6 +445,6 @@ int main(int argc, char **argv) {
 		glEnable(GL_CULL_FACE);
 	
 		glutMainLoop();
-	//}
+	}
 	return 1;
 }

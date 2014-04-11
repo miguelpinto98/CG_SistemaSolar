@@ -8,64 +8,64 @@
 		</modelos>
 		<!--mercurio--> 
 		<grupo> 
-			<translacao X="0.0579" />
-			<escala X="0.000351036" Y="0.000351036" Z="0.000351036"/>
+			<translacao X="2" />
+			<escala X="0.0351036" Y="0.0351036" Z="0.0351036"/>
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>
 		<!--venus--> 
 		<grupo> 
-			<translacao X="0.108" />
-			<escala X="0.0008707626" Y="0.0008707626" Z="0.0008707626" />
+			<translacao X="1.8" />
+			<escala X="0.08707626" Y="0.08707626" Z="0.08707626" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>
 		<!--terra--> 
 		<grupo> 
-			<translacao X="0.1496" />
-			<escala X="0.000917718" Y="0.000917718" Z="0.000917718" />
+			<translacao X="1.7" />
+			<escala X="0.0917718" Y="0.0917718" Z="0.0917718" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>
 		<!--marte--> 
 		<grupo> 
-			<translacao X="1.228" />
-			<escala X="0.0004888058" Y="0.0004888058" Z="0.0004888058" />
+			<translacao X="2" />
+			<escala X="0.04888058" Y="0.04888058" Z="0.04888058" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>
 		<!--jupiter--> 
 		<grupo> 
-			<translacao X="0.778" />
-			<escala X="0.0102866187" Y="0.0102866187" Z="0.0102866187" />
+			<translacao X="1.7" />
+			<escala X="0.102866187" Y="0.102866187" Z="0.102866187" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>
 		<!--saturno--> 
 		<grupo> 
-			<translacao X="1.43" />
-			<escala X="0.0086716547" Y="0.0086716547" Z="0.0086716547" />
+			<translacao X="1.8" />
+			<escala X="0.86716547" Y="0.86716547" Z="0.86716547" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>
 		<!--urano--> 
 		<grupo> 
-			<translacao X="2.87" />
-			<escala X="0.0036775540" Y=".0036775540" Z=".0036775540" />
+			<translacao X="3.5" />
+			<escala X="0.36775540" Y=".36775540" Z=".36775540" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>
 		<!--neptuno--> 
 		<grupo> 
-			<translacao X="4.5" />
-			<escala X="0.0035605756" Y="0.0035605756" Z="0.0035605756" />
+			<translacao X="4" />
+			<escala X="0.35605756" Y="0.35605756" Z="0.35605756" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>

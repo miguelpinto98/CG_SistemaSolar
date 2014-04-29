@@ -1,7 +1,7 @@
 #include "Ponto.h"
 
 
-Ponto::Ponto(double xx, double yy, double zz){
+Ponto::Ponto(float xx, float yy, float zz){
 	x = xx;
 	y = yy;
 	z = zz;

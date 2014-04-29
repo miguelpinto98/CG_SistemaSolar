@@ -4,7 +4,7 @@
 		<grupo>
 			<translacao Y="1" />
 			<modelos>
-				<modelo ficheiro="cone.3d" />
+				<modelo ficheiro="paralelipipedo.3d" />
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>

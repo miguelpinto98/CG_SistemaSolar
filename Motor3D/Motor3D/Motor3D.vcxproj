@@ -80,7 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="mainMotor3D.cpp" />
+    <ClCompile Include="Motor3D.cpp" />
     <ClCompile Include="Ponto.cpp" />
     <ClCompile Include="Primitiva.cpp" />
     <ClCompile Include="tinyxml2\tinyxml2.cpp" />
@@ -88,6 +88,7 @@
     <ClCompile Include="Transformacao.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Motor3D.h" />
     <ClInclude Include="Ponto.h" />
     <ClInclude Include="Primitiva.h" />
     <ClInclude Include="tinyxml2\tinyxml2.h" />

@@ -253,24 +253,15 @@ void teste(XMLElement* grupo, Transformacao transf) {
 	for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
 		//translacao
 		if(strcmp(transformacao->Value(), "translacao")==0) {
-			float transX, transY, transZ;
+			float tmp;
 
-			if(transformacao->Attribute("X") == NULL)
-				transX=0;
+			if(transformacao->Attribute("tempo") == NULL)
+				tmp=0;
 			else 
-				transX= stof(transformacao->Attribute("X"));
+				tmp= stof(transformacao->Attribute("tempo"));
 
-			if(transformacao->Attribute("Y") == NULL)
-				transY=0;
-			else
-				transY= stof(transformacao->Attribute("Y"));
 
-			if(transformacao->Attribute("Z") == NULL)
-				transZ=0;
-			else
-				transZ= stof(transformacao->Attribute("Z"));
-
-			printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
+			//printf("%s - %f\n", transformacao->Value(), tmp);
 	
 			Tipo x = transf.getTranslacao();
 			tp = Tipo::Tipo(transX+x.getTX(),transY+x.getTY(),transZ+x.getTZ());
@@ -279,32 +270,32 @@ void teste(XMLElement* grupo, Transformacao transf) {
 		
 		//rotacao
 		if(strcmp(transformacao->Value(), "rotacao")==0) {
-			float rotAng, rotEixoX, rotEixoY, rotEixoZ;
+			float t, EixoX, EixoY, EixoZ;
 
-			if(transformacao->Attribute("angulo") == NULL) 
-				rotAng=0;
+			if(transformacao->Attribute("tempo") == NULL) 
+				t=0;
 			else 
-				rotAng= stof(transformacao->Attribute("angulo"));
+				t= stof(transformacao->Attribute("tempo"));
 
 			if(transformacao->Attribute("eixoX") == NULL)
-				rotEixoX=0;
+				EixoX=0;
 			else 
-				rotEixoX= stof(transformacao->Attribute("eixoX"));
+				EixoX= stof(transformacao->Attribute("eixoX"));
 
 			if(transformacao->Attribute("eixoY") == NULL)
-				rotEixoY=0;
+				EixoY=0;
 			else 
-				rotEixoY= stof(transformacao->Attribute("eixoY"));
+				EixoY= stof(transformacao->Attribute("eixoY"));
 
 			if(transformacao->Attribute("eixoZ") == NULL)
-				rotEixoZ=0;
+				EixoZ=0;
 			else 
-				rotEixoZ= stof(transformacao->Attribute("eixoZ"));
+				EixoZ= stof(transformacao->Attribute("eixoZ"));
 
-			//printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
+			//printf("%s - %f, %f, %f, %f \n", transformacao->Value(), t, EixoX, EixoY, EixoZ);
 
 			Tipo x = transf.getRotacao();
-			tp = Tipo::Tipo(rotAng+x.getTAng(),rotEixoX+x.getTX(),rotEixoY+x.getTY(),rotEixoZ+x.getTZ());
+			tp = Tipo::Tipo(t+x.getTt(),EixoX+x.getTX(),EixoY+x.getTY(),EixoZ+x.getTZ());
 			tr.setRotacao(tp);
 		} else {
 			tr.setRotacao(transf.getRotacao());

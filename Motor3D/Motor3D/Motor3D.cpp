@@ -60,14 +60,12 @@ void renderScene(void) {
 
 	framesPerSecond();
 
-	desenhaPrimitiva();
+	//desenhaPrimitiva();
 
 	/* Cenário Imediato */
-	/*
+	
 	int ipr = primitivas.size(), jpon;
 	vector<Ponto> ress;
-
-
 
 	for(int i=0; i<ipr; i++) {
 		jpon = primitivas[i].getPontos().size();
@@ -75,10 +73,11 @@ void renderScene(void) {
 		Transformacao t = primitivas[i].getTransformacao();
 		Tipo tp;
 
+		glPushMatrix();
+
 		if(!t.trasnformacaoVazia()) {
 			tp = t.getTranslacao();
 			if(!tp.tipoVazio()) {
-				//cout << tp.getTX() << " - " <<tp.getTY() << " - " << tp.getTZ() << endl;
 				glTranslatef(tp.getTX(),tp.getTY(),tp.getTZ()); 
 			}
 
@@ -96,8 +95,8 @@ void renderScene(void) {
 			glVertex3f(ress.at(j).getX(), ress.at(j).getY(), ress.at(j).getZ());
 		}
 		glEnd();
+		glPopMatrix();
 	}
-	*/
 	glutSwapBuffers();
 }
 
@@ -250,93 +249,102 @@ void teste(XMLElement* grupo, Transformacao transf) {
 		grupo=grupo->FirstChildElement();
 	
 	//transformações para um grupo
-	for (XMLElement* transformacao = grupo->FirstChildElement(); (strcmp(transformacao->Value(), "modelos")!=0); transformacao = transformacao->NextSiblingElement()) {
-		//translacao
-		if(strcmp(transformacao->Value(), "translacao")==0) {
-			float transX, transY, transZ;
+	XMLElement* transformacao = grupo->FirstChildElement();
 
-			if(transformacao->Attribute("X") == NULL)
-				transX=0;
-			else 
-				transX= stof(transformacao->Attribute("X"));
+	/* Verifica se existem transformcoes antes dos modelos */
+	if (strcmp(transformacao->Value(), "modelos") == 0) {
+		tr = transf;
+	} else {
+		for (transformacao; (strcmp(transformacao->Value(), "modelos") != 0); transformacao = transformacao->NextSiblingElement()) {
+			/* Translacao */
+			if (strcmp(transformacao->Value(), "translacao") == 0) {
+				float transX, transY, transZ;
 
-			if(transformacao->Attribute("Y") == NULL)
-				transY=0;
-			else
-				transY= stof(transformacao->Attribute("Y"));
+				if (transformacao->Attribute("X") == NULL)
+					transX = 0;
+				else
+					transX = stof(transformacao->Attribute("X"));
 
-			if(transformacao->Attribute("Z") == NULL)
-				transZ=0;
-			else
-				transZ= stof(transformacao->Attribute("Z"));
+				if (transformacao->Attribute("Y") == NULL)
+					transY = 0;
+				else
+					transY = stof(transformacao->Attribute("Y"));
 
-			printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
-	
-			Tipo x = transf.getTranslacao();
-			tp = Tipo::Tipo(transX+x.getTX(),transY+x.getTY(),transZ+x.getTZ());
-			tr.setTranslacao(tp);
-		}
-		
-		//rotacao
-		if(strcmp(transformacao->Value(), "rotacao")==0) {
-			float rotAng, rotEixoX, rotEixoY, rotEixoZ;
+				if (transformacao->Attribute("Z") == NULL)
+					transZ = 0;
+				else
+					transZ = stof(transformacao->Attribute("Z"));
 
-			if(transformacao->Attribute("angulo") == NULL) 
-				rotAng=0;
-			else 
-				rotAng= stof(transformacao->Attribute("angulo"));
+				printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
 
-			if(transformacao->Attribute("eixoX") == NULL)
-				rotEixoX=0;
-			else 
-				rotEixoX= stof(transformacao->Attribute("eixoX"));
+				Tipo x = transf.getTranslacao();
+				tp = Tipo::Tipo(transX + x.getTX(), transY + x.getTY(), transZ + x.getTZ());
+				tr.setTranslacao(tp);
+			}
 
-			if(transformacao->Attribute("eixoY") == NULL)
-				rotEixoY=0;
-			else 
-				rotEixoY= stof(transformacao->Attribute("eixoY"));
+			//rotacao
+			if (strcmp(transformacao->Value(), "rotacao") == 0) {
+				float rotAng, rotEixoX, rotEixoY, rotEixoZ;
 
-			if(transformacao->Attribute("eixoZ") == NULL)
-				rotEixoZ=0;
-			else 
-				rotEixoZ= stof(transformacao->Attribute("eixoZ"));
+				if (transformacao->Attribute("angulo") == NULL)
+					rotAng = 0;
+				else
+					rotAng = stof(transformacao->Attribute("angulo"));
 
-			//printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
+				if (transformacao->Attribute("eixoX") == NULL)
+					rotEixoX = 0;
+				else
+					rotEixoX = stof(transformacao->Attribute("eixoX"));
 
-			Tipo x = transf.getRotacao();
-			tp = Tipo::Tipo(rotAng+x.getTAng(),rotEixoX+x.getTX(),rotEixoY+x.getTY(),rotEixoZ+x.getTZ());
-			tr.setRotacao(tp);
-		} else {
-			tr.setRotacao(transf.getRotacao());
-		}
-			
-		 
-		//escala
-		if(strcmp(transformacao->Value(), "escala")==0) {
-			float escX, escY, escZ;
+				if (transformacao->Attribute("eixoY") == NULL)
+					rotEixoY = 0;
+				else
+					rotEixoY = stof(transformacao->Attribute("eixoY"));
 
-			if(transformacao->Attribute("X") == NULL)
-				escX=0;
-			else 
-				escX= stof(transformacao->Attribute("X"));
+				if (transformacao->Attribute("eixoZ") == NULL)
+					rotEixoZ = 0;
+				else
+					rotEixoZ = stof(transformacao->Attribute("eixoZ"));
 
-			if(transformacao->Attribute("Y") == NULL)
-				escY=0;
-			else 
-				escY= stof(transformacao->Attribute("Y"));
+				//printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
 
-			if(transformacao->Attribute("Z") == NULL)
-				escZ=0;
-			else 
-				escZ= stof(transformacao->Attribute("Z"));
+				Tipo x = transf.getRotacao();
+				tp = Tipo::Tipo(rotAng + x.getTAng(), rotEixoX + x.getTX(), rotEixoY + x.getTY(), rotEixoZ + x.getTZ());
+				tr.setRotacao(tp);
+			}
+			else {
+				tr.setRotacao(transf.getRotacao());
+			}
 
-			//printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
 
-			Tipo x = transf.getEscala();
-			tp = Tipo::Tipo(escX*x.getTX(),escY*x.getTY(),escZ*x.getTZ());
-			tr.setEscala(tp);
-		} else {
-			tr.setEscala(transf.getEscala());
+			//escala
+			if (strcmp(transformacao->Value(), "escala") == 0) {
+				float escX, escY, escZ;
+
+				if (transformacao->Attribute("X") == NULL)
+					escX = 0;
+				else
+					escX = stof(transformacao->Attribute("X"));
+
+				if (transformacao->Attribute("Y") == NULL)
+					escY = 0;
+				else
+					escY = stof(transformacao->Attribute("Y"));
+
+				if (transformacao->Attribute("Z") == NULL)
+					escZ = 0;
+				else
+					escZ = stof(transformacao->Attribute("Z"));
+
+				printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
+
+				Tipo x = transf.getEscala();
+				tp = Tipo::Tipo(escX*x.getTX(), escY*x.getTY(), escZ*x.getTZ());
+				tr.setEscala(tp);
+			}
+			else {
+				tr.setEscala(transf.getEscala());
+			}
 		}
 	}
 
@@ -351,19 +359,26 @@ void teste(XMLElement* grupo, Transformacao transf) {
 			p.setTransformacao(tr);
 			primitivas.push_back(p);
 
-			cout << tr.getTranslacao().getTX() << " - " << tr.getTranslacao().getTY() << " - " << tr.getTranslacao().getTZ() << endl;
-			cout << tr.getRotacao().getTAng() << " - " << tr.getRotacao().getTX() << " - " << tr.getRotacao().getTY() << " - " << tr.getRotacao().getTZ() << endl;
-			cout << tr.getEscala().getTX() << " - " << tr.getEscala().getTY() << " - " << tr.getEscala().getTZ() << endl;
+			cout << "T: "<< tr.getTranslacao().getTX() << " - " << tr.getTranslacao().getTY() << " - " << tr.getTranslacao().getTZ() << endl;
+			cout << "R: "<< tr.getRotacao().getTAng() << " - " << tr.getRotacao().getTX() << " - " << tr.getRotacao().getTY() << " - " << tr.getRotacao().getTZ() << endl;
+			cout << "E: "<< tr.getEscala().getTX() << " - " << tr.getEscala().getTY() << " - " << tr.getEscala().getTZ() << endl;
 		}
 	}
 	
 	//faz o mesmo de cima para grupos filhos
 	if(grupo->FirstChildElement("grupo")) {
+
+		cout << "Vou para os Filhos" << endl;
+		 
 		teste(grupo->FirstChildElement("grupo"),tr);
 	}
 
 	//faz o mesmo de cima para grupos irmãos
 	if(grupo->NextSiblingElement("grupo")) {
+
+		cout << "Vim para os Irmaos" << endl;
+
+
 		teste(grupo->NextSiblingElement("grupo"),transf);
 	}
 }
@@ -421,12 +436,12 @@ void preparaPrimitivas() {
 int main(int argc, char **argv) {
 	//string xmlmotor="exemplo1.xml";
 	//string xmlmotor="exemplo2.xml";
-	string xmlmotor="exemplo3.xml";
+	//string xmlmotor="exemplo3.xml";
 	//string xmlmotor="exemplo4.xml";
 	//string xmlmotor="exemplo5.xml";
 	//string xmlmotor="exemplo6.xml";
 	//string xmlmotor="exemploInv1.xml";
-	//string xmlmotor="sistemasolar1.xml";
+	string xmlmotor="sistemasolar.xml";
 	//string xmlmotor="motor.xml";
 
 	readXML(xmlmotor);
@@ -453,8 +468,8 @@ int main(int argc, char **argv) {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 
-		glewInit();
-			preparaPrimitivas();
+		//glewInit();
+			//preparaPrimitivas();
 
 	
 		glutMainLoop();

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<cena>
-    <modelo ficheiro="Motor3D/esfera.3d" />
-    <modelo ficheiro="Motor3D/plano.3d" />
-    <modelo ficheiro="Motor3D/cone.3d" />
-    <modelo ficheiro="Motor3D/paralelipipedo.3d" />
-</cena>

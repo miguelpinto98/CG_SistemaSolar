@@ -3,9 +3,8 @@
 #include <fstream>
 #include <fstream>
 #include <vector>
-#include "LinhaIndice.h"
+#include "Indices.h"
 #include "Vertices.h"
-#include "Ponto.h"
 
 
 using namespace std;
@@ -13,33 +12,44 @@ using namespace std;
 
 int lerPatch(string fl) {
 	Vertices vertices;
+	Indices indices;
 	string line, token, delimiter = ",";
 	int pos, nrPatches, nrVertices;
-	int p=0, v=0;
+	int p=0, v=0, ind;
 	float a, b, c;
 	ifstream file(fl);
 
 	if(file.is_open()) {
 
-			if(getline(file,line) && p==0) {
-				nrPatches=atoi(line.c_str());
-				p=1;
-			}
+			//patches
+
+			if(getline(file,line) && p==0) { nrPatches=atoi(line.c_str()); p=1;}
 
 			for (int i=0; i<nrPatches && getline(file, line); i++){
+				LinhaIndice linha;
 				for(int j=0; j<16;j++){
 					pos = line.find(delimiter);
 					token = line.substr(0,pos);
-					a = atof(token.c_str());
+					ind = atof(token.c_str());
 					line.erase(0, pos + delimiter.length());
+					linha.adicionaIndice(ind);
 				}
+				indices.adicionaLinhaInd(linha);
 			}
 
+			/*for(int i=0; i<indices.getIndices().size(); i++){
+				for(int j=0; j<indices.getIndices()[i].getLinha().size(); j++){
+					printf("%d\n", indices.getIndices()[i].getLinha()[j]);
+				}
+			}*/
 
-			if(getline(file,line) && v==0) {
-				nrVertices=atoi(line.c_str());
-				v=1;
-			}
+
+
+
+
+
+			//indices
+			if(getline(file,line) && v==0) { nrVertices=atoi(line.c_str()); v=1;}
 
 			for (int i=0; i<nrVertices && getline(file, line); i++){
 					pos = line.find(delimiter);

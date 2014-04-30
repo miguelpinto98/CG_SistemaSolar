@@ -1,13 +1,8 @@
 #include "LinhaIndice.h"
 
 
-LinhaIndice::LinhaIndice(int indice) {
-	i=indice;
-}
-
-
-void LinhaIndice::adicionaIndice(int i) {
-	indices.push_back(i);
+void LinhaIndice::adicionaIndice(int p) {
+	indice.push_back(p);
 }
 
 

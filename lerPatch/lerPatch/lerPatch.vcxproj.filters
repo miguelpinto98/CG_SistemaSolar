@@ -27,6 +27,9 @@
     <ClCompile Include="Vertices.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Indices.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LinhaIndice.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vertices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Indices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,11 +5,10 @@
 using namespace std;
 
 class LinhaIndice {
-	int i;
+
 public:
-	LinhaIndice(int);
-	vector<int> indices;
-	int getI() { return i; }
+	vector<int> indice;
+	vector<int> getLinha() { return indice; }
 	void adicionaIndice(int i);
 	virtual ~LinhaIndice(void);
 };

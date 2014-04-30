@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Motor3D", "Motor3D\Motor3D.vcxproj", "{1ED50EC9-ED33-44DF-8399-4C0BC36CE065}"
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Motor3D", "Motor3D\Motor3D.vcxproj", "{1DA521A0-0CE0-4961-9667-F54DFFE386F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +11,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1ED50EC9-ED33-44DF-8399-4C0BC36CE065}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1ED50EC9-ED33-44DF-8399-4C0BC36CE065}.Debug|Win32.Build.0 = Debug|Win32
-		{1ED50EC9-ED33-44DF-8399-4C0BC36CE065}.Release|Win32.ActiveCfg = Release|Win32
-		{1ED50EC9-ED33-44DF-8399-4C0BC36CE065}.Release|Win32.Build.0 = Release|Win32
+		{1DA521A0-0CE0-4961-9667-F54DFFE386F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1DA521A0-0CE0-4961-9667-F54DFFE386F3}.Debug|Win32.Build.0 = Debug|Win32
+		{1DA521A0-0CE0-4961-9667-F54DFFE386F3}.Release|Win32.ActiveCfg = Release|Win32
+		{1DA521A0-0CE0-4961-9667-F54DFFE386F3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

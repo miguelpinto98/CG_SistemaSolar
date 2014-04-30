@@ -7,27 +7,24 @@
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\tinyxml2">
-      <UniqueIdentifier>{96de91ac-e201-43f8-9155-85adac87d2e4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\tinyxml2">
-      <UniqueIdentifier>{329907e0-0481-43fb-a41d-d0ec9ff65d21}</UniqueIdentifier>
+      <UniqueIdentifier>{d1a245f0-1808-42cb-ae72-d4115dc62f4e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tinyxml2\tinyxml2.cpp">
-      <Filter>Resource Files\tinyxml2</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitiva.cpp">
+    <ClCompile Include="Motor3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Ponto.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitiva.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tipo.cpp">
@@ -36,18 +33,18 @@
     <ClCompile Include="Transformacao.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Motor3D.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="tinyxml2\tinyxml2.cpp">
+      <Filter>Resource Files\tinyxml2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tinyxml2\tinyxml2.h">
-      <Filter>Header Files\tinyxml2</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitiva.h">
+    <ClInclude Include="Motor3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ponto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitiva.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tipo.h">
@@ -56,8 +53,11 @@
     <ClInclude Include="Transformacao.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Motor3D.h">
+    <ClInclude Include="Estado.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2\tinyxml2.h">
+      <Filter>Resource Files\tinyxml2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

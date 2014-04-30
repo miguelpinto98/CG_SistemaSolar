@@ -76,7 +76,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LinhaIndice.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Ponto.cpp" />
+    <ClCompile Include="Vertices.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LinhaIndice.h" />
+    <ClInclude Include="Ponto.h" />
+    <ClInclude Include="Vertices.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

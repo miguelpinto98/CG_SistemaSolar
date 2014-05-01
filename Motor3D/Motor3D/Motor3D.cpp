@@ -1,17 +1,5 @@
 #include "Motor3D.h"
 
-float xx=0, yy=0, zz=0, angle = 0.0f;
-float camX = 0, camY, camZ = 5;
-int startX, startY, tracking = 0;
-
-int alpha = 0, beta = 0, r = 5;
-
-/* FRAMES PER SECOND */
-int timebase = 0, frame = 0;
-
-/* Numero Vertices */
-int nvertices;
-
 void changeSize(int w, int h) {
 	if(h == 0)
 		h = 1;
@@ -23,12 +11,6 @@ void changeSize(int w, int h) {
     glViewport(0, 0, w, h);
 	gluPerspective(45.0f ,ratio, 1.0f ,1000.0f);
 	glMatrixMode(GL_MODELVIEW);
-}
-
-void desenhaPrimitiva() {
-	glBindBuffer(GL_ARRAY_BUFFER,buffer[0]);
-    glVertexPointer(3,GL_FLOAT,0,0);
-    glDrawArrays(GL_TRIANGLES, 0, nvertices);
 }
 
 void framesPerSecond() {
@@ -47,6 +29,39 @@ void framesPerSecond() {
 	}
 }
 
+void desenhaPrimitivas() {
+	int ipr = primitivas.size();
+	for (int i = 0; i<ipr; i++) {
+		Primitiva p = primitivas[i];
+		Transformacao t = p.getTransformacao();
+		Tipo tp;
+
+		glPushMatrix();
+
+		if (!t.trasnformacaoVazia()) {
+			tp = t.getTranslacao();
+			if (!tp.tipoVazio()) {
+				glTranslatef(tp.getTX(), tp.getTY(), tp.getTZ());
+			}
+
+			tp = t.getRotacao();
+			if (!tp.tipoVazio())
+				glRotatef(tp.getTAng(), tp.getTX(), tp.getTY(), tp.getTZ());
+
+			tp = t.getEscala();
+			if (!tp.tipoVazio())
+				glScalef(tp.getTX(), tp.getTY(), tp.getTZ());
+		}
+		/* Modo Imediato */
+		//p.construir();
+
+		/* Modo VBO */
+		p.desenhar();
+
+		glPopMatrix();
+	}
+}
+
 void renderScene(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -60,47 +75,11 @@ void renderScene(void) {
 
 	framesPerSecond();
 
-	//desenhaPrimitiva();
-
-	/* Cenário Imediato */
+	desenhaPrimitivas();
 	
-	int ipr = primitivas.size(), jpon;
-	vector<Ponto> ress;
-
-	for(int i=0; i<ipr; i++) {
-		jpon = primitivas[i].getPontos().size();
-		ress = primitivas[i].getPontos();
-		Transformacao t = primitivas[i].getTransformacao();
-		Tipo tp;
-
-		glPushMatrix();
-
-		if(!t.trasnformacaoVazia()) {
-			tp = t.getTranslacao();
-			if(!tp.tipoVazio()) {
-				glTranslatef(tp.getTX(),tp.getTY(),tp.getTZ()); 
-			}
-
-			tp=t.getRotacao(); 
-			if(!tp.tipoVazio())
-				glRotatef(tp.getTAng(), tp.getTX(),tp.getTY(),tp.getTZ());
-			
-			tp=t.getEscala();
-			if(!tp.tipoVazio())
-				glScalef(tp.getTX(),tp.getTY(),tp.getTZ()); 
-		}
-		
-		glBegin(GL_TRIANGLES);
-		for(int j=0; j< jpon; j++) {
-			glVertex3f(ress.at(j).getX(), ress.at(j).getY(), ress.at(j).getZ());
-		}
-		glEnd();
-		glPopMatrix();
-	}
 	glutSwapBuffers();
 }
 
-// escrever função de processamento do teclado
 void normalkeyboard(unsigned char tecla, int x, int y) {
 	switch (tecla) {
 		case 'a':
@@ -128,8 +107,71 @@ void specialKeys(int key, int x, int y) {
 	}
 }
 
+void processMouseButtons(int button, int state, int xx, int yy)
+{
+	if (state == GLUT_DOWN)  {
+		startX = xx;
+		startY = yy;
+		if (button == GLUT_LEFT_BUTTON)
+			tracking = 1;
+		else if (button == GLUT_RIGHT_BUTTON)
+			tracking = 2;
+		else
+			tracking = 0;
+	}
+	else if (state == GLUT_UP) {
+		if (tracking == 1) {
+			alpha += (xx - startX);
+			beta += (yy - startY);
+		}
+		else if (tracking == 2) {
 
-// escrever função de processamento do menu
+			r -= yy - startY;
+			if (r < 3)
+				r = 3.0;
+		}
+		tracking = 0;
+	}
+}
+
+void processMouseMotion(int xx, int yy) {
+	int deltaX, deltaY;
+	int alphaAux, betaAux;
+	int rAux;
+
+	if (!tracking)
+		return;
+
+	deltaX = xx - startX;
+	deltaY = yy - startY;
+
+	if (tracking == 1) {
+
+
+		alphaAux = alpha + deltaX;
+		betaAux = beta + deltaY;
+
+		if (betaAux > 85.0)
+			betaAux = 85.0;
+		else if (betaAux < -85.0)
+			betaAux = -85.0;
+
+		rAux = r;
+	}
+	else
+		if (tracking == 2) {
+
+			alphaAux = alpha;
+			betaAux = beta;
+			rAux = r - deltaY;
+			if (rAux < 3)
+				rAux = 3;
+		}
+	camX = rAux * sin(alphaAux * 3.14 / 180.0) * cos(betaAux * 3.14 / 180.0);
+	camZ = rAux * cos(alphaAux * 3.14 / 180.0) * cos(betaAux * 3.14 / 180.0);
+	camY = rAux * sin(betaAux * 3.14 / 180.0);
+}
+
 void menu(int op) {
 	switch (op) {
 		case 1: glPolygonMode(GL_FRONT, GL_FILL); break;
@@ -139,72 +181,14 @@ void menu(int op) {
 	glutPostRedisplay();
 }
 
+void defineMenu() {
+	glutCreateMenu(menu);
 
-
-void processMouseButtons(int button, int state, int xx, int yy)
-{
-   if (state == GLUT_DOWN)  {
-      startX = xx;
-      startY = yy;
-      if (button == GLUT_LEFT_BUTTON)
-         tracking = 1;
-      else if (button == GLUT_RIGHT_BUTTON)
-         tracking = 2;
-      else
-         tracking = 0;
-   }
-   else if (state == GLUT_UP) {
-      if (tracking == 1) {
-         alpha += (xx - startX);
-         beta += (yy - startY);
-      }
-      else if (tracking == 2) {
-         
-         r -= yy - startY;
-         if (r < 3)
-            r = 3.0;
-      }
-      tracking = 0;
-   }
-}
-
-
-void processMouseMotion(int xx, int yy) {
-   int deltaX, deltaY;
-   int alphaAux, betaAux;
-   int rAux;
-
-   if (!tracking)
-      return;
-
-   deltaX = xx - startX;
-   deltaY = yy - startY;
-
-   if (tracking == 1) {
-
-
-      alphaAux = alpha + deltaX;
-      betaAux = beta + deltaY;
-
-      if (betaAux > 85.0)
-         betaAux = 85.0;
-      else if (betaAux < -85.0)
-         betaAux = -85.0;
-
-      rAux = r;
-   } else 
-	   if (tracking == 2) {
-
-      alphaAux = alpha;
-      betaAux = beta;
-      rAux = r - deltaY;
-      if (rAux < 3)
-         rAux = 3;
-   }
-   camX = rAux * sin(alphaAux * 3.14 / 180.0) * cos(betaAux * 3.14 / 180.0);
-   camZ = rAux * cos(alphaAux * 3.14 / 180.0) * cos(betaAux * 3.14 / 180.0);
-   camY = rAux * sin(betaAux * 3.14 / 180.0);
-
+	glutAddMenuEntry("GL_FILL", 1);
+	glutAddMenuEntry("GL_LINE", 2);
+	glutAddMenuEntry("GL_POINT", 3);
+	glutAddMenuEntry("GL_FRONT", 4);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 int lerFicheiro(string fl, Primitiva& pr) {
@@ -383,54 +367,21 @@ void teste(XMLElement* grupo, Transformacao transf) {
 	}
 }
 
-
 void readXML(string fxml) {
 	XMLDocument doc;
 	doc.LoadFile(fxml.c_str());
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
 	Transformacao t = Transformacao::Transformacao();
-	t.setEscala(Tipo::Tipo(1,1,1));
-	teste(cena,t);
+	t.setEscala(Tipo::Tipo(1, 1, 1));
+	teste(cena, t);
 }
 
-void defineMenu() {
-	glutCreateMenu(menu);
 
-	glutAddMenuEntry("GL_FILL",1);
-	glutAddMenuEntry("GL_LINE",2);
-	glutAddMenuEntry("GL_POINT",3);
-	glutAddMenuEntry("GL_FRONT",4);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
-}
+void initPrimitivas() {
+	int num = primitivas.size();
 
-void preparaPrimitivas() {
-	Primitiva p = primitivas[1];
-	int tpontos = p.getPontos().size(), lados = tpontos/3, j;
-	vector<Ponto> ress = p.getPontos();
-
-
-	nvertices = tpontos*3;
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	float *vertexB = (float *)malloc(sizeof(float) * nvertices);
-
-	j=0;
-	for(int i=0; i<tpontos; i++) {
-		Ponto xyz = ress.at(i);
-
-		vertexB[j+0] = xyz.getX();
-		vertexB[j+1] = xyz.getY();
-		vertexB[j+2] = xyz.getZ();
-
-		j+=3;
-	}
-	nvertices = j;
-
-	glGenBuffers(1, buffer);
-	glBindBuffer(GL_ARRAY_BUFFER,buffer[0]);
-	glBufferData(GL_ARRAY_BUFFER, nvertices*sizeof(float), vertexB, GL_STATIC_DRAW);
-
-	free(vertexB);
+	for (int i = 0; i < num; i++)
+		primitivas[i].preparar();
 }
 
 int main(int argc, char **argv) {
@@ -468,10 +419,9 @@ int main(int argc, char **argv) {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 
-		//glewInit();
-			//preparaPrimitivas();
+		glewInit();
+		initPrimitivas();
 
-	
 		glutMainLoop();
 	//}
 	return 1;

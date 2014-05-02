@@ -236,30 +236,37 @@ void teste(XMLElement* grupo, Transformacao transf) {
 	XMLElement* transformacao = grupo->FirstChildElement();
 
 	/* Verifica se existem transformcoes antes dos modelos */
-	if (strcmp(transformacao->Value(), "modelos") == 0) {
-		tr = transf;
-	} else {
+	if (strcmp(transformacao->Value(), "modelos") == 0) tr = transf;
+	else {
 		for (transformacao; (strcmp(transformacao->Value(), "modelos") != 0); transformacao = transformacao->NextSiblingElement()) {
 			/* Translacao */
 			if (strcmp(transformacao->Value(), "translacao") == 0) {
+				int tempoT;
 				float transX, transY, transZ;
 
-				if (transformacao->Attribute("X") == NULL)
-					transX = 0;
-				else
-					transX = stof(transformacao->Attribute("X"));
+				if (transformacao->Attribute("tempo") == NULL) tempoT = 0;
+				else tempoT = stoi(transformacao->Attribute("tempo"));
 
-				if (transformacao->Attribute("Y") == NULL)
-					transY = 0;
-				else
-					transY = stof(transformacao->Attribute("Y"));
+				for (XMLElement* ponto = transformacao->FirstChildElement("ponto"); ponto; ponto = ponto->NextSiblingElement("ponto")){
 
-				if (transformacao->Attribute("Z") == NULL)
-					transZ = 0;
-				else
-					transZ = stof(transformacao->Attribute("Z"));
+					if (ponto->Attribute("X") == NULL)
+						transX = 0;
+					else
+						transX = stof(ponto->Attribute("X"));
 
-				printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
+					if (ponto->Attribute("Y") == NULL)
+						transY = 0;
+					else
+						transY = stof(ponto->Attribute("Y"));
+
+					if (ponto->Attribute("Z") == NULL)
+						transZ = 0;
+					else
+						transZ = stof(ponto->Attribute("Z"));
+
+
+					printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
+				}
 
 				Tipo x = transf.getTranslacao();
 				tp = Tipo::Tipo(transX + x.getTX(), transY + x.getTY(), transZ + x.getTZ());
@@ -268,12 +275,13 @@ void teste(XMLElement* grupo, Transformacao transf) {
 
 			//rotacao
 			if (strcmp(transformacao->Value(), "rotacao") == 0) {
-				float rotAng, rotEixoX, rotEixoY, rotEixoZ;
+				float rotEixoX, rotEixoY, rotEixoZ;
+				int tempoR;
 
-				if (transformacao->Attribute("angulo") == NULL)
-					rotAng = 0;
+				if (transformacao->Attribute("tempo") == NULL)
+					tempoR = 0;
 				else
-					rotAng = stof(transformacao->Attribute("angulo"));
+					tempoR = stoi(transformacao->Attribute("tempo"));
 
 				if (transformacao->Attribute("eixoX") == NULL)
 					rotEixoX = 0;

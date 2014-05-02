@@ -265,7 +265,7 @@ void teste(XMLElement* grupo, Transformacao transf) {
 						transZ = stof(ponto->Attribute("Z"));
 
 
-					printf("%s - %f, %f, %f\n", transformacao->Value(), transX, transY, transZ);
+					printf("%s: %d\n%s: %f, %f, %f\n", transformacao->Value(), tempoT, ponto->Value(), transX, transY, transZ);
 				}
 
 				Tipo x = transf.getTranslacao();
@@ -298,10 +298,10 @@ void teste(XMLElement* grupo, Transformacao transf) {
 				else
 					rotEixoZ = stof(transformacao->Attribute("eixoZ"));
 
-				//printf("%s - %f, %f, %f, %f \n", transformacao->Value(),rotAng, rotEixoX, rotEixoY, rotEixoZ);
+				printf("%s - %d, %f, %f, %f \n", transformacao->Value(),tempoR, rotEixoX, rotEixoY, rotEixoZ);
 
 				Tipo x = transf.getRotacao();
-				tp = Tipo::Tipo(rotAng + x.getTAng(), rotEixoX + x.getTX(), rotEixoY + x.getTY(), rotEixoZ + x.getTZ());
+				//tp = Tipo::Tipo(rotAng + x.getTAng(), rotEixoX + x.getTX(), rotEixoY + x.getTY(), rotEixoZ + x.getTZ());
 				tr.setRotacao(tp);
 			}
 			else {

@@ -2,17 +2,15 @@
 <cena>
 	<grupo>
 		<translacao tempo="10">
-			<ponto X="5" Y="0" Z="2" />
-			<ponto X="5" Y="0" Z="2" />
-			<ponto X="5" Y="0" Z="2" />
-			<ponto X="5" Y="0" Z="2" />
-		<rotacao tempo="45" eixoX="0" eixoY="1" eixoZ="0" />
+			<ponto X="1" Y="0" Z="1" />
+			<ponto X="2" Y="0" Z="1" />
+			<ponto X="3" Y="0" Z="1" />
+		</translacao>
+		<rotacao tempo="10" eixoX="0" eixoY="1" eixoZ="0" />
 		<escala X="1" Y="2" Z="3" />
 		<modelos>
 			<modelo ficheiro="esfera.3d" />
-			<modelo ficheiro="plano.3d" />
-    		<modelo ficheiro="cone.3d" />
-    		<modelo ficheiro="paralelipipedo.3d" />
+			<modelo ficheiro="cone.3d" />
 		</modelos>
 	</grupo>
 </cena>

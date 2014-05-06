@@ -227,17 +227,15 @@ int lerFicheiro(string fl, Primitiva& pr) {
 
 void teste(XMLElement* grupo, Transformacao transf) {
 	Transformacao tr;
-	Tipo tp;
-
-	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) 
-		grupo=grupo->FirstChildElement();
+	//Tipo tp;
+	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
 	
 	//transformações para um grupo
 	XMLElement* transformacao = grupo->FirstChildElement();
 
 	/* Verifica se existem transformcoes antes dos modelos */
-	if (strcmp(transformacao->Value(), "modelos") == 0) tr = transf;
-	else {
+	//if (strcmp(transformacao->Value(), "modelos") == 0) tr = transf;
+	//else {
 		for (transformacao; (strcmp(transformacao->Value(), "modelos") != 0); transformacao = transformacao->NextSiblingElement()) {
 			/* Translacao */
 			if (strcmp(transformacao->Value(), "translacao") == 0) {
@@ -246,8 +244,10 @@ void teste(XMLElement* grupo, Transformacao transf) {
 
 				if (transformacao->Attribute("tempo") == NULL) tempoT = 0;
 				else tempoT = stoi(transformacao->Attribute("tempo"));
+				   
+				
 
-				for (XMLElement* ponto = transformacao->FirstChildElement("ponto"); ponto; ponto = ponto->NextSiblingElement("ponto")){
+				for (XMLElement* ponto = grupo->FirstChildElement()->FirstChildElement("ponto"); ponto; ponto = ponto->NextSiblingElement("ponto")){
 
 					if (ponto->Attribute("X") == NULL)
 						transX = 0;
@@ -268,9 +268,9 @@ void teste(XMLElement* grupo, Transformacao transf) {
 					printf("%s: %d\n%s: %f, %f, %f\n", transformacao->Value(), tempoT, ponto->Value(), transX, transY, transZ);
 				}
 
-				Tipo x = transf.getTranslacao();
-				tp = Tipo::Tipo(transX + x.getTX(), transY + x.getTY(), transZ + x.getTZ());
-				tr.setTranslacao(tp);
+				//Tipo x = transf.getTranslacao();
+				//tp = Tipo::Tipo(transX + x.getTX(), transY + x.getTY(), transZ + x.getTZ());
+				//tr.setTranslacao(tp);
 			}
 
 			//rotacao
@@ -300,13 +300,13 @@ void teste(XMLElement* grupo, Transformacao transf) {
 
 				printf("%s - %d, %f, %f, %f \n", transformacao->Value(),tempoR, rotEixoX, rotEixoY, rotEixoZ);
 
-				Tipo x = transf.getRotacao();
+			//	Tipo x = transf.getRotacao();
 				//tp = Tipo::Tipo(rotAng + x.getTAng(), rotEixoX + x.getTX(), rotEixoY + x.getTY(), rotEixoZ + x.getTZ());
-				tr.setRotacao(tp);
+				//tr.setRotacao(tp);
 			}
-			else {
-				tr.setRotacao(transf.getRotacao());
-			}
+			//else {
+				//tr.setRotacao(transf.getRotacao());
+			//}
 
 
 			//escala
@@ -330,14 +330,14 @@ void teste(XMLElement* grupo, Transformacao transf) {
 
 				printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
 
-				Tipo x = transf.getEscala();
-				tp = Tipo::Tipo(escX*x.getTX(), escY*x.getTY(), escZ*x.getTZ());
-				tr.setEscala(tp);
+			//	Tipo x = transf.getEscala();
+				//tp = Tipo::Tipo(escX*x.getTX(), escY*x.getTY(), escZ*x.getTZ());
+				//tr.setEscala(tp);
 			}
-			else {
-				tr.setEscala(transf.getEscala());
-			}
-		}
+		//	else {
+			//	tr.setEscala(transf.getEscala());
+			//}
+		//}
 	}
 
 	//para o mesmo grupo, quais os modelos(ficheiros) que recebem as transformações
@@ -348,12 +348,12 @@ void teste(XMLElement* grupo, Transformacao transf) {
 		flag = lerFicheiro(p.getNomePrimitiva(),p);
 
 		if(flag>=0) { 
-			p.setTransformacao(tr);
+		//	p.setTransformacao(tr);
 			primitivas.push_back(p);
 
-			cout << "T: "<< tr.getTranslacao().getTX() << " - " << tr.getTranslacao().getTY() << " - " << tr.getTranslacao().getTZ() << endl;
-			cout << "R: "<< tr.getRotacao().getTAng() << " - " << tr.getRotacao().getTX() << " - " << tr.getRotacao().getTY() << " - " << tr.getRotacao().getTZ() << endl;
-			cout << "E: "<< tr.getEscala().getTX() << " - " << tr.getEscala().getTY() << " - " << tr.getEscala().getTZ() << endl;
+			//cout << "T: "<< tr.getTranslacao().getTX() << " - " << tr.getTranslacao().getTY() << " - " << tr.getTranslacao().getTZ() << endl;
+			//cout << "R: "<< tr.getRotacao().getTAng() << " - " << tr.getRotacao().getTX() << " - " << tr.getRotacao().getTY() << " - " << tr.getRotacao().getTZ() << endl;
+			//cout << "E: "<< tr.getEscala().getTX() << " - " << tr.getEscala().getTY() << " - " << tr.getEscala().getTZ() << endl;
 		}
 	}
 	
@@ -393,19 +393,19 @@ void initPrimitivas() {
 }
 
 int main(int argc, char **argv) {
-	//string xmlmotor="exemplo1.xml";
+	string xmlmotor="exemplo1.xml";
 	//string xmlmotor="exemplo2.xml";
 	//string xmlmotor="exemplo3.xml";
 	//string xmlmotor="exemplo4.xml";
 	//string xmlmotor="exemplo5.xml";
 	//string xmlmotor="exemplo6.xml";
 	//string xmlmotor="exemploInv1.xml";
-	string xmlmotor="sistemasolar.xml";
+	//string xmlmotor="sistemasolar.xml";
 	//string xmlmotor="motor.xml";
 
 	readXML(xmlmotor);
 
-	//if(argc>1) { 
+	/*if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 		glutInitWindowPosition(100,100);
@@ -431,6 +431,6 @@ int main(int argc, char **argv) {
 		initPrimitivas();
 
 		glutMainLoop();
-	//}
+	}*/
 	return 1;
-}
+} 

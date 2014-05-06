@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cena>
 	<grupo>
-		<translacao X="5" Y="0" Z="2" />
-		<rotacao angulo="45" eixoX="0" eixoY="1" eixoZ="0" />
+		<translacao tempo="10">
+			<ponto X="5" Y="0" Z="2" />
+			<ponto X="5" Y="0" Z="2" />
+			<ponto X="5" Y="0" Z="2" />
+			<ponto X="5" Y="0" Z="2" />
+		<rotacao tempo="45" eixoX="0" eixoY="1" eixoZ="0" />
 		<escala X="1" Y="2" Z="3" />
 		<modelos>
 			<modelo ficheiro="esfera.3d" />

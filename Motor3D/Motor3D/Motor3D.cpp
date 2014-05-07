@@ -1,17 +1,17 @@
 #include "Motor3D.h"
 
-#define POINT_COUNT 5
+#define POINT_COUNT 8
 
-float p[POINT_COUNT][3] = {{-1,-1,0},{-1,1,0},{1,1,0},{0,0,-1},{1,-1,0}};
+float p[POINT_COUNT][3] = {{-1,-1,0},{0,-1.5,0},{1,-1,0},{1.5,0,0},{1,1,0},{0,1.5,0},{-1,1,0},{-1.5,0,0}};
 
 void getCatmullRomPoint(float t, int *indices, float *res) {
     int i;
     float res_aux[4];
-	// catmull-rom matrix
+	// catmull-rom matrix (nao mexer)
 	float m[4][4] = {{-0.5f,  1.5f, -1.5f,  0.5f},
-        { 1.0f, -2.5f,  2.0f, -0.5f},
-        {-0.5f,  0.0f,  0.5f,  0.0f},
-        { 0.0f,  1.0f,  0.0f,  0.0f}};
+					 { 1.0f, -2.5f,  2.0f, -0.5f},
+					 {-0.5f,  0.0f,  0.5f,  0.0f},
+					 { 0.0f,  1.0f,  0.0f,  0.0f}};
     
     
     // Calcular o ponto res = T * M * P

@@ -255,11 +255,67 @@ void verificaTranslacoes(XMLElement* transformacao, int& t) {
 	}
 }
 
-void teste(XMLElement* grupo, Transformacao transf) {
-	int tempo = 0;
+void verificaRotacao(XMLElement* transformacao){
+	float rotEixoX, rotEixoY, rotEixoZ;
+	int tempoR;
 
+	if(transformacao->Attribute("tempo") == NULL) tempoR=0;
+		else tempoR= stoi(transformacao->Attribute("tempo"));
+
+		if(transformacao->Attribute("eixoX") == NULL) rotEixoX=0;
+		else rotEixoX= stof(transformacao->Attribute("eixoX"));
+
+		if(transformacao->Attribute("eixoY") == NULL) rotEixoY=0;
+		else rotEixoY= stof(transformacao->Attribute("eixoY"));
+
+		if(transformacao->Attribute("eixoZ") == NULL) rotEixoZ=0;
+		else rotEixoZ= stof(transformacao->Attribute("eixoZ"));
+
+	printf("%s - %d, %f, %f, %f \n", transformacao->Value(),tempoR, rotEixoX, rotEixoY, rotEixoZ);
+	/*	t.transformacao = "rotacao";
+		t.arg1=rotAng;
+		t.arg2=rotEixoX;
+		t.arg3=rotEixoY;
+		t.arg4=rotEixoZ;
+
+	Tipo x = transf.getRotacao();
+	tp = Tipo::Tipo(rotAng + x.getTAng(), rotEixoX + x.getTX(), rotEixoY + x.getTY(), rotEixoZ + x.getTZ());
+	tr.setRotacao(tp);*/
+
+}
+
+void verificaEscala(XMLElement* transformacao) {
+	float escX, escY, escZ;
+
+	if (transformacao->Attribute("X") == NULL)
+		escX = 0;
+	else
+		escX = stof(transformacao->Attribute("X"));
+
+	if (transformacao->Attribute("Y") == NULL)
+		escY = 0;
+	else
+		escY = stof(transformacao->Attribute("Y"));
+
+	if (transformacao->Attribute("Z") == NULL)
+		escZ = 0;
+	else
+		escZ = stof(transformacao->Attribute("Z"));
+
+	printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
+
+//	Tipo x = transf.getEscala();
+	//tp = Tipo::Tipo(escX*x.getTX(), escY*x.getTY(), escZ*x.getTZ());
+	//tr.setEscala(tp);
+	}
+
+
+void parseXML(XMLElement* grupo, Transformacao transf) {
+	int tempo = 0;
 	Transformacao tr;
 	Tipo tp; /* Isto vai desaparecer */
+
+
 	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
 
 	//transformações para um grupo
@@ -270,70 +326,15 @@ void teste(XMLElement* grupo, Transformacao transf) {
 		tr = transf;
 	else {
 		for (transformacao; (strcmp(transformacao->Value(), "modelos") != 0); transformacao = transformacao->NextSiblingElement()) {
-			/* Translacao */
-			verificaTranslacoes(transformacao,tempo);
-
-			//rotacao
-			if (strcmp(transformacao->Value(), "rotacao") == 0) {
-				float rotEixoX, rotEixoY, rotEixoZ;
-				int tempoR;
-
-				if(transformacao->Attribute("tempo") == NULL) tempoR=0;
-					else tempoR= stoi(transformacao->Attribute("tempo"));
-
-					if(transformacao->Attribute("eixoX") == NULL) rotEixoX=0;
-					else rotEixoX= stof(transformacao->Attribute("eixoX"));
-
-					if(transformacao->Attribute("eixoY") == NULL) rotEixoY=0;
-					else rotEixoY= stof(transformacao->Attribute("eixoY"));
-
-					if(transformacao->Attribute("eixoZ") == NULL) rotEixoZ=0;
-					else rotEixoZ= stof(transformacao->Attribute("eixoZ"));
-
-				printf("%s - %d, %f, %f, %f \n", transformacao->Value(),tempoR, rotEixoX, rotEixoY, rotEixoZ);
-				/*	t.transformacao = "rotacao";
-					t.arg1=rotAng;
-					t.arg2=rotEixoX;
-					t.arg3=rotEixoY;
-					t.arg4=rotEixoZ;
-
-				Tipo x = transf.getRotacao();
-				tp = Tipo::Tipo(rotAng + x.getTAng(), rotEixoX + x.getTX(), rotEixoY + x.getTY(), rotEixoZ + x.getTZ());
-				tr.setRotacao(tp);*/
-			}
+			if (strcmp(transformacao->Value(), "translacao") == 0) verificaTranslacoes(transformacao,tempo);
+			//else { tr.setRotacao(transf.getRotacao());}
+	
+			if (strcmp(transformacao->Value(), "rotacao") == 0) verificaRotacao(transformacao);
 			//else { tr.setRotacao(transf.getRotacao());}
 
 
-
-
-			//escala
-			if (strcmp(transformacao->Value(), "escala") == 0) {
-				float escX, escY, escZ;
-
-				if (transformacao->Attribute("X") == NULL)
-					escX = 0;
-				else
-					escX = stof(transformacao->Attribute("X"));
-
-				if (transformacao->Attribute("Y") == NULL)
-					escY = 0;
-				else
-					escY = stof(transformacao->Attribute("Y"));
-
-				if (transformacao->Attribute("Z") == NULL)
-					escZ = 0;
-				else
-					escZ = stof(transformacao->Attribute("Z"));
-
-				printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
-
-			//	Tipo x = transf.getEscala();
-				//tp = Tipo::Tipo(escX*x.getTX(), escY*x.getTY(), escZ*x.getTZ());
-				//tr.setEscala(tp);
-			}
-		//	else {
-			//	tr.setEscala(transf.getEscala());
-			//}
+			if (strcmp(transformacao->Value(), "escala") == 0) verificaEscala(transformacao);
+			//else { tr.setEscala(transf.getEscala());}
 		}
 	}
 
@@ -356,19 +357,14 @@ void teste(XMLElement* grupo, Transformacao transf) {
 	
 	//faz o mesmo de cima para grupos filhos
 	if(grupo->FirstChildElement("grupo")) {
-
 		cout << "Vou para os Filhos" << endl;
-		 
-		teste(grupo->FirstChildElement("grupo"),tr);
+		parseXML(grupo->FirstChildElement("grupo"),tr);
 	}
 
 	//faz o mesmo de cima para grupos irmãos
 	if(grupo->NextSiblingElement("grupo")) {
-
 		cout << "Vim para os Irmaos" << endl;
-
-
-		teste(grupo->NextSiblingElement("grupo"),transf);
+		parseXML(grupo->NextSiblingElement("grupo"),transf);
 	}
 }
 
@@ -378,7 +374,7 @@ void readXML(string fxml) {
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
 	Transformacao t = Transformacao::Transformacao();
 	t.setEscala(Tipo::Tipo(1, 1, 1));
-	teste(cena, t);
+	parseXML(cena, t);
 }
 
 

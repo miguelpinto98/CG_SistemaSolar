@@ -1,5 +1,67 @@
 #include "Motor3D.h"
 
+#define POINT_COUNT 5
+
+float p[POINT_COUNT][3] = {{-1,-1,0},{-1,1,0},{1,1,0},{0,0,-1},{1,-1,0}};
+
+void getCatmullRomPoint(float t, int *indices, float *res) {
+    int i;
+    float res_aux[4];
+	// catmull-rom matrix
+	float m[4][4] = {{-0.5f,  1.5f, -1.5f,  0.5f},
+        { 1.0f, -2.5f,  2.0f, -0.5f},
+        {-0.5f,  0.0f,  0.5f,  0.0f},
+        { 0.0f,  1.0f,  0.0f,  0.0f}};
+    
+    
+    // Calcular o ponto res = T * M * P
+    // sendo Pi = p[indices[i]]
+    
+    
+    //Sem derivada
+    for (i=0; i<4; i++)
+        res_aux[i]= pow(t,3) * m[0][i] +  pow(t,2) * m[1][i] + t * m[2][i] + m[3][i];
+    
+    /*
+    //Com derivada (Esta é a versão para ser utilizada a derivada dos pontos, mas ainda não está concluida)
+    for (i=0; i<4; i++)
+        res_aux[i]= 3*pow(t,2) * m[0][i] +  2*t * m[1][i] + m[2][i];
+    */
+    
+    //Calculo do RES
+	for(i=0;i<3;i++){
+        res[i]=res_aux[0]*p[indices[0]][i] + res_aux[1]*p[indices[1]][i] +res_aux[2]*p[indices[2]][i] + res_aux[3]*p[indices[3]][i];
+    }
+}
+
+// given  global t, returns the point in the curve
+void getGlobalCatmullRomPoint(float gt, float *res) {
+    
+	float t = gt * POINT_COUNT; // this is the real global t
+	int index = floor(t);  // which segment
+	t = t - index; // where within  the segment
+    
+	// indices store the points
+	int indices[4];
+	indices[0] = (index + POINT_COUNT-1)%POINT_COUNT;	indices[1] = (indices[0]+1)%POINT_COUNT;
+	indices[2] = (indices[1]+1)%POINT_COUNT; indices[3] = (indices[2]+1)%POINT_COUNT;
+    
+	getCatmullRomPoint(t, indices, res);
+}
+
+void renderCatmullRomCurve() {
+    float  gtt;
+    float res[3];
+    // desenhar a curva usando segmentos de reta - GL_LINE_LOOP
+    
+    glBegin(GL_LINE_LOOP);
+    for (gtt=0; gtt<1; gtt+=0.0001){
+        getGlobalCatmullRomPoint(gtt,res);
+        glVertex3fv(res);
+    }
+    glEnd();
+}
+
 void changeSize(int w, int h) {
 	if(h == 0)
 		h = 1;
@@ -64,6 +126,10 @@ void desenhaPrimitivas() {
 }
 
 void renderScene(void) {
+	static float a = 0;
+	float res[3];
+    
+	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
@@ -71,12 +137,25 @@ void renderScene(void) {
 		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
 
-	glTranslatef(xx,yy,zz);
+	renderCatmullRomCurve();
+    
+	glPushMatrix();
+	getGlobalCatmullRomPoint(a,res);
+
+	glTranslatef(res[0],res[1],res[2]);
+	glScalef(0.1, 0.1, 0.1);
+	glutWireTeapot(1);
+	glPopMatrix();
+   
+    
+	a+=0.001;
+
+	/*glTranslatef(xx,yy,zz);
     glRotatef(angle, 0.0f, 1.0f, 0.0f);
 
 	framesPerSecond();
 
-	desenhaPrimitivas();
+	desenhaPrimitivas();*/
 	
 	glutSwapBuffers();
 }
@@ -385,6 +464,7 @@ void initPrimitivas() {
 		primitivas[i].preparar();
 }
 
+
 int main(int argc, char **argv) {
 	string xmlmotor="exemplo1.xml";
 	//string xmlmotor="exemplo2.xml";
@@ -398,7 +478,7 @@ int main(int argc, char **argv) {
 
 	readXML(xmlmotor);
 
-	/*if(argc>1) { 
+	//if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 		glutInitWindowPosition(100,100);
@@ -424,6 +504,6 @@ int main(int argc, char **argv) {
 		initPrimitivas();
 
 		glutMainLoop();
-	}*/
-	return 1;
+	//}
+	return 0;
 } 

@@ -7,7 +7,6 @@
 			<ponto X="3" Y="0" Z="1" />
 		</translacao>
 		<rotacao tempo="10" eixoX="0" eixoY="1" eixoZ="0" />
-		<escala X="1" Y="2" Z="3" />
 		<modelos>
 			<modelo ficheiro="esfera.3d" />
 			<modelo ficheiro="cone.3d" />

@@ -1,19 +1,23 @@
 #include "Translacao.h"
 
-
 Translacao::Translacao() {
 	time = 0;
 }
 
-Translacao::Translacao(int t) {
+Translacao::Translacao(float t) {
 	time = t;
 }
 
-bool Translacao::vazio() {
-	return (time == 0) ? true : false;
+Translacao::Translacao(float t, vector<Ponto> vtp) {
+	time = t;
+	transPontos = vtp;
 }
 
-void Translacao::setTime(int t) {
+bool Translacao::vazio() {
+	return (time == 0 && transPontos.size() == 0) ? true : false;
+}
+
+void Translacao::setTime(float t) {
 	time = t;
 }
 

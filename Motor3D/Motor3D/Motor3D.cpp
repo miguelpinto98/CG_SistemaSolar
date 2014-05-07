@@ -34,24 +34,22 @@ void desenhaPrimitivas() {
 	for (int i = 0; i<ipr; i++) {
 		Primitiva p = primitivas[i];
 		Transformacao t = p.getTransformacao();
-		Tipo tp;
 
 		glPushMatrix();
-
+		
 		if (!t.trasnformacaoVazia()) {
-			Translacao trans;
-			trans = t.getTranslacao(); /* FALTA ALTERAR ISTO */
-			if (!tp.tipoVazio()) {
-				glTranslatef(tp.getTX(), tp.getTY(), tp.getTZ());
+			Translacao tr = t.getTranslacao();
+			if (!tr.vazio()) {
+				//Fazer CatMullRom
 			}
 
-			tp = t.getRotacao();
-			if (!tp.tipoVazio())
-				glRotatef(tp.getTAng(), tp.getTX(), tp.getTY(), tp.getTZ());
+			Rotacao ro = t.getRotacao();
+			if (!ro.vazio())
+				glRotatef(-1, ro.getRx(), ro.getRy(), ro.getRz());
 
-			tp = t.getEscala();
-			if (!tp.tipoVazio())
-				glScalef(tp.getTX(), tp.getTY(), tp.getTZ());
+			Escala es = t.getEscala();
+			if (!es.vazio())
+				glScalef(es.getEx(), es.getEy(), es.getEz());
 		}
 		/* Modo Imediato */
 		//p.construir();
@@ -226,18 +224,18 @@ int lerFicheiro(string fl, Primitiva& pr) {
 	}
 }
 
-void verificaTranslacoes(XMLElement* transformacao, int& t) {
+Translacao verificaTranslacoes(XMLElement* transformacao) {
+	vector<Ponto> transpontos;
+	float tempo = 0;
 
 	if (strcmp(transformacao->Value(), "translacao") == 0) {
 		if (transformacao->Attribute("tempo"))
-			t = stoi(transformacao->Attribute("tempo"));
-
-		printf("%s - %d\n", transformacao->Value(), t);
+			tempo = stoi(transformacao->Attribute("tempo"));
 
 		float transX, transY, transZ;
 		for (XMLElement* ponto = transformacao->FirstChildElement("ponto"); ponto; ponto = ponto->NextSiblingElement("ponto")) {
 			transX = transY = transZ = 0;
-			
+
 			if (ponto->Attribute("X"))
 				transX = stof(ponto->Attribute("X"));
 
@@ -247,95 +245,79 @@ void verificaTranslacoes(XMLElement* transformacao, int& t) {
 			if (ponto->Attribute("Z"))
 				transZ = stof(ponto->Attribute("Z"));
 
-			printf("ponto: %f - %f - %f\n", transX, transY, transZ);
+			Ponto pt = Ponto::Ponto(transX, transY, transZ);
+			transpontos.push_back(pt);
 		}
-		/*Tipo x = transf.getTranslacao();
-		tp = Tipo::Tipo(transX + x.getTX(), transY + x.getTY(), transZ + x.getTZ());
-		tr.setTranslacao(tp);*/
 	}
+	return Translacao::Translacao(tempo, transpontos);
 }
 
-void verificaRotacao(XMLElement* transformacao){
-	float rotEixoX, rotEixoY, rotEixoZ;
-	int tempoR;
+Rotacao verificaRotacao(XMLElement* transformacao){
+	float rotX, rotY, rotZ, tempo;
+	rotX = rotY = rotZ = tempo = 0;
 
-	if(transformacao->Attribute("tempo") == NULL) tempoR=0;
-		else tempoR= stoi(transformacao->Attribute("tempo"));
+	if(transformacao->Attribute("tempo"))
+		tempo= stoi(transformacao->Attribute("tempo"));
 
-		if(transformacao->Attribute("eixoX") == NULL) rotEixoX=0;
-		else rotEixoX= stof(transformacao->Attribute("eixoX"));
+	if(transformacao->Attribute("eixoX"))
+		rotX= stof(transformacao->Attribute("eixoX"));
 
-		if(transformacao->Attribute("eixoY") == NULL) rotEixoY=0;
-		else rotEixoY= stof(transformacao->Attribute("eixoY"));
+	if(transformacao->Attribute("eixoY"))
+		rotY= stof(transformacao->Attribute("eixoY"));
 
-		if(transformacao->Attribute("eixoZ") == NULL) rotEixoZ=0;
-		else rotEixoZ= stof(transformacao->Attribute("eixoZ"));
-
-	printf("%s - %d, %f, %f, %f \n", transformacao->Value(),tempoR, rotEixoX, rotEixoY, rotEixoZ);
-	/*	t.transformacao = "rotacao";
-		t.arg1=rotAng;
-		t.arg2=rotEixoX;
-		t.arg3=rotEixoY;
-		t.arg4=rotEixoZ;
-
-	Tipo x = transf.getRotacao();
-	tp = Tipo::Tipo(rotAng + x.getTAng(), rotEixoX + x.getTX(), rotEixoY + x.getTY(), rotEixoZ + x.getTZ());
-	tr.setRotacao(tp);*/
-
+	if(transformacao->Attribute("eixoZ"))
+		rotZ= stof(transformacao->Attribute("eixoZ"));
+	
+	return Rotacao::Rotacao(tempo,rotX,rotY,rotZ);
 }
 
-void verificaEscala(XMLElement* transformacao) {
+Escala verificaEscala(XMLElement* transformacao) {
 	float escX, escY, escZ;
+	escX = escY = escZ = 0;
 
-	if (transformacao->Attribute("X") == NULL)
-		escX = 0;
-	else
+	if (transformacao->Attribute("X"))
 		escX = stof(transformacao->Attribute("X"));
 
-	if (transformacao->Attribute("Y") == NULL)
-		escY = 0;
-	else
+	if (transformacao->Attribute("Y"))
 		escY = stof(transformacao->Attribute("Y"));
 
-	if (transformacao->Attribute("Z") == NULL)
-		escZ = 0;
-	else
+	if (transformacao->Attribute("Z"))
 		escZ = stof(transformacao->Attribute("Z"));
-
-	printf("%s - %f, %f, %f\n", transformacao->Value(), escX, escY, escZ);
-
-//	Tipo x = transf.getEscala();
-	//tp = Tipo::Tipo(escX*x.getTX(), escY*x.getTY(), escZ*x.getTZ());
-	//tr.setEscala(tp);
-	}
-
+	
+	return Escala::Escala(escX, escY, escZ);
+}
 
 void parseXML(XMLElement* grupo, Transformacao transf) {
-	int tempo = 0;
-	Transformacao tr;
-	Tipo tp; /* Isto vai desaparecer */
+	Transformacao trans;
+	Translacao tr;
+	Rotacao ro;
+	Escala es;
 
-
-	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
+	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0)
+		grupo=grupo->FirstChildElement();
 
 	//transformações para um grupo
 	XMLElement* transformacao = grupo->FirstChildElement();
 
 	/* Verifica se existem transformcoes antes dos modelos */
 	if (strcmp(transformacao->Value(), "modelos") == 0)
-		tr = transf;
+		trans = transf;
 	else {
 		for (transformacao; (strcmp(transformacao->Value(), "modelos") != 0); transformacao = transformacao->NextSiblingElement()) {
-			if (strcmp(transformacao->Value(), "translacao") == 0) verificaTranslacoes(transformacao,tempo);
+			if (strcmp(transformacao->Value(), "translacao") == 0)
+				tr = verificaTranslacoes(transformacao);
 			//else { tr.setRotacao(transf.getRotacao());}
 	
-			if (strcmp(transformacao->Value(), "rotacao") == 0) verificaRotacao(transformacao);
+			if (strcmp(transformacao->Value(), "rotacao") == 0)
+				ro = verificaRotacao(transformacao);
 			//else { tr.setRotacao(transf.getRotacao());}
 
 
-			if (strcmp(transformacao->Value(), "escala") == 0) verificaEscala(transformacao);
+			if (strcmp(transformacao->Value(), "escala") == 0) 
+				es = verificaEscala(transformacao);
 			//else { tr.setEscala(transf.getEscala());}
 		}
+		trans = Transformacao::Transformacao(tr, ro, es);
 	}
 
 	//para o mesmo grupo, quais os modelos(ficheiros) que recebem as transformações
@@ -346,19 +328,19 @@ void parseXML(XMLElement* grupo, Transformacao transf) {
 		flag = lerFicheiro(p.getNomePrimitiva(),p);
 
 		if(flag>=0) { 
-		//	p.setTransformacao(tr);
+			p.setTransformacao(trans);
 			primitivas.push_back(p);
 
-			//cout << "T: "<< tr.getTranslacao().getTX() << " - " << tr.getTranslacao().getTY() << " - " << tr.getTranslacao().getTZ() << endl;
-			//cout << "R: "<< tr.getRotacao().getTAng() << " - " << tr.getRotacao().getTX() << " - " << tr.getRotacao().getTY() << " - " << tr.getRotacao().getTZ() << endl;
-			//cout << "E: "<< tr.getEscala().getTX() << " - " << tr.getEscala().getTY() << " - " << tr.getEscala().getTZ() << endl;
+			cout << "Translacao: "<< trans.getTranslacao().getTime() << endl;
+			cout << "Rotacao   : " << trans.getRotacao().getRx() << " - " << trans.getRotacao().getRy() << " - " << trans.getRotacao().getRz() << endl;
+			cout << "Escala    : " << trans.getEscala().getEx() << " - " << trans.getEscala().getEy() << " - " << trans.getEscala().getEz() << endl;
 		}
 	}
 	
 	//faz o mesmo de cima para grupos filhos
 	if(grupo->FirstChildElement("grupo")) {
 		cout << "Vou para os Filhos" << endl;
-		parseXML(grupo->FirstChildElement("grupo"),tr);
+		parseXML(grupo->FirstChildElement("grupo"),trans);
 	}
 
 	//faz o mesmo de cima para grupos irmãos
@@ -373,7 +355,6 @@ void readXML(string fxml) {
 	doc.LoadFile(fxml.c_str());
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
 	Transformacao t = Transformacao::Transformacao();
-	t.setEscala(Tipo::Tipo(1, 1, 1));
 	parseXML(cena, t);
 }
 
@@ -386,19 +367,20 @@ void initPrimitivas() {
 }
 
 int main(int argc, char **argv) {
-	string xmlmotor="exemplo1.xml";
+	//string xmlmotor="exemplo1.xml";
 	//string xmlmotor="exemplo2.xml";
 	//string xmlmotor="exemplo3.xml";
 	//string xmlmotor="exemplo4.xml";
 	//string xmlmotor="exemplo5.xml";
 	//string xmlmotor="exemplo6.xml";
 	//string xmlmotor="exemploInv1.xml";
-	//string xmlmotor="sistemasolar.xml";
+	//string xmlmotor="sistemasolar1.xml";
 	//string xmlmotor="motor.xml";
+	string xmlmotor="SistemaSolar3Fase.xml";
 
 	readXML(xmlmotor);
 
-	/*if(argc>1) { 
+	//if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 		glutInitWindowPosition(100,100);
@@ -424,6 +406,6 @@ int main(int argc, char **argv) {
 		initPrimitivas();
 
 		glutMainLoop();
-	}*/
+	//}
 	return 1;
 } 

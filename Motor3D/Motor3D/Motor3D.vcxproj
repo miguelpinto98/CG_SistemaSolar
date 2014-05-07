@@ -83,18 +83,19 @@
     <ClCompile Include="Motor3D.cpp" />
     <ClCompile Include="Ponto.cpp" />
     <ClCompile Include="Primitiva.cpp" />
+    <ClCompile Include="Rotacao.cpp" />
     <ClCompile Include="tinyxml2\tinyxml2.cpp" />
-    <ClCompile Include="Tipo.cpp" />
+    <ClCompile Include="Escala.cpp" />
     <ClCompile Include="Transformacao.cpp" />
     <ClCompile Include="Translacao.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Estado.h" />
     <ClInclude Include="Motor3D.h" />
     <ClInclude Include="Ponto.h" />
     <ClInclude Include="Primitiva.h" />
+    <ClInclude Include="Rotacao.h" />
     <ClInclude Include="tinyxml2\tinyxml2.h" />
-    <ClInclude Include="Tipo.h" />
+    <ClInclude Include="Escala.h" />
     <ClInclude Include="Transformacao.h" />
     <ClInclude Include="Translacao.h" />
   </ItemGroup>

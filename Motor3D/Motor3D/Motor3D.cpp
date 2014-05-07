@@ -39,7 +39,8 @@ void desenhaPrimitivas() {
 		glPushMatrix();
 
 		if (!t.trasnformacaoVazia()) {
-			tp = t.getTranslacao();
+			Translacao trans;
+			trans = t.getTranslacao(); /* FALTA ALTERAR ISTO */
 			if (!tp.tipoVazio()) {
 				glTranslatef(tp.getTX(), tp.getTY(), tp.getTZ());
 			}
@@ -223,51 +224,54 @@ int lerFicheiro(string fl, Primitiva& pr) {
 		cout << "Nao foi possivel ler o arquivo" << endl;
 		return -1;
 	}
-} 
+}
+
+void verificaTranslacoes(XMLElement* transformacao, int& t) {
+
+	if (strcmp(transformacao->Value(), "translacao") == 0) {
+		if (transformacao->Attribute("tempo"))
+			t = stoi(transformacao->Attribute("tempo"));
+
+		printf("%s - %d\n", transformacao->Value(), t);
+
+		float transX, transY, transZ;
+		for (XMLElement* ponto = transformacao->FirstChildElement("ponto"); ponto; ponto = ponto->NextSiblingElement("ponto")) {
+			transX = transY = transZ = 0;
+			
+			if (ponto->Attribute("X"))
+				transX = stof(ponto->Attribute("X"));
+
+			if (ponto->Attribute("Y"))
+				transY = stof(ponto->Attribute("Y"));
+
+			if (ponto->Attribute("Z"))
+				transZ = stof(ponto->Attribute("Z"));
+
+			printf("ponto: %f - %f - %f\n", transX, transY, transZ);
+		}
+		/*Tipo x = transf.getTranslacao();
+		tp = Tipo::Tipo(transX + x.getTX(), transY + x.getTY(), transZ + x.getTZ());
+		tr.setTranslacao(tp);*/
+	}
+}
 
 void teste(XMLElement* grupo, Transformacao transf) {
+	int tempo = 0;
+
 	Transformacao tr;
-	Tipo tp;
+	Tipo tp; /* Isto vai desaparecer */
 	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0) grupo=grupo->FirstChildElement();
 
-	
 	//transformações para um grupo
 	XMLElement* transformacao = grupo->FirstChildElement();
 
 	/* Verifica se existem transformcoes antes dos modelos */
-	if (strcmp(transformacao->Value(), "modelos") == 0) tr = transf;
+	if (strcmp(transformacao->Value(), "modelos") == 0)
+		tr = transf;
 	else {
 		for (transformacao; (strcmp(transformacao->Value(), "modelos") != 0); transformacao = transformacao->NextSiblingElement()) {
-			
 			/* Translacao */
-			if (strcmp(transformacao->Value(), "translacao") == 0) {
-				int tempoT;
-
-				if (transformacao->Attribute("tempo") == NULL) tempoT = 0;
-				else tempoT = stoi(transformacao->Attribute("tempo"));
-				printf("%s - %d\n", transformacao->Value(), tempoT);
-				   
-				
-				float transX, transY, transZ;
-				for (XMLElement* ponto = transformacao->FirstChildElement("ponto"); ponto; ponto = ponto->NextSiblingElement("ponto")){
-					
-						if(ponto->Attribute("X") == NULL) transX=0;
-						else transX= stof(ponto->Attribute("X"));
-
-						if(ponto->Attribute("Y") == NULL) transY=0;
-						else transY= stof(ponto->Attribute("Y"));
-
-						if(ponto->Attribute("Z") == NULL) transZ=0;
-						else transZ= stof(ponto->Attribute("Z"));
-
-						printf("ponto: %f - %f - %f\n", transX, transY, transZ);
-				}
-
-				/*Tipo x = transf.getTranslacao();
-				tp = Tipo::Tipo(transX + x.getTX(), transY + x.getTY(), transZ + x.getTZ());
-				tr.setTranslacao(tp);*/
-			}
-
+			verificaTranslacoes(transformacao,tempo);
 
 			//rotacao
 			if (strcmp(transformacao->Value(), "rotacao") == 0) {

@@ -36,6 +36,9 @@
     <ClCompile Include="tinyxml2\tinyxml2.cpp">
       <Filter>Resource Files\tinyxml2</Filter>
     </ClCompile>
+    <ClCompile Include="Translacao.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Motor3D.h">
@@ -58,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="tinyxml2\tinyxml2.h">
       <Filter>Resource Files\tinyxml2</Filter>
+    </ClInclude>
+    <ClInclude Include="Translacao.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

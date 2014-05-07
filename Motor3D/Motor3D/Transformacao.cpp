@@ -1,12 +1,12 @@
 #include "Transformacao.h"
 
 Transformacao::Transformacao() {
-	translacao = Tipo::Tipo();
+	translacao = Translacao::Translacao();
 	rotacao = Tipo::Tipo();
 	escala = Tipo::Tipo();
 }
 
-Transformacao::Transformacao(Tipo t, Tipo r, Tipo e) {
+Transformacao::Transformacao(Translacao t, Tipo r, Tipo e) {
 	translacao = t;
 	rotacao = r;
 	escala = e;
@@ -14,7 +14,7 @@ Transformacao::Transformacao(Tipo t, Tipo r, Tipo e) {
 
 bool Transformacao::trasnformacaoVazia() {
 	bool res = false;	
-	if(translacao.tipoVazio() && rotacao.tipoVazio() && escala.tipoVazio())
+	if(translacao.vazio() && rotacao.tipoVazio() && escala.tipoVazio())
 		res = true;
 
 	return res;

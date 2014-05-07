@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cena>
 	<grupo>
-		<translacao tempo="10">
+		<translacao tempo="100">
 			<ponto X="1" Y="0" Z="1" />
 			<ponto X="2" Y="0" Z="1" />
 			<ponto X="3" Y="0" Z="1" />

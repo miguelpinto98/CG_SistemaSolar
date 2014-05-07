@@ -91,7 +91,7 @@ void framesPerSecond() {
 	}
 }
 
-void desenhaPrimitivas() {
+void desenhaPrimitivas(float a, float* res) {
 	int ipr = primitivas.size();
 	for (int i = 0; i<ipr; i++) {
 		Primitiva p = primitivas[i];
@@ -117,7 +117,15 @@ void desenhaPrimitivas() {
 		//p.construir();
 
 		/* Modo VBO */
+
+		//getGlobalCatmullRomPoint(a, res);
+
+		//glTranslatef(res[0], res[1], res[2]);
+		//glScalef(0.1, 0.1, 0.1);
+
 		p.desenhar();
+
+		
 
 		glPopMatrix();
 	}
@@ -135,26 +143,14 @@ void renderScene(void) {
 		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
 
-	renderCatmullRomCurve();
-    
-	glPushMatrix();
-	getGlobalCatmullRomPoint(a,res);
-
-	glTranslatef(res[0],res[1],res[2]);
-	glScalef(0.1, 0.1, 0.1);
-	glutWireTeapot(1);
-	glPopMatrix();
-   
-    
-	a+=0.001;
-
-	/*glTranslatef(xx,yy,zz);
-    glRotatef(angle, 0.0f, 1.0f, 0.0f);
-
+	//renderCatmullRomCurve();
+  
 	framesPerSecond();
 
-	desenhaPrimitivas();*/
+	desenhaPrimitivas(a,res);
 	
+	a += 0.001;
+
 	glutSwapBuffers();
 }
 

@@ -2,22 +2,18 @@
 
 Transformacao::Transformacao() {
 	translacao = Translacao::Translacao();
-	rotacao = Tipo::Tipo();
-	escala = Tipo::Tipo();
+	rotacao = Rotacao::Rotacao();
+	escala = Escala::Escala();
 }
 
-Transformacao::Transformacao(Translacao t, Tipo r, Tipo e) {
+Transformacao::Transformacao(Translacao t, Rotacao r, Escala e) {
 	translacao = t;
 	rotacao = r;
 	escala = e;
 }
 
 bool Transformacao::trasnformacaoVazia() {
-	bool res = false;	
-	if(translacao.vazio() && rotacao.tipoVazio() && escala.tipoVazio())
-		res = true;
-
-	return res;
+	return (translacao.vazio() && rotacao.vazio() && escala.vazio()) ? true : false;
 }
 
 Transformacao::~Transformacao(void)

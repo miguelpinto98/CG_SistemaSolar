@@ -16,6 +16,12 @@
     <Filter Include="Resource Files\tinyxml2">
       <UniqueIdentifier>{d1a245f0-1808-42cb-ae72-d4115dc62f4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\tipos">
+      <UniqueIdentifier>{126877a2-11b0-4b67-97db-3b6ef38aa486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tipos">
+      <UniqueIdentifier>{2250cf6e-5bcf-4d72-9503-8c1b8b2ab560}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Motor3D.cpp">
@@ -27,17 +33,20 @@
     <ClCompile Include="Primitiva.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tipo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Transformacao.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tinyxml2\tinyxml2.cpp">
       <Filter>Resource Files\tinyxml2</Filter>
     </ClCompile>
+    <ClCompile Include="Rotacao.cpp">
+      <Filter>Source Files\tipos</Filter>
+    </ClCompile>
     <ClCompile Include="Translacao.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\tipos</Filter>
+    </ClCompile>
+    <ClCompile Include="Escala.cpp">
+      <Filter>Source Files\tipos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,20 +59,20 @@
     <ClInclude Include="Primitiva.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tipo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Transformacao.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Estado.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tinyxml2\tinyxml2.h">
       <Filter>Resource Files\tinyxml2</Filter>
     </ClInclude>
+    <ClInclude Include="Rotacao.h">
+      <Filter>Header Files\tipos</Filter>
+    </ClInclude>
+    <ClInclude Include="Escala.h">
+      <Filter>Header Files\tipos</Filter>
+    </ClInclude>
     <ClInclude Include="Translacao.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\tipos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

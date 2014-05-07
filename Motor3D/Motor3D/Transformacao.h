@@ -1,20 +1,21 @@
 #pragma once
-#include "Tipo.h"
 #include "Translacao.h"
+#include "Rotacao.h"
+#include "Escala.h"
 
 class Transformacao {
 	Translacao translacao;
-	Tipo rotacao;
-	Tipo escala;
+	Rotacao rotacao;
+	Escala escala;
 public:
 	Transformacao();
-	Transformacao(Translacao, Tipo, Tipo);
+	Transformacao(Translacao, Rotacao, Escala);
 	Translacao getTranslacao() { return translacao; }
-	Tipo getRotacao() { return rotacao; }
-	Tipo getEscala() { return escala; }
+	Rotacao getRotacao() { return rotacao; }
+	Escala getEscala() { return escala; }
 	void setTranslacao(Translacao t) { translacao = t; }
-	void setRotacao(Tipo t) { rotacao = t; }
-	void setEscala(Tipo t) { escala = t; }
+	void setRotacao(Rotacao t) { rotacao = t; }
+	void setEscala(Escala t) { escala = t; }
 	bool trasnformacaoVazia();
 	~Transformacao(void);
 };

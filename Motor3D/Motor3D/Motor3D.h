@@ -15,7 +15,9 @@
 #include "tinyxml2\tinyxml2.h"
 #include "Ponto.h"
 #include "Primitiva.h"
-#include "Estado.h"
+#include "Translacao.h"
+#include "Rotacao.h"
+#include "Escala.h"
 
 #pragma comment(lib, "glew32.lib")
 

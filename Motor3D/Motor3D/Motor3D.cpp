@@ -1,8 +1,8 @@
 #include "Motor3D.h"
 
-#define POINT_COUNT 8
+#define POINT_COUNT 4
 
-float p[POINT_COUNT][3] = {{-1,-1,0},{0,-1.5,0},{1,-1,0},{1.5,0,0},{1,1,0},{0,1.5,0},{-1,1,0},{-1.5,0,0}};
+float p[POINT_COUNT][3] = {{-1,-1,0},{1,-1,0},{1,1,0},{-1,1,0}};
 
 void getCatmullRomPoint(float t, int *indices, float *res) {
     int i;
@@ -12,21 +12,19 @@ void getCatmullRomPoint(float t, int *indices, float *res) {
 					 { 1.0f, -2.5f,  2.0f, -0.5f},
 					 {-0.5f,  0.0f,  0.5f,  0.0f},
 					 { 0.0f,  1.0f,  0.0f,  0.0f}};
+	res[0] = 0.0; res[1] = 0.0; res[2] = 0.0;
     
     
-    // Calcular o ponto res = T * M * P
-    // sendo Pi = p[indices[i]]
-    
-    
+     
     //Sem derivada
     for (i=0; i<4; i++)
         res_aux[i]= pow(t,3) * m[0][i] +  pow(t,2) * m[1][i] + t * m[2][i] + m[3][i];
-    
-    /*
+     
+   /*
     //Com derivada (Esta é a versão para ser utilizada a derivada dos pontos, mas ainda não está concluida)
     for (i=0; i<4; i++)
-        res_aux[i]= 3*pow(t,2) * m[0][i] +  2*t * m[1][i] + m[2][i];
-    */
+        res_aux[i]= 3*pow(t,2) * m[0][i] +  2*t * m[1][i] + m[2][i]; */
+  
     
     //Calculo do RES
 	for(i=0;i<3;i++){
@@ -34,7 +32,6 @@ void getCatmullRomPoint(float t, int *indices, float *res) {
     }
 }
 
-// given  global t, returns the point in the curve
 void getGlobalCatmullRomPoint(float gt, float *res) {
     
 	float t = gt * POINT_COUNT; // this is the real global t
@@ -52,7 +49,6 @@ void getGlobalCatmullRomPoint(float gt, float *res) {
 void renderCatmullRomCurve() {
     float  gtt;
     float res[3];
-    // desenhar a curva usando segmentos de reta - GL_LINE_LOOP
     
     glBegin(GL_LINE_LOOP);
     for (gtt=0; gtt<1; gtt+=0.0001){
@@ -148,7 +144,7 @@ void renderScene(void) {
 	glPopMatrix();
    
     
-	a+=0.001;
+	a+=0.01;
 
 	/*glTranslatef(xx,yy,zz);
     glRotatef(angle, 0.0f, 1.0f, 0.0f);
@@ -388,7 +384,6 @@ void verificaEscala(XMLElement* transformacao) {
 	//tr.setEscala(tp);
 	}
 
-
 void parseXML(XMLElement* grupo, Transformacao transf) {
 	int tempo = 0;
 	Transformacao tr;
@@ -456,14 +451,12 @@ void readXML(string fxml) {
 	parseXML(cena, t);
 }
 
-
 void initPrimitivas() {
 	int num = primitivas.size();
 
 	for (int i = 0; i < num; i++)
 		primitivas[i].preparar();
 }
-
 
 int main(int argc, char **argv) {
 	string xmlmotor="exemplo1.xml";

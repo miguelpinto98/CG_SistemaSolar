@@ -1,3 +1,6 @@
+#ifndef _MAIN
+#define _MAIN
+
 #define _USE_MATH_DEFINES
 
 #include <stdlib.h>
@@ -8,5 +11,14 @@
 #include <fstream>
 #include <string>
 #include <math.h>
+#include <vector>
+
+#include "Patch.h"
+#include "Ponto.h"
 
 using namespace std;
+
+vector<Patch> patchs;
+vector<Ponto> vertices;
+
+#endif

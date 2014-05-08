@@ -31,7 +31,6 @@ void plano(float compr, float larg, int cmdh, int cmdv, string str) {
 	file.close();
 }
 
-
 void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, int cmdl, string str) {
 	int i, j;
 	ofstream file(str);
@@ -159,7 +158,6 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	file.close();
 }
 
-
 void esfera(double raio, int camadasV, int camadasH, string str){
 	double camada = M_PI / camadasV; //pi=180
 	double rotacoes = 2 * M_PI / camadasH;
@@ -205,7 +203,6 @@ void esfera(double raio, int camadasV, int camadasH, string str){
 	}
 	file.close();
 }
-
 
 void cone(double raio, double altura, double camadasV, double camadasH, string str){
 
@@ -282,9 +279,54 @@ void cone(double raio, double altura, double camadasV, double camadasH, string s
 	file.close();
 }
 
+void readPatch(string path) {
+	int i , j, pos, ind, np, nv;
+	float ponto[3], n;
+	string line, token;
+
+	ifstream ifile;
+	ifile.open(path, ios::in);
+	
+	ifile >> np; getline(ifile, line);
+
+	for (i = 0; i < np && getline(ifile, line); i++) {
+		Patch pa = Patch::Patch();
+		for (j = 0; j < 16; j++) {
+			pos = line.find(",");
+			token = line.substr(0, pos);
+			ind = atof(token.c_str());
+			line.erase(0, pos + 1);
+			
+			pa.adicionaIndice(ind);
+		}
+		patchs.push_back(pa);
+	}
+
+	ifile >> nv; getline(ifile, line);
+
+	for (i = 0; i < nv && getline(ifile, line); i++) {
+		for (j = 0; j < 3; j++) {
+			pos = line.find(",");
+			token = line.substr(0, pos);
+			n = atof(token.c_str());
+			line.erase(0, pos + 1);
+
+			ponto[j] = n;
+		}
+		vertices.push_back(Ponto::Ponto(ponto[0], ponto[1], ponto[2]));
+	}
+	ifile.close();
+}
+
+void patchBezier() {
+
+}
 
 int main(int argc, char **argv) {
-	if (argc>1) {
+	readPatch("teapot.patch");
+	patchBezier();
+
+	/*if (argc>1) {
 		if (!strcmp(argv[1], "plano") && argc == 7) {
 			cout << "PLANO\n" << endl;
 			plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), argv[6]);
@@ -305,12 +347,18 @@ int main(int argc, char **argv) {
 						esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), argv[5]);
 					}
 					else {
-						cout << "PRIMITIVA NAO DESENHADA - DADOS INSERIDOS INVALIDOS!" << endl;
+						if (!strcmp(argv[1], "abc")) { 
+							readPatch("teapot.patch");
+							patchBezier();
+						}
+						else {
+							cout << "PRIMITIVA NAO DESENHADA - DADOS INSERIDOS INVALIDOS!" << endl;
+						}
 					}
 				}
 			}
 		}
 	}
-
+	*/
 	return 0;
 }

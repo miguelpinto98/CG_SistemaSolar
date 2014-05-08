@@ -20,18 +20,18 @@ void getCatmullRomPoint(float t, int *indices, float *res) {
 	float m[4][4] = {{-0.5f,  1.5f, -1.5f,  0.5f},
 					 {1.0f, -2.5f,  2.0f, -0.5f},
 					 {-0.5f,  0.0f,  0.5f,  0.0f},
-					 {0.0f,  1.0f,  0.0f,  0.0f}};
+					 {0.0f,  1.0f,  0.0f,  0.0f}};  
   
      
-   /*//Sem derivada
+   //Sem derivada
     for (i=0; i<4; i++)
-        res_aux[i]= pow(t,3) * m[0][i] +  pow(t,2) * m[1][i] + t * m[2][i] + m[3][i];*/
+        res_aux[i]= pow(t,3) * m[0][i] +  pow(t,2) * m[1][i] + t * m[2][i] + m[3][i];
 		
     
     
-     for (i=0; i<4; i++){
+     /*for (i=0; i<4; i++){
         res_aux[i]= (3*pow(t,2) * m[0][i])  +  (2*t * m[1][i]) + m[2][i];
-	}
+	}*/
     
     
     //Calculo do RES

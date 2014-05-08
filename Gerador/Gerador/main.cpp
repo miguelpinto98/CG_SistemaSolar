@@ -1,4 +1,4 @@
-#include "main.h"
+ #include "main.h"
 
 void plano(float compr, float larg, int cmdh, int cmdv, string str) {
 	double x, y = -(larg / 2), z = y;
@@ -318,13 +318,90 @@ void readPatch(string path) {
 	ifile.close();
 }
 
-void patchBezier() {
+Ponto Calculate(float t, float *p1, float *p2, float *p3, float *p4) {
+	float res[3];
 
+	float it = 1.0 - t;
+
+	float b0 = it*it*it;
+	float b1 = 3*t*it*it;
+	float b2 = 3*t*t*it;
+	float b3 = t*t*t;
+
+	res[0] = b0*p1[0] + b1*p2[0] + b2*p3[0] + b3*p4[0];
+	res[1] = b0*p1[1] + b1*p2[1] + b2*p3[1] + b3*p4[1];
+	res[2] = b0*p1[2] + b1*p2[2] + b2*p3[2] + b3*p4[2];
+
+	return Ponto::Ponto(res[0], res[1], res[2]);
 }
+
+Ponto bezier(float u, float v, vector<int> pat) {
+	float bz[4][3], res[4][3];
+	int i, j = 0, k=0;
+
+	for (i = 0; i < 16; i ++) {
+		bz[j][0] = vertices[pat[i]].getX();
+		bz[j][1] = vertices[pat[i]].getY();
+		bz[j][2] = vertices[pat[i]].getZ();
+
+		j++;
+
+		if (j % 4 == 0) {
+			Ponto p = Calculate(u, bz[0], bz[1], bz[2], bz[3]);
+			res[k][0] = p.getX();
+			res[k][1] = p.getY();
+			res[k][2] = p.getZ();
+			
+			k++;
+			j = 0;
+		}
+	} 
+	return Calculate(v, res[0], res[1], res[2], res[3]);
+}
+
+void escreveTriangulos(Ponto p1, Ponto p2, Ponto p3, ofstream& file) {
+	file << p1.getX() << "," << p1.getY() << "," << p1.getZ() << endl;
+	file << p2.getX() << "," << p2.getY() << "," << p2.getZ() << endl;
+	file << p3.getX() << "," << p3.getY() << "," << p3.getZ() << endl;
+}
+
+void patchBezier(int tess, int ip, ofstream& file) {
+	float inc = 1.0 / tess, u, v, u2, v2;
+	
+	for (int i = 0; i < tess; i++) {
+		for (int j = 0; j < tess; j++) {
+			u = i*inc;
+			v = j*inc;
+			u2 = (i + 1)*inc;
+			v2 = (j + 1)*inc;
+
+			Ponto p0 = bezier(u, v, patchs[ip].getPatch());
+			Ponto p1 = bezier(u, v2, patchs[ip].getPatch());
+			Ponto p2 = bezier(u2, v, patchs[ip].getPatch());
+			Ponto p3 = bezier(u2, v2, patchs[ip].getPatch());
+
+			escreveTriangulos(p0, p2, p3,file);
+			escreveTriangulos(p0, p3, p1,file);
+		}
+	}
+}
+
+void initSupBezier(int tess) {
+	ofstream file;
+	file.open("teapot.3d");
+
+	int num = patchs.size();
+
+	for (int i = 0; i < num; i++)
+		patchBezier(20, i,file);
+
+	file.close();
+}
+
 
 int main(int argc, char **argv) {
 	readPatch("teapot.patch");
-	patchBezier();
+	initSupBezier(25);
 
 	/*if (argc>1) {
 		if (!strcmp(argv[1], "plano") && argc == 7) {
@@ -347,9 +424,9 @@ int main(int argc, char **argv) {
 						esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), argv[5]);
 					}
 					else {
-						if (!strcmp(argv[1], "abc")) { 
-							readPatch("teapot.patch");
-							patchBezier();
+						if (!strcmp(argv[1], "")) { 
+							//readPatch("teapot.patch");
+							//initSupBezier(argv[X]);
 						}
 						else {
 							cout << "PRIMITIVA NAO DESENHADA - DADOS INSERIDOS INVALIDOS!" << endl;
@@ -358,7 +435,6 @@ int main(int argc, char **argv) {
 				}
 			}
 		}
-	}
-	*/
+	}*/
 	return 0;
 }

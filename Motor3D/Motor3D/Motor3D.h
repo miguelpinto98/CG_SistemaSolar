@@ -26,15 +26,4 @@ using namespace tinyxml2;
 
 vector<Primitiva> primitivas;
 
-#define CONST 0.1f;
-
-float xx = 0, yy = 0, zz = 0, angle = 0.0f;
-float camX = 0, camY, camZ = 5;
-int startX, startY, tracking = 0;
-
-int alpha = 0, beta = 0, r = 5;
-
-/* FRAMES PER SECOND */
-int timebase = 0, frame = 0;
-
 #endif

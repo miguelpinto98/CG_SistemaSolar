@@ -1,17 +1,5 @@
 #include "Motor3D.h"
 
-#define CONST 0.1f;
-
-float xx = 0, yy = 0, zz = 0, angle = 0.0f;
-float camX = 0, camY, camZ = 5;
-int startX, startY, tracking = 0;
-
-int alpha = 0, beta = 0, r = 5;
-
-/* FRAMES PER SECOND */
-int timebase = 0, frame = 0;
-
-
 #define POINT_COUNT 4
 
 float p[POINT_COUNT][3] = {{-1,-1,0},{1,-1,0},{1,1,0},{-1,1,0}};
@@ -115,7 +103,7 @@ void desenhaPrimitivas(float a, float* res) {
 
 			Rotacao ro = t.getRotacao();
 			if (!ro.vazio())
-				glRotatef(-1, ro.getRx(), ro.getRy(), ro.getRz());
+				glRotatef(1, ro.getRx(), ro.getRy(), ro.getRz());
 
 			Escala es = t.getEscala();
 			if (!es.vazio())
@@ -151,6 +139,13 @@ void renderScene(void) {
 		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
 
+	/* Definicoes Camara */
+	glRotatef(anguloX, 1, 0, 0);
+	glRotatef(anguloY, 0, 1, 0);
+	glRotatef(anguloZ, 0, 0, 1);
+	glTranslatef(coordX, coordY, coordZ);
+
+	/* RENDER PRIMITIVAS */
 	//renderCatmullRomCurve();
   
 	framesPerSecond();
@@ -162,30 +157,41 @@ void renderScene(void) {
 	glutSwapBuffers();
 }
 
+void resetCamara() {
+	anguloX = anguloY = anguloZ = 0.0f;
+	coordX = coordY = coordZ = 0;
+	alpha = 0.0f;
+	beta = 0.5f;
+}
+
 void normalkeyboard(unsigned char tecla, int x, int y) {
 	switch (tecla) {
-		case 'a':
-		case 'A': xx-=CONST; break;
-		case 'd': 
-		case 'D': xx+=CONST; break;
-		case 'w':
-		case 'W': yy+=CONST; break;
-		case 's':
-		case 'S': yy-=CONST; break;
-		case 'e':
-		case 'E': zz-=CONST; break;
-		case 'q':
-		case 'Q': zz+=CONST; break;
+		case 'W':;
+		case 'w': anguloX += 1; break;
+		case 'S':;
+		case 's': anguloX -= 1; break;
+		case 'A':;
+		case 'a': anguloY += 1; break;
+		case 'D':;
+		case 'd': anguloY -= 1; break;
+		case 'q':;
+		case 'Q': anguloZ += 1; break;
+		case 'e':;
+		case 'E': anguloZ -= 1; break;
+		case 'R':;
+		case 'r': resetCamara(); break;
+		case '+': coordZ += 0.5f; break;
+		case '-': coordZ -= 0.5f; break;
 	}
 	glutPostRedisplay();
 }
 
 void specialKeys(int key, int x, int y) {
 	switch (key) {
-		case GLUT_KEY_LEFT: angle-=5.0f; break;
-		case GLUT_KEY_RIGHT: angle+=5.0f; break;
-		case GLUT_KEY_UP: yy+=CONST; break;
-		case GLUT_KEY_DOWN: break;
+		case GLUT_KEY_UP: coordY += 1; break;
+		case GLUT_KEY_DOWN: coordY -= 1; break;
+		case GLUT_KEY_LEFT: coordX -= 1; break;
+		case GLUT_KEY_RIGHT: coordX += 1; break;
 	}
 }
 

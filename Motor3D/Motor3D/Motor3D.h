@@ -26,4 +26,16 @@ using namespace tinyxml2;
 
 vector<Primitiva> primitivas;
 
+/* CAMARA - TECLADO */
+float anguloX = 0.0f, anguloY = 0.0f, anguloZ = 0.0f;
+float coordX = 0, coordY = 0, coordZ = 0;
+
+/* CAMARA - RATO */
+float camX = 0, camY, camZ = 5;
+int startX, startY, tracking = 0;
+int alpha = 0, beta = 0, r = 5;
+
+/* FRAMES PER SECOND */
+int timebase = 0, frame = 0;
+
 #endif

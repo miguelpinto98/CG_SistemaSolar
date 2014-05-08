@@ -87,7 +87,7 @@ void framesPerSecond() {
 	}
 }
 
-void desenhaPrimitivas(float a, float* res) {
+void desenhaPrimitivas(float* res) {
 	int ipr = primitivas.size();
 	for (int i = 0; i<ipr; i++) {
 		Primitiva p = primitivas[i];
@@ -113,24 +113,13 @@ void desenhaPrimitivas(float a, float* res) {
 		//p.construir();
 
 		/* Modo VBO */
-
-		//getGlobalCatmullRomPoint(a, res);
-
-		//glTranslatef(res[0], res[1], res[2]);
-		//glScalef(0.1, 0.1, 0.1);
-
 		p.desenhar();
-
-		
 
 		glPopMatrix();
 	}
 }
 
 void renderScene(void) {
-	static float a = 0;
-	float res[3];
-    
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -138,6 +127,8 @@ void renderScene(void) {
 	gluLookAt(camX,camY,camZ, 
 		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
+	
+	framesPerSecond();
 
 	/* Definicoes Camara */
 	glRotatef(anguloX, 1, 0, 0);
@@ -146,13 +137,8 @@ void renderScene(void) {
 	glTranslatef(coordX, coordY, coordZ);
 
 	/* RENDER PRIMITIVAS */
-	//renderCatmullRomCurve();
-  
-	framesPerSecond();
-
-	desenhaPrimitivas(a,res);
 	
-	a += 0.001;
+	desenhaPrimitivas(a,res);
 
 	glutSwapBuffers();
 }
@@ -362,7 +348,7 @@ Rotacao verificaRotacao(XMLElement* transformacao){
 
 Escala verificaEscala(XMLElement* transformacao) {
 	float escX, escY, escZ;
-	escX = escY = escZ = 0;
+	escX = escY = escZ = 1;
 
 	if (transformacao->Attribute("X"))
 		escX = stof(transformacao->Attribute("X"));

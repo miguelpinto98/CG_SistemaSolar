@@ -286,36 +286,40 @@ void readPatch(string path) {
 
 	ifstream ifile;
 	ifile.open(path, ios::in);
-	
-	ifile >> np; getline(ifile, line);
 
-	for (i = 0; i < np && getline(ifile, line); i++) {
-		Patch pa = Patch::Patch();
-		for (j = 0; j < 16; j++) {
-			pos = line.find(",");
-			token = line.substr(0, pos);
-			ind = atof(token.c_str());
-			line.erase(0, pos + 1);
-			
-			pa.adicionaIndice(ind);
+	if (ifile.is_open()) {
+		ifile >> np; getline(ifile, line);
+
+		for (i = 0; i < np && getline(ifile, line); i++) {
+			Patch pa = Patch::Patch();
+			for (j = 0; j < 16; j++) {
+				pos = line.find(",");
+				token = line.substr(0, pos);
+				ind = atof(token.c_str());
+				line.erase(0, pos + 1);
+
+				pa.adicionaIndice(ind);
+			}
+			patchs.push_back(pa);
 		}
-		patchs.push_back(pa);
-	}
 
-	ifile >> nv; getline(ifile, line);
+		ifile >> nv; getline(ifile, line);
 
-	for (i = 0; i < nv && getline(ifile, line); i++) {
-		for (j = 0; j < 3; j++) {
-			pos = line.find(",");
-			token = line.substr(0, pos);
-			n = atof(token.c_str());
-			line.erase(0, pos + 1);
+		for (i = 0; i < nv && getline(ifile, line); i++) {
+			for (j = 0; j < 3; j++) {
+				pos = line.find(",");
+				token = line.substr(0, pos);
+				n = atof(token.c_str());
+				line.erase(0, pos + 1);
 
-			ponto[j] = n;
+				ponto[j] = n;
+			}
+			vertices.push_back(Ponto::Ponto(ponto[0], ponto[1], ponto[2]));
 		}
-		vertices.push_back(Ponto::Ponto(ponto[0], ponto[1], ponto[2]));
+		ifile.close();
+	} else {
+		cout << "Ficheiro *.patch nao encontrado!" << endl;
 	}
-	ifile.close();
 }
 
 Ponto Calculate(float t, float *p1, float *p2, float *p3, float *p4) {
@@ -386,9 +390,9 @@ void patchBezier(int tess, int ip, ofstream& file) {
 	}
 }
 
-void initSupBezier(int tess) {
+void initSupBezier(int tess, string nameFile) {
 	ofstream file;
-	file.open("teapot.3d");
+	file.open(nameFile);
 
 	int num = patchs.size();
 
@@ -398,12 +402,8 @@ void initSupBezier(int tess) {
 	file.close();
 }
 
-
 int main(int argc, char **argv) {
-	readPatch("teapot.patch");
-	initSupBezier(25);
-
-	/*if (argc>1) {
+	if (argc>1) {
 		if (!strcmp(argv[1], "plano") && argc == 7) {
 			cout << "PLANO\n" << endl;
 			plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), argv[6]);
@@ -424,9 +424,17 @@ int main(int argc, char **argv) {
 						esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), argv[5]);
 					}
 					else {
-						if (!strcmp(argv[1], "")) { 
-							//readPatch("teapot.patch");
-							//initSupBezier(argv[X]);
+						char token[7];
+						if (argc == 4) {
+							string abc = argv[1];
+							int pos = abc.find(".");
+							abc = abc.substr(pos, pos+6);
+							strcpy_s(token,size_t(7),abc.c_str());
+						}
+						if (!strcmp(token, ".patch") && argc == 4) { 
+							cout << argv[1] << endl;
+							readPatch(argv[1]);	//Nome Ficheiro = Path
+							initSupBezier(atoi(argv[2]), argv[3]); //Inteiro e Nome do Ficheiro a Ser Gerado
 						}
 						else {
 							cout << "PRIMITIVA NAO DESENHADA - DADOS INSERIDOS INVALIDOS!" << endl;
@@ -435,6 +443,6 @@ int main(int argc, char **argv) {
 				}
 			}
 		}
-	}*/
+	}
 	return 0;
 }

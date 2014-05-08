@@ -80,13 +80,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bezier.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Patch.cpp" />
     <ClCompile Include="Ponto.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bezier.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Patch.h" />
     <ClInclude Include="Ponto.h" />

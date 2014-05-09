@@ -13,7 +13,7 @@ Rotacao::Rotacao(float t, float x, float y, float z) {
 }
 
 bool Rotacao::vazio() {
-	return (time == rx == ry == rz == 0) ? true : false;
+	return (time == 0 && rx == 0 && ry == 0 && rz == 0) ? true : false;
 }
 
 Rotacao::~Rotacao()

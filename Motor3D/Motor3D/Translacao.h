@@ -9,12 +9,14 @@ class Translacao
 {
 	float time;
 	vector<Ponto> transPontos;
+	int tam;
 public:
 	Translacao();
 	Translacao(float);
-	Translacao(float,vector<Ponto>);
+	Translacao(float,vector<Ponto>,int);
 	float getTime() { return time; }
-	vector<Ponto> getTransPontos() { return transPontos; }
+	int getTamanho() { return tam; }
+ 	vector<Ponto> getTransPontos() { return transPontos; }
 	void setTime(float);
 	bool vazio();
 	virtual ~Translacao();

@@ -13,7 +13,7 @@ Escala::Escala(float xx, float yy, float zz) {
 }
 
 bool Escala::vazio() {
-	return (ex == ey == ez == 0) ? true : false;
+	return (ex == 0 && ey == 0 && ez == 0) ? true : false;
 }
 
 Escala::~Escala(void)

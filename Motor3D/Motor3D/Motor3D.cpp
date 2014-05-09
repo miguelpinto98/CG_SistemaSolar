@@ -1,38 +1,35 @@
 #include "Motor3D.h"
 
-vector<Ponto> transpontos;
-int tamanho = transpontos.size();
-
-
-void getCatmullRomPoint(float t, int *indices, float *res) {
-   int i;
+void getCatmullRomPoint(float t, int *indices, float *res, vector<Ponto> transpontos) {
 	float res_aux[4];
 	
 	float m[4][4] = {{-0.5f,  1.5f, -1.5f,  0.5f},
 					 { 1.0f, -2.5f,  2.0f, -0.5f},
 					 {-0.5f,  0.0f,  0.5f,  0.0f},
 				     { 0.0f,  1.0f,  0.0f,  0.0f}};
-		
-	res[0] = 0.0;
-	res[1] = 0.0;
-	res[2] = 0.0;
-     
+
+	res[0] = 0.0; res[1] = 0.0; res[2] = 0.0;
+	float t3 = t*t*t, t2 = t*t;
+
    //TESSELACAO*M
-	res_aux[0]= pow(t,3)*m[0][0] + pow(t,2)*m[1][0] + t*m[2][0] + m[3][0];
-	res_aux[1]= pow(t,3)*m[0][1] + pow(t,2)*m[1][1] + t*m[2][1] + m[3][1];
-	res_aux[2]= pow(t,3)*m[0][2] + pow(t,2)*m[1][2] + t*m[2][2] + m[3][2];
-	res_aux[3]= pow(t,3)*m[0][3] + pow(t,2)*m[1][3] + t*m[2][3] + m[3][3];
+	res_aux[0]= t3*m[0][0] + t2*m[1][0] + t*m[2][0] + m[3][0];
+	res_aux[1]= t3*m[0][1] + t2*m[1][1] + t*m[2][1] + m[3][1];
+	res_aux[2]= t3*m[0][2] + t2*m[1][2] + t*m[2][2] + m[3][2];
+	res_aux[3]= t3*m[0][3] + t2*m[1][3] + t*m[2][3] + m[3][3];
+	
+	int i0 = indices[0]; Ponto p0 = transpontos[i0];
+	int i1 = indices[1]; Ponto p1 = transpontos[i1];
+	int i2 = indices[2]; Ponto p2 = transpontos[i2];
+	int i3 = indices[3]; Ponto p3 = transpontos[i3];
 
-
-   
     //TESSELACAO*M*P = res
-	res[0]= res_aux[0]*transpontos[0].getX() + res_aux[1]*transpontos[1].getX() + res_aux[2]*transpontos[2].getX() + res_aux[3]*transpontos[3].getX();
-	res[1]= res_aux[0]*transpontos[0].getY() + res_aux[1]*transpontos[1].getY() + res_aux[2]*transpontos[2].getY() + res_aux[3]*transpontos[3].getY();
-	res[2]= res_aux[0]*transpontos[0].getZ() + res_aux[1]*transpontos[1].getZ() + res_aux[2]*transpontos[2].getZ() + res_aux[3]*transpontos[3].getZ();
+	res[0] = res_aux[0] * p0.getX() + res_aux[1] * p1.getX() + res_aux[2] * p2.getX() + res_aux[3] * p3.getX();
+	res[1] = res_aux[0] * p0.getY() + res_aux[1] * p1.getY() + res_aux[2] * p2.getY() + res_aux[3] * p3.getY();
+	res[2] = res_aux[0] * p0.getZ() + res_aux[1] * p1.getZ() + res_aux[2] * p2.getZ() + res_aux[3] * p3.getZ();
 }
 
-
-void getGlobalCatmullRomPoint(float gt, float *res) {   
+void getGlobalCatmullRomPoint(float gt, float *res, vector<Ponto> transpontos) {
+	int tamanho = transpontos.size();
 	float t = gt * tamanho; // this is the real global t
 	int index = floor(t);  // which segment
 	t = t - index; // where within  the segment
@@ -44,20 +41,19 @@ void getGlobalCatmullRomPoint(float gt, float *res) {
 	indices[2] = (indices[1]+1)%tamanho;
 	indices[3] = (indices[2]+1)%tamanho;
 
-	getCatmullRomPoint(t, indices, res);
+	getCatmullRomPoint(t, indices, res,transpontos);
 }
 
-void renderCatmullRomCurve() {
+void renderCatmullRomCurve(vector<Ponto> transpontos) {
     float res[3];
     
     glBegin(GL_LINE_LOOP);
     for (float gt=0; gt<1; gt+=0.0001){
-       getGlobalCatmullRomPoint(gt,res);
-        glVertex3fv(res);
+       getGlobalCatmullRomPoint(gt,res,transpontos);
+       glVertex3fv(res);
     }
     glEnd();
 }
-
 
 void changeSize(int w, int h) {
 	if(h == 0)
@@ -88,18 +84,24 @@ void framesPerSecond() {
 	}
 }
 
-void desenhaPrimitivas(float* res) {
+/*void desenhaPrimitivas(float* res, int a) {
 	int ipr = primitivas.size();
 	for (int i = 0; i<ipr; i++) {
 		Primitiva p = primitivas[i];
 		Transformacao t = p.getTransformacao();
+
+		renderCatmullRomCurve(t.getTranslacao().getTransPontos());
 
 		glPushMatrix();
 		
 		if (!t.trasnformacaoVazia()) {
 			Translacao tr = t.getTranslacao();
 			if (!tr.vazio()) {
-				//
+				int num = tr.getTransPontos().size();
+				if (num>0) {
+					getGlobalCatmullRomPoint(a, res, tr.getTransPontos());
+					//glTranslatef(res[0], res[1], res[2]);
+				}
 			}
 
 			Rotacao ro = t.getRotacao();
@@ -110,15 +112,15 @@ void desenhaPrimitivas(float* res) {
 			if (!es.vazio())
 				glScalef(es.getEx(), es.getEy(), es.getEz());
 		}
-		/* Modo Imediato */
-		//p.construir();
+		/* Modo Imediato
+		p.construir();
 
-		/* Modo VBO */
+		 Modo VBO 
 		p.desenhar();
 
 		glPopMatrix();
 	}
-}
+} */
 
 void renderScene(void) {
 	static float a = 0;
@@ -140,20 +142,56 @@ void renderScene(void) {
 	glRotatef(anguloZ, 0, 0, 1);
 	glTranslatef(coordX, coordY, coordZ);
 
+	//vector<Ponto> abc;
+	//desenhaPrimitivas(res,a);
+	//Primitiva p = primitivas[1];
+	//vector<Ponto> transpontos = p.getTransformacao().getTranslacao().getTransPontos();
+
+	//glPushMatrix();
+	//getGlobalCatmullRomPoint(a,res,transpontos);
+	//glScalef(0.1, 0.1, 0.1);
+	//p.desenhar();
+	//glPopMatrix();
+
 	/* RENDER PRIMITIVAS */
-	
-	desenhaPrimitivas(res);
-	//renderCatmullRomCurve();
-    
-	glPushMatrix();
-	//getGlobalCatmullRomPoint(a,res);
-	glTranslatef(res[0],res[1],res[2]);
-	glScalef(0.1, 0.1, 0.1);
-	glutWireTeapot(1);
-	glPopMatrix();
-    
+	int ipr = primitivas.size();
+	for (int i = 0; i<ipr; i++) {
+		Primitiva p = primitivas[i];
+		Transformacao t = p.getTransformacao();
+
+		glPushMatrix();
+
+		if (!t.trasnformacaoVazia()) {
+			Translacao tr = t.getTranslacao();
+			if (!tr.vazio()) {
+				int num = tr.getTamanho();
+				if (num>0) {
+					vector<Ponto> vp = tr.getTransPontos();
+					renderCatmullRomCurve(vp);
+					getGlobalCatmullRomPoint(a, res, vp);
+					glTranslatef(res[0], res[1], res[2]);
+				}
+			}
+
+			Rotacao ro = t.getRotacao();
+			if (!ro.vazio())
+				glRotatef(1, ro.getRx(), ro.getRy(), ro.getRz());
+
+			Escala es = t.getEscala();
+			if (!es.vazio())
+				glScalef(es.getEx(), es.getEy(), es.getEz());
+		}
+		/* Modo Imediato */
+		//p.construir();
+
+		/* Modo VBO */
+		p.desenhar();
+
+		glPopMatrix();
+	}
+	a += 0.001;
+
     glutSwapBuffers();
-	a+=0.01;
 }
 
 void resetCamara() {
@@ -312,8 +350,9 @@ int lerFicheiro(string fl, Primitiva& pr) {
 	}
 }
 
-Translacao verificaTranslacoes(XMLElement* transformacao, vector<Ponto> transpontos) {
+Translacao verificaTranslacoes(XMLElement* transformacao) {
 	float tempo = 0;
+	vector<Ponto> tr;
 
 	if (strcmp(transformacao->Value(), "translacao") == 0) {
 		if (transformacao->Attribute("tempo"))
@@ -332,13 +371,13 @@ Translacao verificaTranslacoes(XMLElement* transformacao, vector<Ponto> transpon
 			if (ponto->Attribute("Z"))
 				transZ = stof(ponto->Attribute("Z"));
 
+			cout << transX << "-" << transY << "-" << transZ << endl;
 			Ponto pt = Ponto::Ponto(transX, transY, transZ);
-			transpontos.push_back(pt);		
+			tr.push_back(pt);		
 		}
 	}
-	return Translacao::Translacao(tempo, transpontos);
+	return Translacao::Translacao(tempo, tr,tr.size());
 }
-
 
 Rotacao verificaRotacao(XMLElement* transformacao){
 	float rotX, rotY, rotZ, tempo;
@@ -393,7 +432,7 @@ void parseXML(XMLElement* grupo, Transformacao transf) {
 	else {
 		for (transformacao; (strcmp(transformacao->Value(), "modelos") != 0); transformacao = transformacao->NextSiblingElement()) {
 			if (strcmp(transformacao->Value(), "translacao") == 0)
-				tr = verificaTranslacoes(transformacao, transpontos);
+				tr = verificaTranslacoes(transformacao);
 			//else { tr.setRotacao(transf.getRotacao());}
 	
 			if (strcmp(transformacao->Value(), "rotacao") == 0)

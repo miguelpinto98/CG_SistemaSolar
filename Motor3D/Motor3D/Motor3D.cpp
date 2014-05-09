@@ -86,9 +86,9 @@ void renderScene(void) {
 
 			Rotacao ro = t.getRotacao();
 			if (!ro.vazio()){
-				float r = glutGet(GLUT_ELAPSED_TIME)%(int)(tr.getTime()*10000);
-				float gr = r/(tr.getTime()*10000);
-				glRotatef(gr, 0, 0, 1);
+				float r = glutGet(GLUT_ELAPSED_TIME)%(int)(ro.getTime()*1000);
+				float gr = (r*360)/(ro.getTime()*1000);
+				glRotatef(gr, ro.getRx(), ro.getRy(), ro.getRz());
 			}
 
 			Escala es = t.getEscala();

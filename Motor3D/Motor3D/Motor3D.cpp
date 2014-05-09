@@ -415,11 +415,12 @@ int main(int argc, char **argv) {
 	//string xmlmotor="exemploInv1.xml";
 	//string xmlmotor="sistemasolar1.xml";
 	//string xmlmotor="motor.xml";
-	string xmlmotor="SistemaSolar3Fase.xml";
+	//string xmlmotor="SistemaSolar3Fase.xml";
 
-	readXML(xmlmotor);
+	if(argc>1) {
+		string file = argv[1];
+		readXML(file);
 
-	//if(argc>1) { 
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 		glutInitWindowPosition(100,100);
@@ -445,6 +446,6 @@ int main(int argc, char **argv) {
 		initPrimitivas();
 
 		glutMainLoop();
-	//}
+	}
 	return 0;
 } 

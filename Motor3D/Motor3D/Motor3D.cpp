@@ -42,7 +42,6 @@ void renderCatmullRomCurve(vector<Ponto> pontos) {
 }
 
 void renderScene(void) {
-	static float ang=0;
 	float res[3];
 
 	
@@ -87,7 +86,9 @@ void renderScene(void) {
 
 			Rotacao ro = t.getRotacao();
 			if (!ro.vazio()){
-				glRotatef(ang, 0, 0, 1);
+				float r = glutGet(GLUT_ELAPSED_TIME)%(int)(tr.getTime()*10000);
+				float gr = r/(tr.getTime()*10000);
+				glRotatef(gr, 0, 0, 1);
 			}
 
 			Escala es = t.getEscala();
@@ -102,8 +103,6 @@ void renderScene(void) {
 
 		glPopMatrix();
 	}
-	ang+=45;
-
     glutSwapBuffers();
 }
 

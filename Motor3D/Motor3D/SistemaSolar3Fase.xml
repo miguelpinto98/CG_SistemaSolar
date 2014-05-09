@@ -25,7 +25,7 @@
 				<ponto X="-1.19" Y="-0.43" Z="0" />
 				<ponto X="-0.89" Y="-0.89" Z="0" />
 			</translacao>
-			<rotacao tempo="10" eixoX="0" eixoY="0" eixoZ="1" />
+			<rotacao tempo="47.89" eixoX="0" eixoY="0" eixoZ="1" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
@@ -50,7 +50,7 @@
 				<ponto X="-1.55" Y="-0.55" Z="0" />
 				<ponto X="-1.16" Y="-1.16" Z="0" />
 			</translacao>
-			<rotacao tempo="10" eixoX="0" eixoY="0" eixoZ="1" />
+			<rotacao tempo="35.03" eixoX="0" eixoY="0" eixoZ="1" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
@@ -75,7 +75,7 @@
 				<ponto X="-2.01" Y="-0.72" Z="0" />
 				<ponto X="-1.51" Y="-1.51" Z="0" />
 			</translacao>
-			<rotacao tempo="10" eixoX="0" eixoY="0" eixoZ="1" />
+			<rotacao tempo="29.79" eixoX="0" eixoY="0" eixoZ="1" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
@@ -100,7 +100,7 @@
 				<ponto X="-2.61" Y="-0.93" Z="0" />
 				<ponto X="-1.96" Y="-1.96" Z="0" />
 			</translacao>
-			<rotacao tempo="10" eixoX="0" eixoY="0" eixoZ="1" />
+			<rotacao tempo="24.13" eixoX="0" eixoY="0" eixoZ="1" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
@@ -125,7 +125,7 @@
 				<ponto X="-3.40" Y="-1.21" Z="0" />
 				<ponto X="-2.55" Y="-2.55" Z="0" />
 			</translacao>
-			<rotacao tempo="10" eixoX="0" eixoY="0" eixoZ="1" />
+			<rotacao tempo="13.07" eixoX="0" eixoY="0" eixoZ="1" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
@@ -150,7 +150,7 @@
 				<ponto X="-4.25" Y="-1.52" Z="0" />
 				<ponto X="-3.19" Y="-3.19" Z="0" />
 			</translacao>
-			<rotacao tempo="10" eixoX="0" eixoY="0" eixoZ="1" />
+			<rotacao tempo="9.69" eixoX="0" eixoY="0" eixoZ="1" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
@@ -175,7 +175,7 @@
 				<ponto X="-4.89" Y="-1.74" Z="0" />
 				<ponto X="-3.66" Y="-3.66" Z="0" />
 			</translacao>
-			<rotacao tempo="10" eixoX="0" eixoY="0" eixoZ="1" />
+			<rotacao tempo="6.81" eixoX="0" eixoY="0" eixoZ="1" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>
@@ -200,7 +200,7 @@
 				<ponto X="-5.62" Y="-2.01" Z="0" />
 				<ponto X="-4.21" Y="-4.21" Z="0" />
 			</translacao>
-			<rotacao tempo="10" eixoX="0" eixoY="0" eixoZ="1" />
+			<rotacao tempo="5.45" eixoX="0" eixoY="0" eixoZ="1" />
 			<modelos>
 				<modelo ficheiro="esfera.3d" />
 			</modelos>

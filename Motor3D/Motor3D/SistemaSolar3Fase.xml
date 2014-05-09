@@ -8,22 +8,22 @@
 		<grupo>
 			<escala X="0.012" Y="0.012" Z="0.012"/>
 			<translacao tempo="10">
-				<ponto X="-0.5" Y="-1.4" Z="0" />
-				<ponto X="0" Y="-1.5" Z="0" />
-				<ponto X="0.5" Y="-1.4" Z="0" />
-				<ponto X="1.05" Y="-1.05" Z="0" />
-				<ponto X="1.4" Y="-0.5" Z="0" />
-				<ponto X="1.5" Y="0" Z="0" />
-				<ponto X="1.4" Y="0.5" Z="0" />
-				<ponto X="1.05" Y="1.05" Z="0" />
-				<ponto X="0.5" Y="1.4" Z="0" />
-				<ponto X="0" Y="1.5" Z="0" />
-				<ponto X="-0.5" Y="1.4" Z="0" />
-				<ponto X="-1.05" Y="1.05" Z="0" />
-				<ponto X="-1.4" Y="0.5" Z="0" />
-				<ponto X="-1.5" Y="0" Z="0" />
-				<ponto X="-1.4" Y="-0.5" Z="0" />
-				<ponto X="-1.05" Y="-1.05" Z="0" />
+				<ponto X="-0.43" Y="-1.19" Z="0" />
+				<ponto X="0" Y="-1.28" Z="0" />
+				<ponto X="0.43" Y="-1.19" Z="0" />
+				<ponto X="0.89" Y="-0.89" Z="0" />
+				<ponto X="1.19" Y="-0.43" Z="0" />
+				<ponto X="1.28" Y="0" Z="0" />
+				<ponto X="1.19" Y="0.43" Z="0" />
+				<ponto X="0.89" Y="0.89" Z="0" />
+				<ponto X="0.43" Y="1.19" Z="0" />
+				<ponto X="0" Y="1.28" Z="0" />
+				<ponto X="-0.43" Y="1.19" Z="0" />
+				<ponto X="-0.89" Y="0.89" Z="0" />
+				<ponto X="-1.19" Y="0.43" Z="0" />
+				<ponto X="-1.28" Y="0" Z="0" />
+				<ponto X="-1.19" Y="-0.43" Z="0" />
+				<ponto X="-0.89" Y="-0.89" Z="0" />
 			</translacao>
 			<rotacao tempo="10" eixoX="0" eixoY="1" eixoZ="0" />
 			<modelos>
@@ -33,22 +33,22 @@
 		<grupo>
 			<escala X="0.0275" Y="0.0275" Z="0.0275"/>
 			<translacao tempo="10">
-				<ponto X="-1" Y="-2.8" Z="0" />
-				<ponto X="0" Y="-3" Z="0" />
-				<ponto X="1" Y="-2.8" Z="0" />
-				<ponto X="2.1" Y="-2.1" Z="0" />
-				<ponto X="2.8" Y="-1" Z="0" />
-				<ponto X="3" Y="0" Z="0" />
-				<ponto X="2.8" Y="1" Z="0" />
-				<ponto X="2.1" Y="2.1" Z="0" />
-				<ponto X="1" Y="2.8" Z="0" />
-				<ponto X="0" Y="3" Z="0" />
-				<ponto X="-1" Y="2.8" Z="0" />
-				<ponto X="-2.1" Y="2.1" Z="0" />
-				<ponto X="-2.8" Y="1" Z="0" />
-				<ponto X="-3" Y="0" Z="0" />
-				<ponto X="-2.8" Y="-1" Z="0" />
-				<ponto X="-2.1" Y="-2.1" Z="0" />
+				<ponto X="-0.55" Y="-1.55" Z="0" />
+				<ponto X="0" Y="-1.66" Z="0" />
+				<ponto X="0.55" Y="-1.55" Z="0" />
+				<ponto X="1.16" Y="-1.16" Z="0" />
+				<ponto X="1.55" Y="-0.55" Z="0" />
+				<ponto X="1.66" Y="0" Z="0" />
+				<ponto X="1.55" Y="0.55" Z="0" />
+				<ponto X="1.16" Y="1.16" Z="0" />
+				<ponto X="0.55" Y="1.55" Z="0" />
+				<ponto X="0" Y="1.66" Z="0" />
+				<ponto X="-0.55" Y="1.55" Z="0" />
+				<ponto X="-1.16" Y="1.16" Z="0" />
+				<ponto X="-1.55" Y="0.55" Z="0" />
+				<ponto X="-1.66" Y="0" Z="0" />
+				<ponto X="-1.55" Y="-0.55" Z="0" />
+				<ponto X="-1.16" Y="-1.16" Z="0" />
 			</translacao>
 			<rotacao tempo="10" eixoX="0" eixoY="1" eixoZ="0" />
 			<modelos>
@@ -58,22 +58,22 @@
 		<grupo>
 			<escala X="0.035" Y="0.035" Z="0.035"/>
 			<translacao tempo="10">
-				<ponto X="-2" Y="-5.6" Z="0" />
-				<ponto X="0" Y="-6" Z="0" />
-				<ponto X="2" Y="-5.6" Z="0" />
-				<ponto X="4.2" Y="-4.2" Z="0" />
-				<ponto X="5.6" Y="-2" Z="0" />
-				<ponto X="6" Y="0" Z="0" />
-				<ponto X="5.6" Y="2" Z="0" />
-				<ponto X="4.2" Y="4.2" Z="0" />
-				<ponto X="2" Y="5.6" Z="0" />
-				<ponto X="0" Y="6" Z="0" />
-				<ponto X="-2" Y="5.6" Z="0" />
-				<ponto X="-4.2" Y="4.2" Z="0" />
-				<ponto X="-5.6" Y="2" Z="0" />
-				<ponto X="-6" Y="0" Z="0" />
-				<ponto X="-5.6" Y="-2" Z="0" />
-				<ponto X="-4.2" Y="-4.2" Z="0" />
+				<ponto X="-0.72" Y="-2.01" Z="0" />
+				<ponto X="0" Y="-2.15" Z="0" />
+				<ponto X="0.72" Y="-2.01" Z="0" />
+				<ponto X="1.51" Y="-1.51" Z="0" />
+				<ponto X="2.01" Y="-0.72" Z="0" />
+				<ponto X="2.15" Y="0" Z="0" />
+				<ponto X="2.01" Y="0.72" Z="0" />
+				<ponto X="1.51" Y="1.51" Z="0" />
+				<ponto X="0.72" Y="2.01" Z="0" />
+				<ponto X="0" Y="2.15" Z="0" />
+				<ponto X="-0.72" Y="2.01" Z="0" />
+				<ponto X="-1.51" Y="1.51" Z="0" />
+				<ponto X="-2.01" Y="0.72" Z="0" />
+				<ponto X="-2.15" Y="0" Z="0" />
+				<ponto X="-2.01" Y="-0.72" Z="0" />
+				<ponto X="-1.51" Y="-1.51" Z="0" />
 			</translacao>
 			<rotacao tempo="10" eixoX="0" eixoY="1" eixoZ="0" />
 			<modelos>
@@ -83,22 +83,22 @@
 		<grupo>
 			<escala X="0.0175" Y="0.0175" Z="0.0175"/>
 			<translacao tempo="10">
-				<ponto X="-4" Y="-11.2" Z="0" />
-				<ponto X="0" Y="-12" Z="0" />
-				<ponto X="4" Y="-11.2" Z="0" />
-				<ponto X="8.4" Y="-8.4" Z="0" />
-				<ponto X="11.2" Y="-4" Z="0" />
-				<ponto X="12" Y="0" Z="0" />
-				<ponto X="11.2" Y="4" Z="0" />
-				<ponto X="8.4" Y="8.4" Z="0" />
-				<ponto X="4" Y="11.2" Z="0" />
-				<ponto X="0" Y="12" Z="0" />
-				<ponto X="-4" Y="11.2" Z="0" />
-				<ponto X="-8.4" Y="8.4" Z="0" />
-				<ponto X="-11.2" Y="4" Z="0" />
-				<ponto X="-12" Y="0" Z="0" />
-				<ponto X="-11.2" Y="-4" Z="0" />
-				<ponto X="-8.4" Y="-8.4" Z="0" />
+				<ponto X="-0.93" Y="-2.61" Z="0" />
+				<ponto X="0" Y="-2.80" Z="0" />
+				<ponto X="0.93" Y="-2.61" Z="0" />
+				<ponto X="1.96" Y="-1.96" Z="0" />
+				<ponto X="2.61" Y="-0.93" Z="0" />
+				<ponto X="2.80" Y="0" Z="0" />
+				<ponto X="2.61" Y="0.93" Z="0" />
+				<ponto X="1.96" Y="1.96" Z="0" />
+				<ponto X="0.93" Y="2.61" Z="0" />
+				<ponto X="0" Y="2.80" Z="0" />
+				<ponto X="-0.93" Y="2.61" Z="0" />
+				<ponto X="-1.96" Y="1.96" Z="0" />
+				<ponto X="-2.61" Y="0.93" Z="0" />
+				<ponto X="-2.80" Y="0" Z="0" />
+				<ponto X="-2.61" Y="-0.93" Z="0" />
+				<ponto X="-1.96" Y="-1.96" Z="0" />
 			</translacao>
 			<rotacao tempo="10" eixoX="0" eixoY="1" eixoZ="0" />
 			<modelos>

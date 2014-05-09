@@ -167,12 +167,14 @@ void renderScene(void) {
 				int num = tr.getTamanho();
 				if (num>0) {
 					vector<Ponto> vp = tr.getTransPontos();
+					glRotatef(80,-1,0,0);
 					renderCatmullRomCurve(vp);
 					getGlobalCatmullRomPoint(a, res, vp);
 					glTranslatef(res[0], res[1], res[2]);
 				}
 			}
 
+			glMatrixMode(GL_MODELVIEW);
 			Rotacao ro = t.getRotacao();
 			if (!ro.vazio())
 				glRotatef(1, ro.getRx(), ro.getRy(), ro.getRz());

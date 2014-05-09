@@ -48,7 +48,7 @@ void renderCatmullRomCurve(vector<Ponto> transpontos) {
     float res[3];
     
     glBegin(GL_LINE_LOOP);
-    for (float gt=0; gt<1; gt+=0.0001){
+    for (float gt=0; gt<1; gt+=0.01){
        getGlobalCatmullRomPoint(gt,res,transpontos);
        glVertex3fv(res);
     }
@@ -123,8 +123,9 @@ void framesPerSecond() {
 } */
 
 void renderScene(void) {
-	static float a = 0;
+	static float ang=0;
 	float res[3];
+
 	
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -166,18 +167,22 @@ void renderScene(void) {
 			if (!tr.vazio()) {
 				int num = tr.getTamanho();
 				if (num>0) {
+					float t = glutGet(GLUT_ELAPSED_TIME)%(int)(tr.getTime()*1000);
+					float gt = t/(tr.getTime()*1000);
 					vector<Ponto> vp = tr.getTransPontos();
 					glRotatef(80,-1,0,0);
 					renderCatmullRomCurve(vp);
-					getGlobalCatmullRomPoint(a, res, vp);
+					getGlobalCatmullRomPoint(gt, res, vp);
 					glTranslatef(res[0], res[1], res[2]);
 				}
 			}
 
-			glMatrixMode(GL_MODELVIEW);
+			
 			Rotacao ro = t.getRotacao();
-			if (!ro.vazio())
-				glRotatef(1, ro.getRx(), ro.getRy(), ro.getRz());
+			if (!ro.vazio()){
+				glRotatef(ang, 0, 0, 1);
+			}
+
 
 			Escala es = t.getEscala();
 			if (!es.vazio())
@@ -191,7 +196,7 @@ void renderScene(void) {
 
 		glPopMatrix();
 	}
-	a += 0.001;
+	ang+=45;
 
     glutSwapBuffers();
 }

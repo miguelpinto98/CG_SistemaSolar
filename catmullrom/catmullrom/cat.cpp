@@ -2,43 +2,44 @@
 #include <GL/glut.h>
 #include <math.h>
 
-extern  float raio,cam_h,cam_v,camh_x,camh_y;
-extern  float x_tela, y_tela; //Variaveis para guardar posição da tela em que se carrega no rato
-float raio=200,cam_h=0.5,cam_v=0.3,camh_x=0,camh_y=0,x_tela, y_tela;
-float camX = 0, camY=0, camZ = 5;
-int startX, startY, tracking = 0;
-int alpha = 0, beta = 0, r = 5;
 
-#define POINT_COUNT 4
-float p[POINT_COUNT][3] = {{-1,-1,0},{1,-1,0},{1,1,0},{-1,1,0}};
+#define POINT_COUNT 16
+float a=1.3;
+float p[POINT_COUNT][3] = {{-1.05*a,-1.05*a,0},{-1.4*a,-0.5*a,0*a},{-1.5*a,0,0},{-1.4*a,0.5*a,0},
+						   {-1.05*a,1.05*a,0},{-0.5*a,1.4*a,0},{0,1.5*a,0},{0.5*a,1.4*a,0},
+						   {1.05*a,1.05*a,0},{1.4*a,0.5*a,0},{1.5*a,0,0},{1.4*a,-0.5*a,0},
+						   {1.05*a,-1.05*a,0},{0.5*a,-1.4*a,0},{0,-1.5*a,0},{-0.5*a,-1.4*a,0}};
+
+
 
 
 void getCatmullRomPoint(float t, int *indices, float *res) {
-    int i;
-    float res_aux[4];
+   int i;
+	float res_aux[4];
 	
 	float m[4][4] = {{-0.5f,  1.5f, -1.5f,  0.5f},
-					 {1.0f, -2.5f,  2.0f, -0.5f},
-					 {-0.5f,  0.0f,  0.5f,  0.0f},
-					 {0.0f,  1.0f,  0.0f,  0.0f}};  
-  
-     
-   //Sem derivada
-    for (i=0; i<4; i++)
-        res_aux[i]= pow(t,3) * m[0][i] +  pow(t,2) * m[1][i] + t * m[2][i] + m[3][i];
+					  { 1.0f, -2.5f,  2.0f, -0.5f},
+					  {-0.5f,  0.0f,  0.5f,  0.0f},
+					   { 0.0f,  1.0f,  0.0f,  0.0f}};
 		
-    
-    
-     /*for (i=0; i<4; i++){
-        res_aux[i]= (3*pow(t,2) * m[0][i])  +  (2*t * m[1][i]) + m[2][i];
-	}*/
-    
-    
-    //Calculo do RES
+	res[0] = 0.0;
+	res[1] = 0.0;
+	res[2] = 0.0;
+     
+   //TESSELACAO*M
+	res_aux[0]= pow(t,3)*m[0][0] + pow(t,2)*m[1][0] + t*m[2][0] + m[3][0];
+	res_aux[1]= pow(t,3)*m[0][1] + pow(t,2)*m[1][1] + t*m[2][1] + m[3][1];
+	res_aux[2]= pow(t,3)*m[0][2] + pow(t,2)*m[1][2] + t*m[2][2] + m[3][2];
+	res_aux[3]= pow(t,3)*m[0][3] + pow(t,2)*m[1][3] + t*m[2][3] + m[3][3];
+
+
+   
+    //TESSELACAO*M*P = res
 	for(i=0;i<3;i++){
-        res[i]=res_aux[0]*p[indices[0]][i] + res_aux[1]*p[indices[1]][i] +res_aux[2]*p[indices[2]][i] + res_aux[3]*p[indices[3]][i];
-    }
+       res[i]=res_aux[0]*p[indices[0]][i] + res_aux[1]*p[indices[1]][i] +res_aux[2]*p[indices[2]][i] + res_aux[3]*p[indices[3]][i];
+	 }
 }
+
 
 void getGlobalCatmullRomPoint(float gt, float *res) {   
 	float t = gt * POINT_COUNT; // this is the real global t
@@ -46,28 +47,25 @@ void getGlobalCatmullRomPoint(float gt, float *res) {
 	t = t - index; // where within  the segment
     
 	// indices store the points
-	int indices[4];
+	int indices[4]; 
 	indices[0] = (index + POINT_COUNT-1)%POINT_COUNT;
 	indices[1] = (indices[0]+1)%POINT_COUNT;
 	indices[2] = (indices[1]+1)%POINT_COUNT;
 	indices[3] = (indices[2]+1)%POINT_COUNT;
-    
+
 	getCatmullRomPoint(t, indices, res);
 }
 
 void renderCatmullRomCurve() {
-    float  gtt;
     float res[3];
     
     glBegin(GL_LINE_LOOP);
-    for (gtt=0; gtt<1; gtt+=0.0001){
-        getGlobalCatmullRomPoint(gtt,res);
+    for (float gt=0; gt<1; gt+=0.0001){
+        getGlobalCatmullRomPoint(gt,res);
         glVertex3fv(res);
     }
     glEnd();
 }
-
-
 
 
 void changeSize(int w, int h) {
@@ -116,15 +114,9 @@ void renderScene(void) {
 	glutWireTeapot(1);
 	glPopMatrix();
     
-    // End of frame
-	glutSwapBuffers();
-    
-	a+=0.001;
-    
-    //Com derivada
-    //a+= 0.01/length(derivada);
+    glutSwapBuffers();
+	a+=0.01;
 }
-
 
 int main(int argc, char **argv) {
     

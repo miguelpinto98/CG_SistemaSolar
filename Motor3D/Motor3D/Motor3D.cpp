@@ -406,17 +406,7 @@ void initPrimitivas() {
 }
 
 int main(int argc, char **argv) {
-	//string xmlmotor="exemplo1.xml";
-	//string xmlmotor="exemplo2.xml";
-	//string xmlmotor="exemplo3.xml";
-	//string xmlmotor="exemplo4.xml";
-	//string xmlmotor="exemplo5.xml";
-	//string xmlmotor="exemplo6.xml";
-	//string xmlmotor="exemploInv1.xml";
-	//string xmlmotor="sistemasolar1.xml";
-	//string xmlmotor="motor.xml";
-	//string xmlmotor="SistemaSolar3Fase.xml";
-
+	//string file="SistemaSolar3Fase.xml";
 	if(argc>1) {
 		string file = argv[1];
 		readXML(file);

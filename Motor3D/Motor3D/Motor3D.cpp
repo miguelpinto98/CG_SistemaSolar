@@ -405,9 +405,9 @@ void initPrimitivas() {
 }
 
 int main(int argc, char **argv) {
-	//string file="SistemaSolar3Fase.xml";
-	if(argc>1) {
-		string file = argv[1];
+	string file="SistemaSolar3Fase.xml";
+	//if(argc>1) {
+		//string file = argv[1];
 		readXML(file);
 
 		glutInit(&argc, argv);
@@ -435,6 +435,6 @@ int main(int argc, char **argv) {
 		initPrimitivas();
 
 		glutMainLoop();
-	}
+	//}
 	return 0;
 } 

@@ -77,7 +77,6 @@ void renderScene(void) {
 					float t = glutGet(GLUT_ELAPSED_TIME)%(int)(tr.getTime()*1000);
 					float gt = t/(tr.getTime()*1000);
 					vector<Ponto> vp = tr.getTransPontos();
-					glRotatef(80,-1,0,0);
 					renderCatmullRomCurve(tr.getPontosCurvas());
 					tr.getGlobalCatmullRomPoint(gt, res, vp);
 					glTranslatef(res[0], res[1], res[2]);

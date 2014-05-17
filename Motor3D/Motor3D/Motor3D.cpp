@@ -460,7 +460,9 @@ void initPrimitivas() {
 
 int main(int argc, char **argv) {
 	//string file="SistemaSolar3Fase.xml";
-	string file = "SSTESTE.xml";
+	string file="LUA.xml";
+	//string file = "SSTESTE.xml";
+
 	//if(argc>1) {
 		//string file = argv[1];
 		readXML(file);

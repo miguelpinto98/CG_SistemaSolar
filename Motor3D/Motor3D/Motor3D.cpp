@@ -41,10 +41,14 @@ void renderCatmullRomCurve(vector<Ponto> pontos) {
 	glEnd();
 }
 
-void renderScene(void) {
-	float res[3];
 
-	
+void teste(Primitiva p, Transformacao t, float *res) {
+
+
+}
+
+void renderScene(void) {
+	float res[3];	
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -64,18 +68,18 @@ void renderScene(void) {
 	/* RENDER PRIMITIVAS */
 	int ipr = primitivas.size();
 	for (int i = 0; i<ipr; i++) {
-		Primitiva p = primitivas[i];
+		Primitiva p = primitivas[i]; 
 		Transformacao t = p.getTransformacao();
 
 		glPushMatrix();
-
+		
 		if (!t.trasnformacaoVazia()) {
 			Translacao tr = t.getTranslacao();
 			if (!tr.vazio()) {
 				int num = tr.getTamanho();
 				if (num>0) {
-					float t = glutGet(GLUT_ELAPSED_TIME)%(int)(tr.getTime()*1000);
-					float gt = t/(tr.getTime()*1000);
+					float te = glutGet(GLUT_ELAPSED_TIME) % (int)(tr.getTime() * 1000);
+					float gt = te / (tr.getTime() * 1000);
 					vector<Ponto> vp = tr.getTransPontos();
 					renderCatmullRomCurve(tr.getPontosCurvas());
 					tr.getGlobalCatmullRomPoint(gt, res, vp);
@@ -83,10 +87,13 @@ void renderScene(void) {
 				}
 			}
 
+			if (p.numeroFilhos() == 1)
+				glPushMatrix();
+			
 			Rotacao ro = t.getRotacao();
 			if (!ro.vazio()){
-				float r = glutGet(GLUT_ELAPSED_TIME)%(int)(ro.getTime()*1000);
-				float gr = (r*360)/(ro.getTime()*1000);
+				float r = glutGet(GLUT_ELAPSED_TIME) % (int)(ro.getTime() * 1000);
+				float gr = (r * 360) / (ro.getTime() * 1000);
 				glRotatef(gr, ro.getRx(), ro.getRy(), ro.getRz());
 			}
 
@@ -98,9 +105,45 @@ void renderScene(void) {
 		//p.construir();
 
 		/* Modo VBO */
+		
+		
+
 		p.desenhar();
 
 		glPopMatrix();
+
+		if (p.numeroFilhos() == 1) { /* BAD CODE*/
+			Primitiva pp = p.getFilhos()[0];
+			t = pp.getTransformacao();
+
+			if (!t.trasnformacaoVazia()) {
+				Translacao tr = t.getTranslacao();
+				if (!tr.vazio()) {
+					int num = tr.getTamanho();
+					if (num>0) {
+						float te = glutGet(GLUT_ELAPSED_TIME) % (int)(tr.getTime() * 1000);
+						float gt = te / (tr.getTime() * 1000);
+						vector<Ponto> vp = tr.getTransPontos();
+						renderCatmullRomCurve(tr.getPontosCurvas());
+						tr.getGlobalCatmullRomPoint(gt, res, vp);
+						glTranslatef(res[0], res[1], res[2]);
+					}
+				}
+
+				Rotacao ro = t.getRotacao();
+				if (!ro.vazio()){
+					float r = glutGet(GLUT_ELAPSED_TIME) % (int)(ro.getTime() * 1000);
+					float gr = (r * 360) / (ro.getTime() * 1000);
+					glRotatef(gr, ro.getRx(), ro.getRy(), ro.getRz());
+				}
+
+				Escala es = t.getEscala();
+				if (!es.vazio())
+					glScalef(es.getEx(), es.getEy(), es.getEz());
+			}
+			p.desenhar();
+			glPopMatrix();
+		}
 	}
     glutSwapBuffers();
 }
@@ -267,7 +310,7 @@ Translacao verificaTranslacoes(XMLElement* transformacao) {
 
 	if (strcmp(transformacao->Value(), "translacao") == 0) {
 		if (transformacao->Attribute("tempo"))
-			tempo = stoi(transformacao->Attribute("tempo"));
+			tempo = stof(transformacao->Attribute("tempo"));
 
 		float transX, transY, transZ;
 		for (XMLElement* ponto = transformacao->FirstChildElement("ponto"); ponto; ponto = ponto->NextSiblingElement("ponto")) {
@@ -296,7 +339,7 @@ Rotacao verificaRotacao(XMLElement* transformacao){
 	rotX = rotY = rotZ = tempo = 0;
 
 	if(transformacao->Attribute("tempo"))
-		tempo= stoi(transformacao->Attribute("tempo"));
+		tempo= stof(transformacao->Attribute("tempo"));
 
 	if(transformacao->Attribute("eixoX"))
 		rotX= stof(transformacao->Attribute("eixoX"));
@@ -326,7 +369,7 @@ Escala verificaEscala(XMLElement* transformacao) {
 	return Escala::Escala(escX, escY, escZ);
 }
 
-void parseXML(XMLElement* grupo, Transformacao transf) {
+void parseXML(XMLElement* grupo, Transformacao transf, char cc) {
 	Transformacao trans;
 	Translacao tr;
 	Rotacao ro;
@@ -368,8 +411,15 @@ void parseXML(XMLElement* grupo, Transformacao transf) {
 
 		if(flag>=0) { 
 			p.setTransformacao(trans);
-			primitivas.push_back(p);
+			p.setTipo(cc);
+			int n = primitivas.size();
 
+			if (n > 1 && primitivas[n - 1].getTipo() == 'I' && cc == 'F') {
+				primitivas[n - 1].adicionaFilho(p);
+			} else
+				primitivas.push_back(p);
+
+			cout << "TIPO: " << p.getTipo() << endl;
 			cout << "Translacao: "<< trans.getTranslacao().getTime() << endl;
 			cout << "Rotacao   : " << trans.getRotacao().getRx() << " - " << trans.getRotacao().getRy() << " - " << trans.getRotacao().getRz() << endl;
 			cout << "Escala    : " << trans.getEscala().getEx() << " - " << trans.getEscala().getEy() << " - " << trans.getEscala().getEz() << endl;
@@ -379,13 +429,13 @@ void parseXML(XMLElement* grupo, Transformacao transf) {
 	//faz o mesmo de cima para grupos filhos
 	if(grupo->FirstChildElement("grupo")) {
 		cout << "Vou para os Filhos" << endl;
-		parseXML(grupo->FirstChildElement("grupo"),trans);
+		parseXML(grupo->FirstChildElement("grupo"),trans,'F');
 	}
 
 	//faz o mesmo de cima para grupos irmãos
 	if(grupo->NextSiblingElement("grupo")) {
 		cout << "Vim para os Irmaos" << endl;
-		parseXML(grupo->NextSiblingElement("grupo"),transf);
+		parseXML(grupo->NextSiblingElement("grupo"),transf,'I');
 	}
 }
 
@@ -394,18 +444,23 @@ void readXML(string fxml) {
 	doc.LoadFile(fxml.c_str());
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
 	Transformacao t = Transformacao::Transformacao();
-	parseXML(cena, t);
+	parseXML(cena, t,'P');
 }
 
 void initPrimitivas() {
 	int num = primitivas.size();
-
-	for (int i = 0; i < num; i++)
+	cout << num << endl;
+	for (int i = 0; i < num; i++) {
+		if (primitivas[i].numeroFilhos() == 1)
+			primitivas[i].getFilhos()[0].preparar();
+		
 		primitivas[i].preparar();
+	}
 }
 
 int main(int argc, char **argv) {
-	string file="SistemaSolar3Fase.xml";
+	//string file="SistemaSolar3Fase.xml";
+	string file = "SSTESTE.xml";
 	//if(argc>1) {
 		//string file = argv[1];
 		readXML(file);

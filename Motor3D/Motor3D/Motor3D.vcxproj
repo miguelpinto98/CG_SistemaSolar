@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -80,6 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Filho.cpp" />
     <ClCompile Include="Motor3D.cpp" />
     <ClCompile Include="Ponto.cpp" />
     <ClCompile Include="Primitiva.cpp" />
@@ -90,6 +91,7 @@
     <ClCompile Include="Translacao.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Filho.h" />
     <ClInclude Include="Motor3D.h" />
     <ClInclude Include="Ponto.h" />
     <ClInclude Include="Primitiva.h" />

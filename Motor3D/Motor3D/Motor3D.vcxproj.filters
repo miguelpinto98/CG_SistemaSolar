@@ -48,6 +48,9 @@
     <ClCompile Include="Escala.cpp">
       <Filter>Source Files\tipos</Filter>
     </ClCompile>
+    <ClCompile Include="Filho.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Motor3D.h">
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="Translacao.h">
       <Filter>Header Files\tipos</Filter>
+    </ClInclude>
+    <ClInclude Include="Filho.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

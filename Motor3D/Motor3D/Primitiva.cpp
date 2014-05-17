@@ -3,10 +3,19 @@
 Primitiva::Primitiva(string n) {
 	nome = n;
 	nvertices = 0;
+	tipo = 'f';
 }
 
 void Primitiva::adicionaPonto(Ponto p) {
 	pontos.push_back(p);
+}
+
+void Primitiva::adicionaFilho(Primitiva p) {
+	filhos.push_back(p);
+}
+
+int Primitiva::numeroFilhos() {
+	return filhos.size();
 }
 
 void Primitiva::construir() {

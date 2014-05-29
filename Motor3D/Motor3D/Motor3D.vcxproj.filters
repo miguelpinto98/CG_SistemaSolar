@@ -109,9 +109,6 @@
     <Image Include="imagens\neptuno.jpg">
       <Filter>Resource Files\imagens</Filter>
     </Image>
-    <Image Include="imagens\saturno.jpg.png">
-      <Filter>Resource Files\imagens</Filter>
-    </Image>
     <Image Include="imagens\sol.jpg">
       <Filter>Resource Files\imagens</Filter>
     </Image>
@@ -122,6 +119,9 @@
       <Filter>Resource Files\imagens</Filter>
     </Image>
     <Image Include="imagens\venus.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\saturno.jpg">
       <Filter>Resource Files\imagens</Filter>
     </Image>
   </ItemGroup>

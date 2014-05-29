@@ -42,10 +42,6 @@ void renderCatmullRomCurve(vector<Ponto> pontos) {
 }
 
 
-void teste(Primitiva p, Transformacao t, float *res) {
-
-
-}
 
 void renderScene(void) {
 	float res[3];	
@@ -462,7 +458,8 @@ void parseXML(XMLElement* grupo, Transformacao transf, char cc) {
 		cout << p.getNomePrimitiva() << endl;
 		flag = lerFicheiro(p.getNomePrimitiva(),p);
 
-		if(flag>=0) { 
+		if(flag>=0) {
+			p.carregaImagem(modelo->Attribute("textura"));
 			p.setTransformacao(trans);
 			p.setTipo(cc);
 			int n = primitivas.size();

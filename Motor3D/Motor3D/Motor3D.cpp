@@ -1,9 +1,5 @@
 #include "Motor3D.h"
 
-//Inicializações para carregar a Imagem
-unsigned int ima, texID;
-unsigned char *imageData;
-
 void changeSize(int w, int h) {
 	if(h == 0)
 		h = 1;
@@ -117,9 +113,7 @@ void renderScene(void) {
 		//p.construir();
 
 		/* Modo VBO */
-		glBindTexture(GL_TEXTURE_2D, texID);
-			p.desenhar();
-		glBindTexture(GL_TEXTURE_2D, 0);
+		p.desenhaComImagem();
 
 		glPopMatrix();
 
@@ -151,11 +145,8 @@ void renderScene(void) {
 				Escala es = t.getEscala();
 				if (!es.vazio())
 					glScalef(es.getEx(), es.getEy(), es.getEz());
-			}
-			
-			glBindTexture(GL_TEXTURE_2D, texID);
-			p.desenhar();
-			glBindTexture(GL_TEXTURE_2D, 0);
+			}		
+			p.desenhaComImagem();
 
 			glPopMatrix();
 		}
@@ -513,31 +504,13 @@ void initPrimitivas() {
 	int num = primitivas.size();
 	cout << num << endl;
 	for (int i = 0; i < num; i++) {
-		if (primitivas[i].numeroFilhos() == 1)
+		if (primitivas[i].numeroFilhos() == 1) {
 			primitivas[i].getFilhos()[0].preparar();
-		
+			primitivas[i].getFilhos()[0].carregaImagem("lua.jpg");
+		}
 		primitivas[i].preparar();
+		primitivas[i].carregaImagem("sol.jpg");
 	}
-}
-
-void carregaImagens() {
-	ilGenImages(1,&ima);
-	ilBindImage(ima);
-	ilLoadImage((ILstring)"imagens/marte.jpg");
-	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-	int width = ilGetInteger(IL_IMAGE_WIDTH);
-	int height = ilGetInteger(IL_IMAGE_HEIGHT);
-	imageData = ilGetData();
-
-	glGenTextures(1, &texID);
-	glBindTexture(GL_TEXTURE_2D, texID);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 }
 
 int main(int argc, char **argv) {
@@ -568,14 +541,13 @@ int main(int argc, char **argv) {
 
 		defineMenu();
 		
-		glewInit();
 		ilInit();
-
+		glewInit();
+		
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_TEXTURE_2D); /* Ativar Texturas */
 
-		carregaImagens();
 		initPrimitivas();
 
 		glutMainLoop();

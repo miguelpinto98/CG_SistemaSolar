@@ -7,6 +7,7 @@ Primitiva::Primitiva(string n) {
 	cmdHor = 0;
 	cmdVer = 0;
 	numsInd = 0;
+	
 }
 
 void Primitiva::adicionaPonto(Ponto p) {
@@ -126,6 +127,35 @@ void Primitiva::preparar() {
 	free(vertexB);
 	free(normalB);
 	free(textureB);
+}
+
+void Primitiva::desenhaComImagem() {
+	glBindTexture(GL_TEXTURE_2D, texID);
+	desenhar();
+	cout << texID << endl;
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Primitiva::carregaImagem(string file) {
+	string path = "imagens/" + file;
+
+	ilGenImages(1, &ima);
+	ilBindImage(ima);
+	ilLoadImage((ILstring)path.c_str());
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+	int width = ilGetInteger(IL_IMAGE_WIDTH);
+	int height = ilGetInteger(IL_IMAGE_HEIGHT);
+	imageData = ilGetData();
+
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 }
 
 Primitiva::~Primitiva(void)

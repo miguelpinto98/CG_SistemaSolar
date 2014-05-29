@@ -3,9 +3,14 @@
 #include <vector>
 #include <GL\glew.h>
 #include <GL\glut.h>
+#include <IL\il.h>
 
 #include "Ponto.h"
 #include "Transformacao.h"
+
+#include <fstream>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -20,6 +25,10 @@ class Primitiva {
 	int cmdHor;
 	int cmdVer;
 	int numsInd;
+	
+	unsigned int ima;
+	unsigned int texID;
+	unsigned char *imageData;
 public:
 	Primitiva(string);
 	vector<Ponto> pontos;
@@ -43,6 +52,9 @@ public:
 	void construir();
 	void desenhar();
 	void preparar();
+	void carregaImagem(string);
+	unsigned int getTexID() { return texID; }
+	void desenhaComImagem();
 	virtual ~Primitiva(void);
 };
 

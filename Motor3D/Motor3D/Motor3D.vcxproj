@@ -101,6 +101,21 @@
     <ClInclude Include="Transformacao.h" />
     <ClInclude Include="Translacao.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="imagens\asteroides.jpg" />
+    <Image Include="imagens\espaço1.jpg" />
+    <Image Include="imagens\espaço2.jpg" />
+    <Image Include="imagens\jupiter.jpg" />
+    <Image Include="imagens\lua.jpg" />
+    <Image Include="imagens\marte.jpg" />
+    <Image Include="imagens\mercurio.jpg" />
+    <Image Include="imagens\neptuno.jpg" />
+    <Image Include="imagens\saturno.jpg.png" />
+    <Image Include="imagens\sol.jpg" />
+    <Image Include="imagens\terra.jpg" />
+    <Image Include="imagens\urano.jpg" />
+    <Image Include="imagens\venus.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

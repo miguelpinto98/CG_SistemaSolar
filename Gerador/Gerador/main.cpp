@@ -184,41 +184,60 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 void esfera(double raio, int camadasV, int camadasH, string str){
 	double camada = M_PI / camadasV; //pi=180
 	double rotacoes = 2 * M_PI / camadasH;
-	int count = 1;
+	Ponto p = Ponto::Ponto();
 	ofstream file(str);
 	vector<Ponto> normais;
 
-	file << (camadasH*camadasV * 6) << endl;
+	float texV = 1 / (float)camadasV;
+	float texH = 1 / (float)camadasH;
+	vector<Ponto> texturas;
+	
+	file << ((camadasH+1)*(camadasV+1)) << endl;
+	file << (camadasH) << endl;
+	file << (camadasV) << endl;
 
-	for (int i = 0; i<camadasV; i++){
+	for (int i = 0; i<=camadasV; i++){
 		double angYX = camada*i; // 0 a 180º na vertical
 
-		for (int j = 0; j<camadasH; j++){
+		for (int j = 0; j<=camadasH; j++){
 			double angZX = rotacoes*j; // 0 a 360º na horizontal
-			count++;
-			Ponto p = Ponto::Ponto();
 
 			double x1 = raio * sin(angYX) * sin(angZX);
+			double y1 = raio * cos(angYX);
+			double z1 = raio * sin(angYX) * cos(angZX);
+
+			file << x1 << "," << y1 << "," << z1 << endl;
+			
+			p = Ponto(x1 / raio, y1 / raio, z1 / raio);
+			normais.push_back(p);
+
+			p = Ponto(j*texH, i*texV, 0);
+			texturas.push_back(p);
+
+			/*
 			double x2 = raio * sin(angYX + camada) * sin(angZX);
 			double x3 = raio * sin(angYX + camada) * sin(angZX + rotacoes);
 			double x4 = raio * sin(angYX) * sin(angZX + rotacoes);
 
-			double y1 = raio * cos(angYX);
+			
 			double y2 = raio * cos(angYX + camada);
 
-			double z1 = raio * sin(angYX) * cos(angZX);
+			
 			double z2 = raio * sin(angYX + camada) * cos(angZX);
 			double z3 = raio * sin(angYX + camada) * cos(angZX + rotacoes);
 			double z4 = raio * sin(angYX) * cos(angZX + rotacoes);
 
+			*/
 
+			/* Modo Todos os Pontos
+			texturas.push_back(ptext);	texturas.push_back(ptext);	texturas.push_back(ptext);
+			texturas.push_back(ptext);	texturas.push_back(ptext);	texturas.push_back(ptext);
+			
+			  --	--
 			//printf("\n\n-- ITERACAO %d de %d --\n", count - 1, camadasV*camadasH);
-			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl; 
+			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x2, y2, z2); file << x2 << "," << y2 << "," << z2 << endl;
 			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
-			/*po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
-			po.x = x2; po.y = y2; po.z = z2; p.push_back(po);
-			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);*/
 			p = Ponto(x1 / raio, y1 / raio, z1 / raio);	normais.push_back(p);
 			p = Ponto(x2 / raio, y2 / raio, z2 / raio);	normais.push_back(p);
 			p = Ponto(x3 / raio, y2 / raio, z3 / raio);	normais.push_back(p);
@@ -226,12 +245,10 @@ void esfera(double raio, int camadasV, int camadasH, string str){
 			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
 			printf("%f, %f, %f\n", x4, y1, z4); file << x4 << "," << y1 << "," << z4 << endl;
-			/*po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
-			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);
-			po.x = x4; po.y = y1; po.z = z4; p.push_back(po);*/
 			p = Ponto(x1 / raio, y1 / raio, z1 / raio);	normais.push_back(p);
 			p = Ponto(x3 / raio, y2 / raio, z3 / raio);	normais.push_back(p);
-			p = Ponto(x4 / raio, y1 / raio, z4 / raio);	normais.push_back(p);
+			p = Ponto(x4 / raio, y1 / raio, z4 / raio);	normais.push_back(p);	
+			*/
 		}
 	}
 
@@ -242,6 +259,15 @@ void esfera(double raio, int camadasV, int camadasH, string str){
 		Ponto p = normais[i];
 		file << p.getX() << "," << p.getY() << "," << p.getZ() << endl;
 	}
+
+	nn = texturas.size();
+	file << nn << endl;
+
+	for (int i = 0; i < nn; i++) {
+		Ponto p = texturas[i];
+		file << p.getX() << "," << p.getY() << endl;
+	}
+
 	file.close();
 }
 
@@ -437,14 +463,19 @@ void initSupBezier(int tess, string nameFile) {
 
 	int num = patchs.size();
 
+	file << (num*tess*tess * 6) << endl;
+
 	for (int i = 0; i < num; i++)
-		patchBezier(20, i,file);
+		patchBezier(tess, i,file);
 
 	file.close();
 }
 
 int main(int argc, char **argv) {
-	esfera(2, 20, 20, "esfera.3d");
+	esfera(2, 50, 50, "esfera.3d");
+
+	//readPatch("teapot.patch");	//Nome Ficheiro = Path
+	//initSupBezier(10, "teapot.3d"); //Inteiro e Nome do Ficheiro a 
 
 	/*if (argc>1) {
 		if (!strcmp(argv[1], "plano") && argc == 7) {

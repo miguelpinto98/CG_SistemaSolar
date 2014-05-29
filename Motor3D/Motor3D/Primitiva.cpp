@@ -4,6 +4,9 @@ Primitiva::Primitiva(string n) {
 	nome = n;
 	nvertices = 0;
 	tipo = 'f';
+	cmdHor = 0;
+	cmdVer = 0;
+	numsInd = 0;
 }
 
 void Primitiva::adicionaPonto(Ponto p) {
@@ -12,6 +15,10 @@ void Primitiva::adicionaPonto(Ponto p) {
 
 void Primitiva::adicionaNormal(Ponto p) {
 	normais.push_back(p);
+}
+
+void Primitiva::adicionaTextura(Ponto p) {
+	texturas.push_back(p);
 }
 
 void Primitiva::adicionaFilho(Primitiva p) {
@@ -37,42 +44,88 @@ void Primitiva::desenhar() {
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
 	glNormalPointer(GL_FLOAT, 0, 0);
-
-	glDrawArrays(GL_TRIANGLES, 0, nvertices);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	glTexCoordPointer(2, GL_FLOAT, 0, 0);
+	
+	glDrawElements(GL_TRIANGLES, numsInd, GL_UNSIGNED_INT, indices);
 }
 
 void Primitiva::preparar() {
-	int tpontos = pontos.size(), lados = tpontos/3, j;
-	//buffers = (GLuint*)malloc(sizeof(GLuint)*tpontos*3*2);
+	int j, jj, x;
+	int tpontos = pontos.size(), textNum;
+	Ponto p = Ponto();
 
-	nvertices = tpontos * 3;
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	nvertices = tpontos * 3;
+	textNum = normais.size() * 2;
 
 	float *vertexB = (float *)malloc(sizeof(float)* nvertices);
 	float *normalB = (float *)malloc(sizeof(float)* nvertices);
+	float *textureB = (float *)malloc(sizeof(float)* textNum); 
 
+	numsInd = 6 * cmdHor*cmdVer;
+	indices = (int*)malloc(numsInd*sizeof(int));
+
+	/* Coordenadas Normais e Textura */
 	j = 0;
+	jj = 0;
 	for (int i = 0; i<tpontos; i++) {
-		Ponto xyz = pontos.at(i);
-		Ponto pn = normais.at(i);
+		p = pontos.at(i);
+		vertexB[j + 0] = p.getX();
+		vertexB[j + 1] = p.getY();
+		vertexB[j + 2] = p.getZ();
 
-		vertexB[j + 0] = xyz.getX();	normalB[j + 0] = pn.getX();
-		vertexB[j + 1] = xyz.getY();	normalB[j + 1] = pn.getY();
-		vertexB[j + 2] = xyz.getZ();	normalB[j + 2] = pn.getZ();
+		p = normais.at(i);
+		normalB[j + 0] = p.getX();
+		normalB[j + 1] = p.getY();
+		normalB[j + 2] = p.getZ();
+
+		p = texturas.at(i);
+		textureB[jj + 0] = p.getX();
+		textureB[jj + 1] = p.getY();
 
 		j += 3;
+		jj += 2;
 	}
-	nvertices = j;
+	int numVN = j;
+	int numT = jj;
+	nvertices = numVN;
 
-	glGenBuffers(2, buffers);
+	x = 0;
+	for (int i = 0; i < cmdVer; i++) {
+		for (int j = 0; j < cmdHor; j++) {
+			int p1, p2, p3, p4;
+			p1 = (cmdHor + 1)*(i)+j;
+			p2 = (cmdHor + 1)*(i)+j + 1;
+			p3 = (cmdHor + 1)*(i + 1) + j;
+			p4 = (cmdHor + 1)*(i + 1) + j + 1;
+
+			indices[x+0] = p1;
+			indices[x+1] = p3;
+			indices[x+2] = p2;
+
+			indices[x+3] = p4;
+			indices[x+4] = p2;
+			indices[x+5] = p3;
+
+			x += 6;
+		}
+	}
+
+	glGenBuffers(3, buffers);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	glBufferData(GL_ARRAY_BUFFER, nvertices*sizeof(float), vertexB, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, numVN*sizeof(float), vertexB, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-	glBufferData(GL_ARRAY_BUFFER, nvertices*sizeof(float), normalB, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, numVN*sizeof(float), normalB, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, numT*sizeof(float), textureB, GL_STATIC_DRAW);
 
 	free(vertexB);
 	free(normalB);
+	free(textureB);
 }
 
 Primitiva::~Primitiva(void)

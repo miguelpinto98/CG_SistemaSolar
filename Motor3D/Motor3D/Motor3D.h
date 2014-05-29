@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <IL/il.h>
 #include <math.h>
 #include <fstream>
 #include <iostream>
@@ -18,6 +19,7 @@
 #include "Translacao.h"
 #include "Rotacao.h"
 #include "Escala.h"
+
 
 #pragma comment(lib, "glew32.lib")
 

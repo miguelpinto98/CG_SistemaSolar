@@ -1,5 +1,9 @@
 #include "Motor3D.h"
 
+//Inicializações para carregar a Imagem
+unsigned int ima, texID;
+unsigned char *imageData;
+
 void changeSize(int w, int h) {
 	if(h == 0)
 		h = 1;
@@ -65,6 +69,14 @@ void renderScene(void) {
 	glRotatef(anguloZ, 0, 0, 1);
 	glTranslatef(coordX, coordY, coordZ);
 
+	float pos[4] = { 0, 60, 256, 1 },
+		  diff[3] = { 1, 1, 1 },
+		  amb[3] = { 0.2, 0.2, 0.2 };
+
+	glLightfv(GL_LIGHT0, GL_POSITION, pos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+
 	/* RENDER PRIMITIVAS */
 	int ipr = primitivas.size();
 	for (int i = 0; i<ipr; i++) {
@@ -105,10 +117,9 @@ void renderScene(void) {
 		//p.construir();
 
 		/* Modo VBO */
-		
-		
-
-		p.desenhar();
+		glBindTexture(GL_TEXTURE_2D, texID);
+			p.desenhar();
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		glPopMatrix();
 
@@ -141,7 +152,11 @@ void renderScene(void) {
 				if (!es.vazio())
 					glScalef(es.getEx(), es.getEy(), es.getEz());
 			}
+			
+			glBindTexture(GL_TEXTURE_2D, texID);
 			p.desenhar();
+			glBindTexture(GL_TEXTURE_2D, 0);
+
 			glPopMatrix();
 		}
 	}
@@ -278,6 +293,10 @@ int lerFicheiro(string fl, Primitiva& pr) {
 
 	if(file.is_open()) {
 		file >> nump; getline(file, line);
+
+		getline(file, line);	pr.setCamdaHorizontal(atoi(line.c_str()));
+		getline(file, line);	pr.setCamadaVertical(atoi(line.c_str()));
+		
 		while(getline(file,line) && i<nump) {
 			pos = line.find(delimiter);
 			token = line.substr(0,pos);
@@ -320,6 +339,24 @@ int lerFicheiro(string fl, Primitiva& pr) {
 			i++;
 			Ponto po(a, b, c);
 			pr.adicionaNormal(po);
+		}
+		
+		i = 0;
+		nump = atoi(line.c_str());
+		while (getline(file, line) && i < nump) {
+			pos = line.find(delimiter);
+			token = line.substr(0, pos);
+			a = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+
+			pos = line.find(delimiter);
+			token = line.substr(0, pos);
+			b = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+
+			i++;
+			Ponto po(a, b, 0);
+			pr.adicionaTextura(po);
 		}
 		file.close();
 		return 0;
@@ -483,10 +520,31 @@ void initPrimitivas() {
 	}
 }
 
+void carregaImagens() {
+	ilGenImages(1,&ima);
+	ilBindImage(ima);
+	ilLoadImage((ILstring)"imagens/marte.jpg");
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+	int width = ilGetInteger(IL_IMAGE_WIDTH);
+	int height = ilGetInteger(IL_IMAGE_HEIGHT);
+	imageData = ilGetData();
+
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+}
+
 int main(int argc, char **argv) {
 	//string file="SistemaSolar3Fase.xml";
 	string file="LUA.xml";
 	//string file = "SSTESTE.xml";
+	//string file = "TeapotTest.xml";
 
 	//if(argc>1) {
 		//string file = argv[1];
@@ -510,10 +568,14 @@ int main(int argc, char **argv) {
 
 		defineMenu();
 		
+		glewInit();
+		ilInit();
+
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
+		glEnable(GL_TEXTURE_2D); /* Ativar Texturas */
 
-		glewInit();
+		carregaImagens();
 		initPrimitivas();
 
 		glutMainLoop();

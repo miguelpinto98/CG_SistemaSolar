@@ -22,6 +22,9 @@
     <Filter Include="Source Files\tipos">
       <UniqueIdentifier>{2250cf6e-5bcf-4d72-9503-8c1b8b2ab560}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\imagens">
+      <UniqueIdentifier>{b99b31b2-ee4a-4293-afea-5038680020a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Motor3D.cpp">
@@ -80,5 +83,46 @@
     <ClInclude Include="Filho.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="imagens\asteroides.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\espaço1.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\espaço2.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\jupiter.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\lua.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\marte.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\mercurio.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\neptuno.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\saturno.jpg.png">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\sol.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\terra.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\urano.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
+    <Image Include="imagens\venus.jpg">
+      <Filter>Resource Files\imagens</Filter>
+    </Image>
   </ItemGroup>
 </Project>

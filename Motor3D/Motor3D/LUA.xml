@@ -252,7 +252,7 @@
 			</translacao>
 			<rotacao tempo="0" eixoX="0" eixoy="0" eixoZ="0" />
 			<modelos>
-				<modelo ficheiro="teapot.3d" />
+				<modelo ficheiro="esfera.3d" />
 			</modelos>
 		</grupo>
 	</grupo>

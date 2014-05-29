@@ -25,7 +25,7 @@ class Primitiva {
 	int cmdHor;
 	int cmdVer;
 	int numsInd;
-	
+	string imagem;
 	unsigned int ima;
 	unsigned int texID;
 	unsigned char *imageData;
@@ -37,6 +37,7 @@ public:
 	void adicionaNormal(Ponto p);
 	void adicionaTextura(Ponto p);
 	string getNomePrimitiva() { return nome; }
+	void setImagem(string file) { imagem = file; }
 	vector<Ponto> getPontos() { return pontos; }
 	Transformacao getTransformacao() { return transf; }
 	void setTransformacao(Transformacao t) { transf = t; }
@@ -52,6 +53,7 @@ public:
 	void construir();
 	void desenhar();
 	void preparar();
+	void Primitiva::prepararComImagem();
 	void carregaImagem(string);
 	unsigned int getTexID() { return texID; }
 	void desenhaComImagem();

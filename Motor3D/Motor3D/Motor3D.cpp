@@ -41,8 +41,6 @@ void renderCatmullRomCurve(vector<Ponto> pontos) {
 	glEnd();
 }
 
-
-
 void renderScene(void) {
 	float res[3];	
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
@@ -459,7 +457,7 @@ void parseXML(XMLElement* grupo, Transformacao transf, char cc) {
 		flag = lerFicheiro(p.getNomePrimitiva(),p);
 
 		if(flag>=0) {
-			p.carregaImagem(modelo->Attribute("textura"));
+			p.setImagem(modelo->Attribute("textura"));
 			p.setTransformacao(trans);
 			p.setTipo(cc);
 			int n = primitivas.size();
@@ -501,12 +499,10 @@ void initPrimitivas() {
 	int num = primitivas.size();
 	cout << num << endl;
 	for (int i = 0; i < num; i++) {
-		if (primitivas[i].numeroFilhos() == 1) {
-			primitivas[i].getFilhos()[0].preparar();
-			primitivas[i].getFilhos()[0].carregaImagem("lua.jpg");
-		}
-		primitivas[i].preparar();
-		primitivas[i].carregaImagem("sol.jpg");
+		if (primitivas[i].numeroFilhos() == 1)
+			primitivas[i].getFilhos()[0].prepararComImagem();
+		
+		primitivas[i].prepararComImagem();
 	}
 }
 

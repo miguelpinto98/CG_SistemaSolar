@@ -4,6 +4,7 @@ class Ponto {
 	float y;
 	float z;
 public:
+	Ponto();
 	Ponto(float,float,float);
 	float getX() { return x; }
 	float getY() { return y; }

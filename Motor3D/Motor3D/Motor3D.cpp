@@ -272,12 +272,13 @@ void defineMenu() {
 
 int lerFicheiro(string fl, Primitiva& pr) {
 	string line, token, delimiter = ",";
-	int pos;
+	int pos, nump, i=0;
 	double a,b,c;
 	ifstream file(fl);
 
 	if(file.is_open()) {
-		while(getline(file,line)) {
+		file >> nump; getline(file, line);
+		while(getline(file,line) && i<nump) {
 			pos = line.find(delimiter);
 			token = line.substr(0,pos);
 			a = atof(token.c_str());
@@ -293,8 +294,32 @@ int lerFicheiro(string fl, Primitiva& pr) {
 			c = atof(token.c_str());
 			line.erase(0, pos + delimiter.length());
 			
+			i++;
 			Ponto po(a,b,c);
 			pr.adicionaPonto(po);
+		}
+		
+		i = 0;
+		nump = atoi(line.c_str());
+		while (getline(file, line) && i < nump) {
+			pos = line.find(delimiter);
+			token = line.substr(0, pos);
+			a = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+
+			pos = line.find(delimiter);
+			token = line.substr(0, pos);
+			b = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+
+			pos = line.find(delimiter);
+			token = line.substr(0, pos);
+			c = atof(token.c_str());
+			line.erase(0, pos + delimiter.length());
+
+			i++;
+			Ponto po(a, b, c);
+			pr.adicionaNormal(po);
 		}
 		file.close();
 		return 0;

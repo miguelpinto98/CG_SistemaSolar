@@ -12,13 +12,15 @@ using namespace std;
 class Primitiva {
 	string nome;
 	Transformacao transf;
-	GLuint *buffer;
+	GLuint buffers[2];
 	int nvertices;
 	vector<Primitiva> filhos;
 	char tipo;
 public:
 	Primitiva(string);
 	vector<Ponto> pontos;
+	vector<Ponto> normais;
+	void adicionaNormal(Ponto p);
 	string getNomePrimitiva() { return nome; }
 	vector<Ponto> getPontos() { return pontos; }
 	Transformacao getTransformacao() { return transf; }

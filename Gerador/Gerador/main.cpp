@@ -5,22 +5,31 @@ void plano(float compr, float larg, int cmdh, int cmdv, string str) {
 	double vr = compr / cmdv, hr = larg / cmdh;
 	double ax, ay = y + hr, az = larg / 2;
 	int i, j;
-
+	
 	ofstream file(str);
+	vector<Ponto> normais;
 	y = larg / 2, ay = -y;
 	z = -(larg / 2), az = z + hr;
+
+	file << (cmdh*cmdv * 6) << endl;
 
 	for (i = 0; i<cmdh; i++) {
 		x = -(compr / 2);
 		ax = x + vr;
 		for (j = 0; j<cmdv; j++) {
+			Ponto p = Ponto::Ponto(0, 1, 0);
+
 			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
 			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;
 			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
+			
+			normais.push_back(p); normais.push_back(p); normais.push_back(p);
 
 			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
 			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
 			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;
+
+			normais.push_back(p); normais.push_back(p); normais.push_back(p);
 
 			x = ax;
 			ax += vr;
@@ -28,12 +37,22 @@ void plano(float compr, float larg, int cmdh, int cmdv, string str) {
 		z = az;
 		az += hr;
 	}
+
+	int nn = normais.size();
+	file << nn << endl;
+
+	for (int i = 0; i < nn; i++) {
+		Ponto p = normais[i];
+		file << p.getX() << "," << p.getY() << "," << p.getZ() << endl;
+	}
+
 	file.close();
 }
 
 void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, int cmdl, string str) {
 	int i, j;
 	ofstream file(str);
+	vector<Ponto> normais;
 
 	double x = -(double)(compr / 2);
 	double y = -(double)(alt / 2);
@@ -47,7 +66,8 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	double ay = y + hr;
 	double az = z + lr;
 
-
+	file << (cmdh*cmdv * 12 + cmdl*cmdv * 12 + cmdl*cmdh * 12) << endl;
+	
 	//BACK AND FRONT: x e y
 	z = (larg / 2); az = -z;
 	y = -(alt / 2); ay = y + hr;
@@ -55,28 +75,28 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	for (i = 0; i<cmdh; i++) {
 		x = -(compr / 2); ax = x + vr;
 		for (j = 0; j<cmdv; j++) {
-
-
+			Ponto p = Ponto::Ponto(0, 0, -1);
 			// (x,ay,az)      (ax,ay,az)
 			//(x,y,az)        (ax, y, az)
-			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
-			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;
-			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;
+			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;		normais.push_back(p);
 
-			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;
-			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
-			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;
+			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl; normais.push_back(p);
+			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;		normais.push_back(p);
 
 
 			// (x,ay,z)      (ax,ay,z)
 			//(x,y,z)        (ax, y, z)
-			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;
-			printf("%f %f %f\n", ax, y, z); file << ax << "," << y << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;
+			p = Ponto::Ponto(0, 0, -1);
+			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", ax, y, z); file << ax << "," << y << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;	normais.push_back(p);
 
-			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
+			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;	normais.push_back(p);
+			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;		normais.push_back(p);
 
 			x = ax;	ax += vr;
 		}
@@ -90,32 +110,28 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	for (i = 0; i<cmdl; i++) {
 		x = -(compr / 2); ax = x + vr;
 		for (j = 0; j<cmdv; j++) {
-
+			Ponto p = Ponto::Ponto(0, 1, 0);
 			// (x,y,z)      (ax,y,z)
 			//(x,y,az)      (ax, y, az)
 
-			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;
-			printf("%f %f %f\n", ax, y, z); file << ax << "," << y << "," << z << endl;
-			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;
+			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", ax, y, z); file << ax << "," << y << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;		normais.push_back(p);
 
-			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;
-			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;
-			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;
-
-
+			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;		normais.push_back(p);
+			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;		normais.push_back(p);
 
 			// (x,ay,z)      (ax,ay,z)
 			//(x,ay,az)      (ax, ay, az)
+			p = Ponto::Ponto(0, -1, 0);
+			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;	normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;	normais.push_back(p);
 
-			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
-
-			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << az << endl;
-			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;
-
-
+			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;	normais.push_back(p);
 			x = ax; ax += vr;
 		}
 		z = az; az += lr;
@@ -130,30 +146,37 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 		z = -(larg / 2); az = z + lr;
 
 		for (j = 0; j<cmdl; j++) {
-
+			Ponto p = Ponto::Ponto(-1, 0, 0);
 			// (x,ay,az)      (x,ay,z)
 			//(x,y,az)        (x,y,z)
 
-			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;
-			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;
-			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;
+			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", x, y, az); file << x << "," << y << "," << az << endl;		normais.push_back(p);
+			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;		normais.push_back(p);
 
-			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;
-			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;
+			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", x, y, z); file << x << "," << y << "," << z << endl;		normais.push_back(p);
 
-			printf("%f %f %f\n", ax, y, z); file << ax << "," << y << "," << z << endl;
-			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;
-			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
+			p = Ponto::Ponto(1, 0, 0);
+			printf("%f %f %f\n", ax, y, z); file << ax << "," << y << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", ax, y, az); file << ax << "," << y << "," << az << endl;	normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;	normais.push_back(p);
 
-			printf("%f %f %f\n", ax, y, z); file << ax << "," << y << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
-			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;
-
+			printf("%f %f %f\n", ax, y, z); file << ax << "," << y << "," << z << endl;		normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl; normais.push_back(p);
+			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;	normais.push_back(p);
 			z = az; az += lr;
 		}
-
 		y = ay; ay += hr;
+	}
+
+	int nn = normais.size();
+	file << nn << endl;
+
+	for (int i = 0; i < nn; i++) {
+		Ponto p = normais[i];
+		file << p.getX() << "," << p.getY() << "," << p.getZ() << endl;
 	}
 	file.close();
 }
@@ -163,6 +186,9 @@ void esfera(double raio, int camadasV, int camadasH, string str){
 	double rotacoes = 2 * M_PI / camadasH;
 	int count = 1;
 	ofstream file(str);
+	vector<Ponto> normais;
+
+	file << (camadasH*camadasV * 6) << endl;
 
 	for (int i = 0; i<camadasV; i++){
 		double angYX = camada*i; // 0 a 180º na vertical
@@ -170,6 +196,7 @@ void esfera(double raio, int camadasV, int camadasH, string str){
 		for (int j = 0; j<camadasH; j++){
 			double angZX = rotacoes*j; // 0 a 360º na horizontal
 			count++;
+			Ponto p = Ponto::Ponto();
 
 			double x1 = raio * sin(angYX) * sin(angZX);
 			double x2 = raio * sin(angYX + camada) * sin(angZX);
@@ -186,12 +213,15 @@ void esfera(double raio, int camadasV, int camadasH, string str){
 
 
 			//printf("\n\n-- ITERACAO %d de %d --\n", count - 1, camadasV*camadasH);
-			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
+			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl; 
 			printf("%f, %f, %f\n", x2, y2, z2); file << x2 << "," << y2 << "," << z2 << endl;
 			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
 			/*po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
 			po.x = x2; po.y = y2; po.z = z2; p.push_back(po);
 			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);*/
+			p = Ponto(x1 / raio, y1 / raio, z1 / raio);	normais.push_back(p);
+			p = Ponto(x2 / raio, y2 / raio, z2 / raio);	normais.push_back(p);
+			p = Ponto(x3 / raio, y2 / raio, z3 / raio);	normais.push_back(p);
 
 			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
 			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
@@ -199,7 +229,18 @@ void esfera(double raio, int camadasV, int camadasH, string str){
 			/*po.x = x1; po.y = y1; po.z = z1; p.push_back(po);
 			po.x = x3; po.y = y2; po.z = z3; p.push_back(po);
 			po.x = x4; po.y = y1; po.z = z4; p.push_back(po);*/
+			p = Ponto(x1 / raio, y1 / raio, z1 / raio);	normais.push_back(p);
+			p = Ponto(x3 / raio, y2 / raio, z3 / raio);	normais.push_back(p);
+			p = Ponto(x4 / raio, y1 / raio, z4 / raio);	normais.push_back(p);
 		}
+	}
+
+	int nn = normais.size();
+	file << nn << endl;
+
+	for (int i = 0; i < nn; i++) {
+		Ponto p = normais[i];
+		file << p.getX() << "," << p.getY() << "," << p.getZ() << endl;
 	}
 	file.close();
 }
@@ -403,7 +444,9 @@ void initSupBezier(int tess, string nameFile) {
 }
 
 int main(int argc, char **argv) {
-	if (argc>1) {
+	esfera(2, 20, 20, "esfera.3d");
+
+	/*if (argc>1) {
 		if (!strcmp(argv[1], "plano") && argc == 7) {
 			cout << "PLANO\n" << endl;
 			plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), argv[6]);
@@ -443,6 +486,6 @@ int main(int argc, char **argv) {
 				}
 			}
 		}
-	}
+	}*/
 	return 0;
 }

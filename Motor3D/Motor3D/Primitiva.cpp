@@ -167,10 +167,12 @@ void Primitiva::desenhaComImagem() {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else {
-		glColor3f(0, 43, 255);
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-		glDrawArrays(GL_TRIANGLES, 0, nvertices);
+		glColor3f(0.5, 43, 255);
+		glDisable(GL_LIGHTING);
+			glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+			glVertexPointer(3, GL_FLOAT, 0, 0);
+			glDrawArrays(GL_TRIANGLES, 0, nvertices);
+		glEnable(GL_LIGHTING);
 		glColor3f(1, 1, 1);
 	}
 }

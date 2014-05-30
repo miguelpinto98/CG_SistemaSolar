@@ -12,6 +12,8 @@ void plano(float compr, float larg, int cmdh, int cmdv, string str) {
 	z = -(larg / 2), az = z + hr;
 
 	file << (cmdh*cmdv * 6) << endl;
+	file << (cmdh) << endl;
+	file << (cmdv) << endl;
 
 	for (i = 0; i<cmdh; i++) {
 		x = -(compr / 2);
@@ -67,6 +69,8 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	double az = z + lr;
 
 	file << (cmdh*cmdv * 12 + cmdl*cmdv * 12 + cmdl*cmdh * 12) << endl;
+	file << (cmdh) << endl;
+	file << (cmdv) << endl;
 	
 	//BACK AND FRONT: x e y
 	z = (larg / 2); az = -z;
@@ -278,6 +282,9 @@ void cone(double raio, double altura, double camadasV, double camadasH, string s
 	double alt = -altura / 2;
 
 	ofstream file(str);
+	file << (camadasH) << endl;
+	file << (camadasH) << endl;
+	file << (camadasV) << endl;
 
 	// a base (desenhado em y = alt = -altura/2)
 	for (double alpha = 0; alpha < 2 * M_PI; alpha += deltaV){

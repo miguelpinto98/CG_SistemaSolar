@@ -59,14 +59,6 @@ void renderScene(void) {
 	glRotatef(anguloZ, 0, 0, 1);
 	glTranslatef(coordX, coordY, coordZ);
 
-	float pos[4] = { 0, 60, 256, 1 },
-		  diff[3] = { 1, 1, 1 },
-		  amb[3] = { 0.2, 0.2, 0.2 };
-
-	glLightfv(GL_LIGHT0, GL_POSITION, pos);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
-
 	/* RENDER PRIMITIVAS */
 	int ipr = primitivas.size();
 	for (int i = 0; i<ipr; i++) {
@@ -107,6 +99,19 @@ void renderScene(void) {
 		//p.construir();
 
 		/* Modo VBO */
+
+		if (i == 0) {
+			GLfloat pos[4] = { 5, 5, 5, 1 };
+			GLfloat amb[3] = { 0, 0, 0 };
+			GLfloat diff[3] = { 0.9, 0.9, 0.9 };
+
+			glLightfv(GL_LIGHT0, GL_POSITION, pos); // posição da luz
+			glLightfv(GL_LIGHT0, GL_AMBIENT, amb); // cores da luz
+			glLightfv(GL_LIGHT0, GL_DIFFUSE, diff); // cores da luz
+			//glLightfv(GL_LIGHT0, GL_SPECULAR, spe);
+		}
+
+
 		p.desenhaComImagem();
 
 		glPopMatrix();
@@ -551,6 +556,9 @@ int main(int argc, char **argv) {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_TEXTURE_2D); /* Ativar Texturas */
+
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
 
 		initPrimitivas();
 

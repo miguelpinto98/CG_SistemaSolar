@@ -648,8 +648,8 @@ void initPrimitivas() {
 
 int main(int argc, char **argv) {
 	//string file="SistemaSolar3Fase.xml";
-	string file="LUA.xml";
-	//string file = "SSTESTE.xml";
+	//string file="LUA.xml";
+	string file = "SistemaSolarPlano.xml";
 	//string file = "TeapotTest.xml";
 
 	//if(argc>1) {

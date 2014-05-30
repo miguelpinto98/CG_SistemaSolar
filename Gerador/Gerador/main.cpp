@@ -1,43 +1,40 @@
  #include "main.h"
 
 void plano(float compr, float larg, int cmdh, int cmdv, string str) {
-	double x, y = -(larg / 2), z = y;
-	double vr = compr / cmdv, hr = larg / cmdh;
-	double ax, ay = y + hr, az = larg / 2;
+	float x,y,z;
 	int i, j;
-	
+
+	Ponto p;
 	ofstream file(str);
 	vector<Ponto> normais;
-	y = larg / 2, ay = -y;
-	z = -(larg / 2), az = z + hr;
+	vector<Ponto> texturas;
 
-	file << (cmdh*cmdv * 6) << endl;
+	y = 0;
+	z = -(larg / 2);
+	x = -(compr / 2);
+
+	float XX = compr / cmdh;
+	float ZZ = larg / cmdv;
+
+	float texV = 1 / (float)cmdh;
+	float texH = 1 / (float)cmdv;
+
+	file << (cmdh+1)*(cmdv+1) << endl;
 	file << (cmdh) << endl;
 	file << (cmdv) << endl;
 
-	for (i = 0; i<cmdh; i++) {
-		x = -(compr / 2);
-		ax = x + vr;
-		for (j = 0; j<cmdv; j++) {
-			Ponto p = Ponto::Ponto(0, 1, 0);
+	for (i = 0; i<=cmdh; i++) {
+		z = -larg / 2 + i*ZZ;
+		for (j = 0; j<=cmdv; j++) {
+			x = -compr / 2 + j*XX;
+			file << x << "," << y << "," << z << endl;
 
-			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, z); file << ax << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
-			
-			normais.push_back(p); normais.push_back(p); normais.push_back(p);
+			p = Ponto::Ponto(0, 1, 0);
+			normais.push_back(p);
 
-			printf("%f %f %f\n", x, ay, z); file << x << "," << ay << "," << z << endl;
-			printf("%f %f %f\n", ax, ay, az); file << ax << "," << ay << "," << az << endl;
-			printf("%f %f %f\n", x, ay, az); file << x << "," << ay << "," << az << endl;
-
-			normais.push_back(p); normais.push_back(p); normais.push_back(p);
-
-			x = ax;
-			ax += vr;
+			p = Ponto::Ponto(1 - i* texH, j*texV, 0);
+			texturas.push_back(p);
 		}
-		z = az;
-		az += hr;
 	}
 
 	int nn = normais.size();
@@ -48,6 +45,14 @@ void plano(float compr, float larg, int cmdh, int cmdv, string str) {
 		file << p.getX() << "," << p.getY() << "," << p.getZ() << endl;
 	}
 
+	nn = texturas.size();
+	file << nn << endl;
+
+	for (int i = 0; i < nn; i++) {
+		Ponto p = texturas[i];
+		file << p.getX() << "," << p.getY() << endl;
+	}
+
 	file.close();
 }
 
@@ -55,6 +60,7 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	int i, j;
 	ofstream file(str);
 	vector<Ponto> normais;
+	vector<Ponto> texturas;
 
 	double x = -(double)(compr / 2);
 	double y = -(double)(alt / 2);
@@ -71,14 +77,14 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	file << (cmdh*cmdv * 12 + cmdl*cmdv * 12 + cmdl*cmdh * 12) << endl;
 	file << (cmdh) << endl;
 	file << (cmdv) << endl;
-	
+
 	//BACK AND FRONT: x e y
 	z = (larg / 2); az = -z;
 	y = -(alt / 2); ay = y + hr;
 
-	for (i = 0; i<cmdh; i++) {
+	for (i = 0; i < cmdh; i++) {
 		x = -(compr / 2); ax = x + vr;
-		for (j = 0; j<cmdv; j++) {
+		for (j = 0; j < cmdv; j++) {
 			Ponto p = Ponto::Ponto(0, 0, -1);
 			// (x,ay,az)      (ax,ay,az)
 			//(x,y,az)        (ax, y, az)
@@ -111,9 +117,9 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	y = alt / 2; ay = -y;
 	z = -(larg / 2); az = z + lr;
 
-	for (i = 0; i<cmdl; i++) {
+	for (i = 0; i < cmdl; i++) {
 		x = -(compr / 2); ax = x + vr;
-		for (j = 0; j<cmdv; j++) {
+		for (j = 0; j < cmdv; j++) {
 			Ponto p = Ponto::Ponto(0, 1, 0);
 			// (x,y,z)      (ax,y,z)
 			//(x,y,az)      (ax, y, az)
@@ -146,10 +152,10 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 	x = compr / 2; ax = -x;
 	y = -(alt / 2); ay = y + hr;
 
-	for (i = 0; i<cmdh; i++) {
+	for (i = 0; i < cmdh; i++) {
 		z = -(larg / 2); az = z + lr;
 
-		for (j = 0; j<cmdl; j++) {
+		for (j = 0; j < cmdl; j++) {
 			Ponto p = Ponto::Ponto(-1, 0, 0);
 			// (x,ay,az)      (x,ay,z)
 			//(x,y,az)        (x,y,z)
@@ -182,7 +188,14 @@ void paralelipipedo(double compr, double larg, double alt, int cmdh, int cmdv, i
 		Ponto p = normais[i];
 		file << p.getX() << "," << p.getY() << "," << p.getZ() << endl;
 	}
-	file.close();
+
+	nn = texturas.size();
+	file << nn << endl;
+
+	for (int i = 0; i < nn; i++) {
+		Ponto p = texturas[i];
+		file << p.getX() << "," << p.getY() << endl;
+	}
 }
 
 void esfera(double raio, int camadasV, int camadasH, string str){
@@ -217,42 +230,6 @@ void esfera(double raio, int camadasV, int camadasH, string str){
 
 			p = Ponto(j*texH, i*texV, 0);
 			texturas.push_back(p);
-
-			/*
-			double x2 = raio * sin(angYX + camada) * sin(angZX);
-			double x3 = raio * sin(angYX + camada) * sin(angZX + rotacoes);
-			double x4 = raio * sin(angYX) * sin(angZX + rotacoes);
-
-			
-			double y2 = raio * cos(angYX + camada);
-
-			
-			double z2 = raio * sin(angYX + camada) * cos(angZX);
-			double z3 = raio * sin(angYX + camada) * cos(angZX + rotacoes);
-			double z4 = raio * sin(angYX) * cos(angZX + rotacoes);
-
-			*/
-
-			/* Modo Todos os Pontos
-			texturas.push_back(ptext);	texturas.push_back(ptext);	texturas.push_back(ptext);
-			texturas.push_back(ptext);	texturas.push_back(ptext);	texturas.push_back(ptext);
-			
-			  --	--
-			//printf("\n\n-- ITERACAO %d de %d --\n", count - 1, camadasV*camadasH);
-			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
-			printf("%f, %f, %f\n", x2, y2, z2); file << x2 << "," << y2 << "," << z2 << endl;
-			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
-			p = Ponto(x1 / raio, y1 / raio, z1 / raio);	normais.push_back(p);
-			p = Ponto(x2 / raio, y2 / raio, z2 / raio);	normais.push_back(p);
-			p = Ponto(x3 / raio, y2 / raio, z3 / raio);	normais.push_back(p);
-
-			printf("%f, %f, %f\n", x1, y1, z1); file << x1 << "," << y1 << "," << z1 << endl;
-			printf("%f, %f, %f\n", x3, y2, z3); file << x3 << "," << y2 << "," << z3 << endl;
-			printf("%f, %f, %f\n", x4, y1, z4); file << x4 << "," << y1 << "," << z4 << endl;
-			p = Ponto(x1 / raio, y1 / raio, z1 / raio);	normais.push_back(p);
-			p = Ponto(x3 / raio, y2 / raio, z3 / raio);	normais.push_back(p);
-			p = Ponto(x4 / raio, y1 / raio, z4 / raio);	normais.push_back(p);	
-			*/
 		}
 	}
 
@@ -282,6 +259,9 @@ void cone(double raio, double altura, double camadasV, double camadasH, string s
 	double alt = -altura / 2;
 
 	ofstream file(str);
+	vector<Ponto> normais;
+	vector<Ponto> texturas;
+
 	file << (camadasH) << endl;
 	file << (camadasH) << endl;
 	file << (camadasV) << endl;
@@ -350,7 +330,22 @@ void cone(double raio, double altura, double camadasV, double camadasH, string s
 			printf("%f, %f, %f\n", x9, y9, z9); file << x9 << "," << y9 << "," << z9 << endl;
 		}
 	}
-	file.close();
+
+	int nn = normais.size();
+	file << nn << endl;
+
+	for (int i = 0; i < nn; i++) {
+		Ponto p = normais[i];
+		file << p.getX() << "," << p.getY() << "," << p.getZ() << endl;
+	}
+
+	nn = texturas.size();
+	file << nn << endl;
+
+	for (int i = 0; i < nn; i++) {
+		Ponto p = texturas[i];
+		file << p.getX() << "," << p.getY() << endl;
+	}
 }
 
 void readPatch(string path) {
@@ -483,12 +478,7 @@ void initSupBezier(int tess, string nameFile) {
 }
 
 int main(int argc, char **argv) {
-	esfera(3, 50, 50, "esfera.3d");
-
-	readPatch("teapot.patch");	//Nome Ficheiro = Path
-	initSupBezier(10, "teapot.3d"); //Inteiro e Nome do Ficheiro a 
-
-	/*if (argc>1) {
+	if (argc>1) {
 		if (!strcmp(argv[1], "plano") && argc == 7) {
 			cout << "PLANO\n" << endl;
 			plano(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), argv[6]);
@@ -528,6 +518,6 @@ int main(int argc, char **argv) {
 				}
 			}
 		}
-	}*/
+	}
 	return 0;
 }

@@ -67,18 +67,37 @@ void renderScene(void) {
 		Transformacao t = p.getTransformacao();
 
 		glPushMatrix();
+
+		if (i == 0) {
+			GLfloat pos[4] = { 0, 0, 0, 1 };
+			GLfloat amb[3] = { 0.3, 0.3, 0.2 };
+			GLfloat diff[3] = { 0.8, 0.8, 0.15 };
+			GLfloat matt[3] = { 1, 1, 1 };
+
+			glLightfv(GL_LIGHT0, GL_POSITION, pos); // posição da luz
+			glLightfv(GL_LIGHT0, GL_AMBIENT, amb); // cores da luz
+			glLightfv(GL_LIGHT0, GL_DIFFUSE, diff); // cores da luz
+
+			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matt);
+		}
+		else {
+			GLfloat matt[3] = { 0, 0, 0 };
+			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matt);
+		}
 		
 		if (!t.trasnformacaoVazia()) {
 			Translacao tr = t.getTranslacao();
 			if (!tr.vazio()) {
 				int num = tr.getTamanho();
 				if (num>0) {
+					glDisable(GL_LIGHTING);
 					float te = glutGet(GLUT_ELAPSED_TIME) % (int)(tr.getTime() * 1000);
 					float gt = te / (tr.getTime() * 1000);
 					vector<Ponto> vp = tr.getTransPontos();
 					renderCatmullRomCurve(tr.getPontosCurvas());
 					tr.getGlobalCatmullRomPoint(gt, res, vp);
 					glTranslatef(res[0], res[1], res[2]);
+					glEnable(GL_LIGHTING);
 				}
 			}
 
@@ -100,17 +119,6 @@ void renderScene(void) {
 		//p.construir();
 		/* Modo VBO */
 
-		if (i == 0) {
-			GLfloat pos[4] = { 5, 5, 5, 1 };
-			GLfloat amb[3] = { 0, 0, 0 };
-			GLfloat diff[3] = { 0.9, 0.9, 0.9 };
-
-			glLightfv(GL_LIGHT0, GL_POSITION, pos); // posição da luz
-			glLightfv(GL_LIGHT0, GL_AMBIENT, amb); // cores da luz
-			glLightfv(GL_LIGHT0, GL_DIFFUSE, diff); // cores da luz
-			//glLightfv(GL_LIGHT0, GL_SPECULAR, spe);
-		}
-
 		//Modo VBO
 		p.desenhaComImagem();
 
@@ -125,12 +133,14 @@ void renderScene(void) {
 				if (!tr.vazio()) {
 					int num = tr.getTamanho();
 					if (num>0) {
+						glDisable(GL_LIGHTING);
 						float te = glutGet(GLUT_ELAPSED_TIME) % (int)(tr.getTime() * 1000);
 						float gt = te / (tr.getTime() * 1000);
 						vector<Ponto> vp = tr.getTransPontos();
 						renderCatmullRomCurve(tr.getPontosCurvas());
 						tr.getGlobalCatmullRomPoint(gt, res, vp);
 						glTranslatef(res[0], res[1], res[2]);
+						glEnable(GL_LIGHTING);
 					}
 				}
 
@@ -145,7 +155,7 @@ void renderScene(void) {
 				if (!es.vazio())
 					glScalef(es.getEx(), es.getEy(), es.getEz());
 			}		
-			p.desenhaComImagem();
+			pp.desenhaComImagem();
 
 			glPopMatrix();
 		}

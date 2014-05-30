@@ -26,6 +26,7 @@ class Primitiva {
 	int cmdVer;
 	int numsInd;
 	string imagem;
+	int cor;
 	unsigned int ima;
 	unsigned int texID;
 	unsigned char *imageData;
@@ -38,6 +39,7 @@ public:
 	void adicionaTextura(Ponto p);
 	string getNomePrimitiva() { return nome; }
 	void setImagem(string file) { imagem = file; }
+	void setCor(int colorCode) { cor = colorCode; }
 	vector<Ponto> getPontos() { return pontos; }
 	Transformacao getTransformacao() { return transf; }
 	void setTransformacao(Transformacao t) { transf = t; }

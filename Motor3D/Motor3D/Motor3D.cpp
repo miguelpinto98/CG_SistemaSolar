@@ -228,6 +228,7 @@ unsigned char picking(int xx, int yy){
 		}
 		glColor3f(color, color, color);
 		p.desenhaComImagem();
+		p.setCor(color);
 		code++; color=code/256.0f;
 		glPopMatrix();
 
@@ -262,6 +263,7 @@ unsigned char picking(int xx, int yy){
 			}
 			glColor3f(color, color, color);
 			p.desenhaComImagem();
+			p.setCor(color);
 			code++; color=code/256.0f;
 
 			glPopMatrix();
@@ -323,7 +325,6 @@ void processMouseButtons(int button, int state, int xx, int yy)
 		else { //middle_button
 			tracking = 0;
 			unsigned char result = picking(xx,yy);
-			printf("%u\n",result);
 			if (result) printf("Selected %u\n", result);
 			else printf("Nothing selected\n");
 		}

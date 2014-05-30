@@ -7,7 +7,7 @@ Primitiva::Primitiva(string n) {
 	cmdHor = 0;
 	cmdVer = 0;
 	numsInd = 0;
-	cor = 0;
+	colorCode = 0;
 }
 
 void Primitiva::adicionaPonto(Ponto p) {

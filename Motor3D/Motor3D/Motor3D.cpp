@@ -53,7 +53,7 @@ void renderScene(void) {
 	
 	framesPerSecond();
 
-	/* Definicoes Camara */
+	//Definicoes Camara
 	glRotatef(anguloX, 1, 0, 0);
 	glRotatef(anguloY, 0, 1, 0);
 	glRotatef(anguloZ, 0, 0, 1);
@@ -67,7 +67,7 @@ void renderScene(void) {
 	glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
 
-	/* RENDER PRIMITIVAS */
+	// RENDER PRIMITIVAS 
 	int ipr = primitivas.size();
 	for (int i = 0; i<ipr; i++) {
 		Primitiva p = primitivas[i]; 
@@ -103,15 +103,15 @@ void renderScene(void) {
 			if (!es.vazio())
 				glScalef(es.getEx(), es.getEy(), es.getEz());
 		}
-		/* Modo Imediato */
+		//Modo Imediato
 		//p.construir();
 
-		/* Modo VBO */
+		//Modo VBO
 		p.desenhaComImagem();
 
 		glPopMatrix();
 
-		if (p.numeroFilhos() == 1) { /* BAD CODE*/
+		if (p.numeroFilhos() == 1) { //BAD CODE
 			Primitiva pp = p.getFilhos()[0];
 			t = pp.getTransformacao();
 
@@ -155,6 +155,118 @@ void resetCamara() {
 	beta = 0.5f;
 }
 
+unsigned char picking(int xx, int yy){
+	int code = 1;
+	float color = code/256.0f;
+
+	float ress[3];	
+	glDisable(GL_LIGHTING | GL_TEXTURE);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	gluLookAt(camX,camY,camZ, 
+		      0.0,0.0,0.0,
+			  0.0f,1.0f,0.0f);
+
+
+	//desenhar versao codificada dos objetos
+	glRotatef(anguloX, 1, 0, 0);
+	glRotatef(anguloY, 0, 1, 0);
+	glRotatef(anguloZ, 0, 0, 1);
+	glTranslatef(coordX, coordY, coordZ);
+
+	
+	// RENDER PRIMITIVAS 
+	int ipr = primitivas.size();
+	for (int i = 0; i<ipr; i++) {
+		Primitiva p = primitivas[i]; 
+		Transformacao t = p.getTransformacao();
+
+		glPushMatrix();
+		
+		if (!t.trasnformacaoVazia()) {
+			Translacao tr = t.getTranslacao();
+			if (!tr.vazio()) {
+				int num = tr.getTamanho();
+				if (num>0) {
+					float te = glutGet(GLUT_ELAPSED_TIME) % (int)(tr.getTime() * 1000);
+					float gt = te / (tr.getTime() * 1000);
+					vector<Ponto> vp = tr.getTransPontos();
+					renderCatmullRomCurve(tr.getPontosCurvas());
+					tr.getGlobalCatmullRomPoint(gt, ress, vp);
+					glTranslatef(ress[0], ress[1], ress[2]);
+				}
+			}
+
+			if (p.numeroFilhos() == 1)
+				glPushMatrix();
+			
+			Rotacao ro = t.getRotacao();
+			if (!ro.vazio()){
+				float r = glutGet(GLUT_ELAPSED_TIME) % (int)(ro.getTime() * 1000);
+				float gr = (r * 360) / (ro.getTime() * 1000);
+				glRotatef(gr, ro.getRx(), ro.getRy(), ro.getRz());
+			}
+
+			Escala es = t.getEscala();
+			if (!es.vazio())
+				glScalef(es.getEx(), es.getEy(), es.getEz());
+		}
+		glColor3f(color, color, color);
+		p.desenhaComImagem();
+		code++; color=code/256.0f;
+		glPopMatrix();
+
+		if (p.numeroFilhos() == 1) { //BAD CODE
+			Primitiva pp = p.getFilhos()[0];
+			t = pp.getTransformacao();
+
+			if (!t.trasnformacaoVazia()) {
+				Translacao tr = t.getTranslacao();
+				if (!tr.vazio()) {
+					int num = tr.getTamanho();
+					if (num>0) {
+						float te = glutGet(GLUT_ELAPSED_TIME) % (int)(tr.getTime() * 1000);
+						float gt = te / (tr.getTime() * 1000);
+						vector<Ponto> vp = tr.getTransPontos();
+						renderCatmullRomCurve(tr.getPontosCurvas());
+						tr.getGlobalCatmullRomPoint(gt, ress, vp);
+						glTranslatef(ress[0], ress[1], ress[2]);
+					}
+				}
+
+				Rotacao ro = t.getRotacao();
+				if (!ro.vazio()){
+					float r = glutGet(GLUT_ELAPSED_TIME) % (int)(ro.getTime() * 1000);
+					float gr = (r * 360) / (ro.getTime() * 1000);
+					glRotatef(gr, ro.getRx(), ro.getRy(), ro.getRz());
+				}
+
+				Escala es = t.getEscala();
+				if (!es.vazio())
+					glScalef(es.getEx(), es.getEy(), es.getEz());
+			}
+			glColor3f(color, color, color);
+			p.desenhaComImagem();
+			code++; color=code/256.0f;
+
+			glPopMatrix();
+		}
+	}
+
+
+
+  
+
+	GLint viewport[4];
+	unsigned char res[4];
+	glGetIntegerv(GL_VIEWPORT,viewport);
+	glReadPixels(xx,viewport[3]-yy,1,1,
+	GL_RGBA,GL_UNSIGNED_BYTE, &res);
+
+	glEnable(GL_LIGHTING | GL_TEXTURE);
+	return res[0]; //devolve cor lida
+}
+
 void normalkeyboard(unsigned char tecla, int x, int y) {
 	switch (tecla) {
 		case 'W':;
@@ -188,15 +300,18 @@ void specialKeys(int key, int x, int y) {
 
 void processMouseButtons(int button, int state, int xx, int yy)
 {
-	if (state == GLUT_DOWN)  {
+		if (state == GLUT_DOWN)  {
 		startX = xx;
 		startY = yy;
-		if (button == GLUT_LEFT_BUTTON)
-			tracking = 1;
-		else if (button == GLUT_RIGHT_BUTTON)
-			tracking = 2;
-		else
+		if (button == GLUT_LEFT_BUTTON) tracking = 1;
+		else if (button == GLUT_RIGHT_BUTTON) tracking = 2;
+		else { //middle_button
 			tracking = 0;
+			unsigned char result = picking(xx,yy);
+			printf("%u\n",result);
+			if (result) printf("Selected %u\n", result);
+			else printf("Nothing selected\n");
+		}
 	}
 	else if (state == GLUT_UP) {
 		if (tracking == 1) {
@@ -206,8 +321,7 @@ void processMouseButtons(int button, int state, int xx, int yy)
 		else if (tracking == 2) {
 
 			r -= yy - startY;
-			if (r < 3)
-				r = 3.0;
+			if (r < 3) r = 3.0;
 		}
 		tracking = 0;
 	}

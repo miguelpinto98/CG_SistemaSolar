@@ -6,7 +6,8 @@ Primitiva::Primitiva(string n) {
 	tipo = 'f';
 	cmdHor = 0;
 	cmdVer = 0;
-	numsInd = 0;	
+	numsInd = 0;
+	cor = 0;
 }
 
 void Primitiva::adicionaPonto(Ponto p) {

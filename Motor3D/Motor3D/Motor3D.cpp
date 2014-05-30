@@ -456,7 +456,7 @@ void parseXML(XMLElement* grupo, Transformacao transf, char cc) {
 		cout << p.getNomePrimitiva() << endl;
 		flag = lerFicheiro(p.getNomePrimitiva(),p);
 
-		if(flag>=0) {
+		if(flag>=0 && p.getNomePrimitiva().compare("teapot.3d")) {
 			p.setImagem(modelo->Attribute("textura"));
 			p.setTransformacao(trans);
 			p.setTipo(cc);
@@ -468,9 +468,15 @@ void parseXML(XMLElement* grupo, Transformacao transf, char cc) {
 				primitivas.push_back(p);
 
 			cout << "TIPO: " << p.getTipo() << endl;
-			cout << "Translacao: "<< trans.getTranslacao().getTime() << endl;
+			cout << "Translacao: " << trans.getTranslacao().getTime() << endl;
 			cout << "Rotacao   : " << trans.getRotacao().getRx() << " - " << trans.getRotacao().getRy() << " - " << trans.getRotacao().getRz() << endl;
 			cout << "Escala    : " << trans.getEscala().getEx() << " - " << trans.getEscala().getEy() << " - " << trans.getEscala().getEz() << endl;
+		}
+		else {
+			p.setTransformacao(trans);
+			p.setTipo(cc);
+
+			primitivas.push_back(p);
 		}
 	}
 	
@@ -499,10 +505,15 @@ void initPrimitivas() {
 	int num = primitivas.size();
 	cout << num << endl;
 	for (int i = 0; i < num; i++) {
-		if (primitivas[i].numeroFilhos() == 1)
+		Primitiva p = primitivas[i];
+
+		if (p.numeroFilhos() == 1)
 			primitivas[i].getFilhos()[0].prepararComImagem();
 		
-		primitivas[i].prepararComImagem();
+		if (p.getNomePrimitiva().compare("teapot.3d"))
+			primitivas[i].prepararComImagem();
+		else
+			primitivas[i].prepararTeapot();
 	}
 }
 

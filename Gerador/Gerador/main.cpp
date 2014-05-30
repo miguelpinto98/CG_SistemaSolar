@@ -464,18 +464,22 @@ void initSupBezier(int tess, string nameFile) {
 	int num = patchs.size();
 
 	file << (num*tess*tess * 6) << endl;
+	file << tess << endl;
+	file << tess << endl;
 
 	for (int i = 0; i < num; i++)
 		patchBezier(tess, i,file);
 
+	file << 0 << endl;
+	file << 0 << endl;
 	file.close();
 }
 
 int main(int argc, char **argv) {
-	esfera(2, 50, 50, "esfera.3d");
+	esfera(3, 50, 50, "esfera.3d");
 
-	//readPatch("teapot.patch");	//Nome Ficheiro = Path
-	//initSupBezier(10, "teapot.3d"); //Inteiro e Nome do Ficheiro a 
+	readPatch("teapot.patch");	//Nome Ficheiro = Path
+	initSupBezier(10, "teapot.3d"); //Inteiro e Nome do Ficheiro a 
 
 	/*if (argc>1) {
 		if (!strcmp(argv[1], "plano") && argc == 7) {

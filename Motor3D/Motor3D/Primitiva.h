@@ -53,6 +53,7 @@ public:
 	void construir();
 	void desenhar();
 	void preparar();
+	void prepararTeapot();
 	void Primitiva::prepararComImagem();
 	void carregaImagem(string);
 	unsigned int getTexID() { return texID; }

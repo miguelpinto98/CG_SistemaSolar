@@ -39,15 +39,45 @@ void Primitiva::construir() {
 	glEnd();
 }
 
-void Primitiva::desenhar() {
+void Primitiva::desenhar() {	
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
 	glNormalPointer(GL_FLOAT, 0, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
 	glTexCoordPointer(2, GL_FLOAT, 0, 0);
-	
+
 	glDrawElements(GL_TRIANGLES, numsInd, GL_UNSIGNED_INT, indices);
+}
+
+void Primitiva::prepararTeapot() {
+	int j;
+	int tpontos = pontos.size();
+	Ponto p = Ponto();
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	nvertices = tpontos * 3;
+
+	float *vertexB = (float *)malloc(sizeof(float)* nvertices);
+
+	/* Coordenadas Normais e Textura */
+	j = 0;
+	for (int i = 0; i<tpontos; i++) {
+		p = pontos.at(i);
+		vertexB[j + 0] = p.getX();
+		vertexB[j + 1] = p.getY();
+		vertexB[j + 2] = p.getZ();
+
+		j += 3;
+	}
+	int numVN = j;
+
+	glGenBuffers(3, buffers);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	glBufferData(GL_ARRAY_BUFFER, numVN*sizeof(float), vertexB, GL_STATIC_DRAW);
+
+	free(vertexB);
 }
 
 void Primitiva::preparar() {
@@ -129,9 +159,19 @@ void Primitiva::preparar() {
 }
 
 void Primitiva::desenhaComImagem() {
-	glBindTexture(GL_TEXTURE_2D, texID);
-	desenhar();
-	glBindTexture(GL_TEXTURE_2D, 0);
+
+	if (nome.compare("teapot.3d")) {
+		glBindTexture(GL_TEXTURE_2D, texID);
+		desenhar();
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	else {
+		glColor3f(0, 43, 255);
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+		glVertexPointer(3, GL_FLOAT, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, nvertices);
+		glColor3f(1, 1, 1);
+	}
 }
 
 void Primitiva::carregaImagem(string file) {

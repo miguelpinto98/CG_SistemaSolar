@@ -154,8 +154,12 @@ void renderScene(void) {
 				Escala es = t.getEscala();
 				if (!es.vazio())
 					glScalef(es.getEx(), es.getEy(), es.getEz());
-			}		
-			pp.desenhaComImagem();
+			}
+			glDisable(GL_TEXTURE_2D);
+			glColor3f(0, 0, 0);
+			p.desenhaComImagem();
+			glColor3f(1, 1, 1);
+			glEnable(GL_TEXTURE_2D);
 
 			glPopMatrix();
 		}
@@ -650,7 +654,7 @@ void initPrimitivas() {
 int main(int argc, char **argv) {
 	//string file="SistemaSolar3Fase.xml";
 	//string file="LUA.xml";
-	string file = "SistemaSolarPlano.xml";
+	string file = "SistemaSolar4Fase.xml";
 	//string file = "TeapotTest.xml";
 
 	//if(argc>1) {

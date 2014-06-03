@@ -555,7 +555,8 @@ void parseXML(XMLElement* grupo, Transformacao transf, char cc) {
 	Translacao tr;
 	Rotacao ro;
 	Escala es;
-
+	
+	
 	if(strcmp(grupo->FirstChildElement()->Value(), "grupo")==0)
 		grupo=grupo->FirstChildElement();
 
@@ -631,6 +632,13 @@ void readXML(string fxml) {
 	XMLDocument doc;
 	doc.LoadFile(fxml.c_str());
 	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
+	XMLElement* luzes = doc.FirstChildElement("cena")->FirstChildElement("luzes");
+	string tipo = doc.FirstChildElement("luzes")->FirstChildElement("luz")->Attribute("tipo");
+	string posX = doc.FirstChildElement("luzes")->FirstChildElement("luz")->Attribute("posX");
+	string posY = doc.FirstChildElement("luzes")->FirstChildElement("luz")->Attribute("posY");
+	string posZ = doc.FirstChildElement("luzes")->FirstChildElement("luz")->Attribute("posZ");
+
+	
 	Transformacao t = Transformacao::Transformacao();
 	parseXML(cena, t,'P');
 }

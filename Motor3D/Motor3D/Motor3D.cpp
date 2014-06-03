@@ -631,16 +631,18 @@ void parseXML(XMLElement* grupo, Transformacao transf, char cc) {
 void readXML(string fxml) {
 	XMLDocument doc;
 	doc.LoadFile(fxml.c_str());
-	XMLElement* cena = doc.FirstChildElement("cena")->FirstChildElement("grupo");
-	XMLElement* luzes = doc.FirstChildElement("cena")->FirstChildElement("luzes");
-	string tipo = doc.FirstChildElement("luzes")->FirstChildElement("luz")->Attribute("tipo");
-	string posX = doc.FirstChildElement("luzes")->FirstChildElement("luz")->Attribute("posX");
-	string posY = doc.FirstChildElement("luzes")->FirstChildElement("luz")->Attribute("posY");
-	string posZ = doc.FirstChildElement("luzes")->FirstChildElement("luz")->Attribute("posZ");
+	XMLElement* cena = doc.FirstChildElement("cena");
+	XMLElement* grupo = cena->FirstChildElement("grupo");
+	XMLElement* luzes = cena->FirstChildElement("luzes");
+	XMLElement* luz = luzes->FirstChildElement("luz");
+	string tipo = luz->Attribute("tipo");
+	string posX = luz->Attribute("posX");
+	string posY = luz->Attribute("posY");
+	string posZ = luz->Attribute("posZ");
 
 	
 	Transformacao t = Transformacao::Transformacao();
-	parseXML(cena, t,'P');
+	parseXML(grupo, t,'P');
 }
 
 void initPrimitivas() {

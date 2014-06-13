@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cena>
+	<luzes> 
+  		<luz tipo="POINT" posX="0.3" posY="0.2" posZ="0.3" /> 
+ 	</luzes>
 	<grupo>		
 		<escala X="0.28" Y="0.28" Z="0.28" />
 		<modelos>

@@ -70,7 +70,7 @@ void renderScene(void) {
 
 		if (i == 0) {
 			GLfloat pos[4] = { 0, 0, 0, 1 };
-			GLfloat amb[3] = { 0.3, 0.3, 0.2 };
+			GLfloat amb[3] = { posX, posY, posZ };
 			GLfloat diff[3] = { 0.8, 0.8, 0.15 };
 			GLfloat matt[3] = { 1, 1, 1 };
 
@@ -635,11 +635,8 @@ void readXML(string fxml) {
 	XMLElement* grupo = cena->FirstChildElement("grupo");
 	XMLElement* luzes = cena->FirstChildElement("luzes");
 	XMLElement* luz = luzes->FirstChildElement("luz");
-	string tipo = luz->Attribute("tipo");
-	string posX = luz->Attribute("posX");
-	string posY = luz->Attribute("posY");
-	string posZ = luz->Attribute("posZ");
-
+	tipo = luz->Attribute("tipo");
+	posX = atof(luz->Attribute("posX")); posY = atof(luz->Attribute("posY")); posZ = atof(luz->Attribute("posZ"));
 	
 	Transformacao t = Transformacao::Transformacao();
 	parseXML(grupo, t,'P');
@@ -662,10 +659,7 @@ void initPrimitivas() {
 }
 
 int main(int argc, char **argv) {
-	//string file="SistemaSolar3Fase.xml";
-	//string file="LUA.xml";
 	string file = "SistemaSolar4Fase.xml";
-	//string file = "TeapotTest.xml";
 
 	//if(argc>1) {
 		//string file = argv[1];
@@ -692,6 +686,7 @@ int main(int argc, char **argv) {
 		ilInit();
 		glewInit();
 		
+		glEnable(GL_NORMALIZE);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_TEXTURE_2D); /* Ativar Texturas */

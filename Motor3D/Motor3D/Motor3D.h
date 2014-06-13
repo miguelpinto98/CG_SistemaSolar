@@ -40,4 +40,8 @@ int alpha = 0, beta = 0, r = 5;
 /* FRAMES PER SECOND */
 int timebase = 0, frame = 0;
 
+/* LUZES */
+string tipo; 
+float posX, posY, posZ;
+
 #endif
